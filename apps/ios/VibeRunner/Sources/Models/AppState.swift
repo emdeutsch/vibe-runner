@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import CoreLocation
 
 /// Main application state
 @MainActor
@@ -17,6 +18,11 @@ class AppState: ObservableObject {
     @Published var currentPace: Double? = nil // seconds per mile
     @Published var totalDistance: Double = 0 // meters
     @Published var runDuration: TimeInterval = 0
+
+    /// Route coordinates for map display
+    @Published var routeCoordinates: [CLLocationCoordinate2D] = []
+    /// Current user location for map centering
+    @Published var currentLocation: CLLocationCoordinate2D?
 
     @Published var error: AppError? = nil
 
@@ -94,6 +100,7 @@ class AppState: ObservableObject {
         totalDistance = 0
         runDuration = 0
         currentPace = nil
+        routeCoordinates = []
         runStartTime = Date()
 
         // Initial state is locked (must prove pace)
@@ -151,7 +158,17 @@ class AppState: ObservableObject {
     }
 
     private func handleLocationUpdate(_ location: LocationSample) async {
+        // Always update current location for map centering
+        let coordinate = CLLocationCoordinate2D(
+            latitude: location.latitude,
+            longitude: location.longitude
+        )
+        currentLocation = coordinate
+
         guard runState != .notRunning else { return }
+
+        // Add to route for map display
+        routeCoordinates.append(coordinate)
 
         // Calculate pace
         if let pace = paceCalculator.addSample(location) {

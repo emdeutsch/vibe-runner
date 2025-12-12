@@ -1,7 +1,9 @@
 import SwiftUI
+import MapKit
 
 struct RunView: View {
     @EnvironmentObject var appState: AppState
+    @State private var showFullMap = false
 
     var body: some View {
         NavigationStack {
@@ -10,46 +12,59 @@ struct RunView: View {
                 StatusBanner(runState: appState.runState)
 
                 // Main Content
-                VStack(spacing: 32) {
-                    Spacer()
-
-                    // Pace Display
-                    PaceDisplay(
-                        pace: appState.currentPace,
-                        runState: appState.runState
-                    )
-
-                    // Stats Row
-                    if appState.runState != .notRunning {
-                        StatsRow(
-                            distance: appState.totalDistance,
-                            duration: appState.runDuration
-                        )
-                    }
-
-                    Spacer()
-
-                    // Action Button
-                    ActionButton(
-                        runState: appState.runState,
-                        onStart: { Task { await appState.startRun() } },
-                        onStop: { Task { await appState.endRun() } }
-                    )
-
-                    // Open Claude Button
-                    if appState.runState == .runningUnlocked {
-                        Button(action: openClaude) {
-                            Label("Open Claude", systemImage: "message.fill")
+                ScrollView {
+                    VStack(spacing: 24) {
+                        // Map Section
+                        if appState.runState != .notRunning {
+                            MapSection(showFullMap: $showFullMap)
                         }
-                        .buttonStyle(.bordered)
-                    }
 
-                    Spacer()
+                        // Pace Display
+                        PaceDisplay(
+                            pace: appState.currentPace,
+                            runState: appState.runState
+                        )
+
+                        // Stats Row
+                        if appState.runState != .notRunning {
+                            StatsRow(
+                                distance: appState.totalDistance,
+                                duration: appState.runDuration
+                            )
+                        }
+
+                        // Action Button
+                        ActionButton(
+                            runState: appState.runState,
+                            onStart: { Task { await appState.startRun() } },
+                            onStop: { Task { await appState.endRun() } }
+                        )
+
+                        // Open Claude Button
+                        if appState.runState == .runningUnlocked {
+                            Button(action: openClaude) {
+                                Label("Open Claude", systemImage: "message.fill")
+                            }
+                            .buttonStyle(.bordered)
+                        }
+                    }
+                    .padding()
                 }
-                .padding()
             }
             .navigationTitle("VibeRunner")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                if appState.runState != .notRunning {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(action: { showFullMap = true }) {
+                            Image(systemName: "map")
+                        }
+                    }
+                }
+            }
+            .sheet(isPresented: $showFullMap) {
+                FullScreenMapView()
+            }
         }
     }
 
@@ -57,6 +72,46 @@ struct RunView: View {
         // Try to open Claude app
         if let url = URL(string: "anthropic://") {
             UIApplication.shared.open(url)
+        }
+    }
+}
+
+// MARK: - Map Section
+
+struct MapSection: View {
+    @EnvironmentObject var appState: AppState
+    @Binding var showFullMap: Bool
+
+    var body: some View {
+        VStack(spacing: 8) {
+            // Compact map
+            RunMapView(
+                routeCoordinates: appState.routeCoordinates,
+                currentLocation: appState.currentLocation,
+                runState: appState.runState
+            )
+            .frame(height: 180)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+            )
+            .onTapGesture {
+                showFullMap = true
+            }
+
+            // Route info
+            HStack {
+                Image(systemName: "point.topleft.down.to.point.bottomright.curvepath")
+                    .foregroundStyle(.secondary)
+                Text("\(appState.routeCoordinates.count) points")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text("Tap to expand")
+                    .font(.caption)
+                    .foregroundStyle(.blue)
+            }
         }
     }
 }
