@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": ["./scripts/viberunner-hr-check"]
+      }
+    ]
+  }
+}
