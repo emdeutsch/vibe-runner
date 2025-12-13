@@ -1,4 +1,12 @@
 import SwiftUI
+import os.log
+
+private let logger = Logger(subsystem: "com.viberunner.app", category: "LoginView")
+
+private func log(_ message: String) {
+    NSLog("[LoginView] %@", message)
+    logger.info("\(message)")
+}
 
 struct LoginView: View {
     @EnvironmentObject var authService: AuthService
@@ -33,7 +41,12 @@ struct LoginView: View {
                     // GitHub Sign In (primary)
                     Button {
                         Task {
-                            try? await authService.signInWithGitHub()
+                            log("GitHub sign in button tapped")
+                            do {
+                                try await authService.signInWithGitHub()
+                            } catch {
+                                log("GitHub sign in error: \(error.localizedDescription)")
+                            }
                         }
                     } label: {
                         HStack {
@@ -42,8 +55,8 @@ struct LoginView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(.primary)
-                        .foregroundStyle(.background)
+                        .background(Color.black)
+                        .foregroundStyle(Color.white)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
 

@@ -24,6 +24,8 @@
 	<true/>
 	<key>WKWatchOnly</key>
 	<false/>
+	<key>WKCompanionAppBundleIdentifier</key>
+	<string>$(COMPANION_APP_BUNDLE_IDENTIFIER)</string>
 
 	<!-- HealthKit Privacy Keys -->
 	<key>NSHealthShareUsageDescription</key>

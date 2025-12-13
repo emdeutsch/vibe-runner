@@ -1,5 +1,15 @@
 import Foundation
+import UIKit
 import Supabase
+import os.log
+
+private let logger = Logger(subsystem: "com.viberunner.app", category: "AuthService")
+
+// NSLog wrapper for reliable syslog capture
+private func log(_ message: String) {
+    NSLog("[AuthService] %@", message)
+    logger.info("\(message)")
+}
 
 @MainActor
 class AuthService: ObservableObject {
@@ -20,8 +30,12 @@ class AuthService: ObservableObject {
     }
 
     private func setupSupabase() {
+        log("setupSupabase called")
+        log("Config.supabaseURL: '\(Config.supabaseURL)'")
+        log("Config.supabaseAnonKey: '\(String(Config.supabaseAnonKey.prefix(20)))...'")
+
         guard !Config.supabaseURL.isEmpty, !Config.supabaseAnonKey.isEmpty else {
-            print("Warning: Supabase configuration missing")
+            log("ERROR: Supabase configuration missing!")
             return
         }
 
@@ -29,6 +43,7 @@ class AuthService: ObservableObject {
             supabaseURL: URL(string: Config.supabaseURL)!,
             supabaseKey: Config.supabaseAnonKey
         )
+        log("Supabase client initialized successfully")
     }
 
     // MARK: - Session Management
@@ -61,7 +76,13 @@ class AuthService: ObservableObject {
     // MARK: - GitHub Sign In
 
     func signInWithGitHub() async throws {
+        log("signInWithGitHub called")
+        log("Supabase URL: \(Config.supabaseURL)")
+        log("Callback URL: \(Config.githubOAuthCallbackURL)")
+
         guard let supabase = supabase else {
+            log("ERROR: Supabase not configured")
+            self.error = "Supabase not configured. Check your settings."
             throw AuthError.notConfigured
         }
 
@@ -69,16 +90,20 @@ class AuthService: ObservableObject {
         error = nil
 
         do {
+            log("Getting OAuth URL...")
             let url = try await supabase.auth.getOAuthSignInURL(
                 provider: .github,
                 redirectTo: URL(string: Config.githubOAuthCallbackURL)
             )
+            log("Got OAuth URL: \(url)")
 
             // Open the URL in Safari
             await MainActor.run {
+                log("Opening URL in Safari...")
                 UIApplication.shared.open(url)
             }
         } catch {
+            log("ERROR: OAuth error: \(error.localizedDescription)")
             self.error = error.localizedDescription
             isLoading = false
             throw error
