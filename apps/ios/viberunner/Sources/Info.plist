@@ -51,6 +51,14 @@
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>viberunner needs to record workout sessions to track your heart rate for tool gating.</string>
 
+	<!-- API Configuration (from xcconfig) -->
+	<key>API_BASE_URL</key>
+	<string>$(API_BASE_URL)</string>
+	<key>SUPABASE_URL</key>
+	<string>$(SUPABASE_URL)</string>
+	<key>SUPABASE_ANON_KEY</key>
+	<string>$(SUPABASE_ANON_KEY)</string>
+
 	<!-- URL Schemes for OAuth -->
 	<key>CFBundleURLTypes</key>
 	<array>

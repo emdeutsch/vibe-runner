@@ -2,9 +2,9 @@ name: viberunner
 options:
   bundleIdPrefix: com.viberunner
   deploymentTarget:
-    iOS: "26.0"
-    watchOS: "26.0"
-  xcodeVersion: "26.0"
+    iOS: "17.0"
+    watchOS: "10.0"
+  xcodeVersion: "15.0"
   generateEmptyDirectories: true
   groupSortPosition: top
 
@@ -22,9 +22,9 @@ configFiles:
 
 settings:
   base:
-    DEVELOPMENT_TEAM: ""
+    DEVELOPMENT_TEAM: B9JJ3C9FR3
     CODE_SIGN_STYLE: Automatic
-    SWIFT_VERSION: "6.2"
+    SWIFT_VERSION: "5.0"
 
 packages:
   Supabase:
@@ -53,7 +53,6 @@ targets:
       path: Sources/viberunner.entitlements
       properties:
         com.apple.developer.healthkit: true
-        com.apple.developer.healthkit.access: []
 
   viberunner-watch:
     type: application
@@ -65,15 +64,15 @@ targets:
     settings:
       base:
         INFOPLIST_FILE: ../../watch/viberunner-watch/Sources/Info.plist
-        PRODUCT_BUNDLE_IDENTIFIER: com.viberunner.app.watchkitapp
+        PRODUCT_BUNDLE_IDENTIFIER: com.viberunner.app.local.watchkitapp
         PRODUCT_NAME: viberunner Watch
         TARGETED_DEVICE_FAMILY: "4"
         WATCHOS_DEPLOYMENT_TARGET: "10.0"
+        COMPANION_APP_BUNDLE_IDENTIFIER: com.viberunner.app.local
     entitlements:
       path: ../../watch/viberunner-watch/Sources/viberunner-watch.entitlements
       properties:
         com.apple.developer.healthkit: true
-        com.apple.developer.healthkit.access: []
 
 schemes:
   Viberunner:
