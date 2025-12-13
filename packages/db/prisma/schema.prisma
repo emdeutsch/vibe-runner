@@ -1,0 +1,186 @@
+// Prisma schema for viberunner - managed against Supabase Postgres
+// Run: npx prisma generate && npx prisma db push
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User profile with HR threshold settings
+model Profile {
+  id              String   @id @default(uuid())
+  userId          String   @unique @map("user_id") // Supabase auth user id
+  hrThresholdBpm  Int      @default(100) @map("hr_threshold_bpm")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  workoutSessions WorkoutSession[]
+  hrSamples       HrSample[]
+  hrStatus        HrStatus?
+  githubAccount   GithubAccount?
+  githubToken     GithubToken?
+  gateRepos       GateRepo[]
+
+  @@map("profiles")
+}
+
+// Workout session tracking
+model WorkoutSession {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  startedAt DateTime  @default(now()) @map("started_at")
+  endedAt   DateTime? @map("ended_at")
+  source    String    @default("watch") // watch, ble
+  active    Boolean   @default(true)
+
+  profile   Profile          @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  hrSamples HrSample[]
+  hrBuckets HrBucket[]
+  summary   WorkoutSummary?
+  commits   SessionCommit[]
+
+  @@index([userId, active])
+  @@index([userId, startedAt])
+  @@map("workout_sessions")
+}
+
+// Individual HR samples from devices
+model HrSample {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  sessionId String   @map("session_id")
+  bpm       Int
+  ts        DateTime @default(now())
+  source    String   @default("watch") // watch, ble
+
+  profile Profile        @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  session WorkoutSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([userId, ts])
+  @@index([sessionId])
+  @@map("hr_samples")
+}
+
+// Current HR status (derived, used for quick lookups)
+model HrStatus {
+  id           String   @id @default(uuid())
+  userId       String   @unique @map("user_id")
+  bpm          Int
+  thresholdBpm Int      @map("threshold_bpm")
+  hrOk         Boolean  @map("hr_ok")
+  expiresAt    DateTime @map("expires_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  profile Profile @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("hr_status")
+}
+
+// GitHub account info (from OAuth)
+model GithubAccount {
+  id           String @id @default(uuid())
+  userId       String @unique @map("user_id")
+  githubUserId Int    @map("github_user_id")
+  username     String
+
+  profile Profile @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("github_accounts")
+}
+
+// GitHub OAuth tokens (encrypted at rest)
+model GithubToken {
+  id                   String   @id @default(uuid())
+  userId               String   @unique @map("user_id")
+  encryptedAccessToken String   @map("encrypted_access_token")
+  scopes               String[] @default([])
+  updatedAt            DateTime @updatedAt @map("updated_at")
+
+  profile Profile @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("github_tokens")
+}
+
+// Gate repos - repos that receive HR signal refs
+model GateRepo {
+  id                      String   @id @default(uuid())
+  userId                  String   @map("user_id")
+  owner                   String
+  name                    String
+  userKey                 String   @map("user_key") // Stable identifier for ref path
+  signalRef               String   @map("signal_ref") // Full ref path: refs/viberunner/hr/<user_key>
+  githubAppInstallationId Int?     @map("github_app_installation_id")
+  active                  Boolean  @default(true)
+  bootstrapVersion        Int      @default(1) @map("bootstrap_version")
+  signerKeyVersion        Int      @default(1) @map("signer_key_version")
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+
+  profile Profile @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@unique([owner, name])
+  @@index([userId, active])
+  @@map("gate_repos")
+}
+
+// HR data bucketed for efficient graph rendering (5-minute intervals)
+model HrBucket {
+  id                     String   @id @default(uuid())
+  sessionId              String   @map("session_id")
+  bucketStart            DateTime @map("bucket_start")
+  bucketEnd              DateTime @map("bucket_end")
+  minBpm                 Int      @map("min_bpm")
+  maxBpm                 Int      @map("max_bpm")
+  avgBpm                 Int      @map("avg_bpm")
+  sampleCount            Int      @map("sample_count")
+  timeAboveThresholdSecs Int      @map("time_above_threshold_secs")
+  thresholdBpm           Int      @map("threshold_bpm")
+
+  session WorkoutSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, bucketStart])
+  @@map("hr_buckets")
+}
+
+// Computed summary for completed workouts
+model WorkoutSummary {
+  id                     String   @id @default(uuid())
+  sessionId              String   @unique @map("session_id")
+  durationSecs           Int      @map("duration_secs")
+  avgBpm                 Int      @map("avg_bpm")
+  maxBpm                 Int      @map("max_bpm")
+  minBpm                 Int      @map("min_bpm")
+  timeAboveThresholdSecs Int      @map("time_above_threshold_secs")
+  timeBelowThresholdSecs Int      @map("time_below_threshold_secs")
+  thresholdBpm           Int      @map("threshold_bpm")
+  totalSamples           Int      @map("total_samples")
+  createdAt              DateTime @default(now()) @map("created_at")
+
+  session WorkoutSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("workout_summaries")
+}
+
+// Commits tagged to workout sessions (via commit message convention)
+model SessionCommit {
+  id           String   @id @default(uuid())
+  sessionId    String   @map("session_id")
+  repoOwner    String   @map("repo_owner")
+  repoName     String   @map("repo_name")
+  commitSha    String   @map("commit_sha")
+  commitMsg    String   @map("commit_msg")
+  linesAdded   Int?     @map("lines_added")
+  linesRemoved Int?     @map("lines_removed")
+  committedAt  DateTime @map("committed_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  session WorkoutSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, commitSha])
+  @@index([sessionId])
+  @@map("session_commits")
+}

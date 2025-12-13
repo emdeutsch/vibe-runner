@@ -1,0 +1,193 @@
+import SwiftUI
+
+struct WorkoutView: View {
+    @EnvironmentObject var workoutService: WorkoutService
+    @EnvironmentObject var watchConnectivity: WatchConnectivityService
+    @EnvironmentObject var apiService: APIService
+
+    @State private var showingError = false
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 32) {
+                // Status card
+                StatusCard(
+                    isActive: workoutService.isActive,
+                    bpm: workoutService.currentBPM,
+                    toolsUnlocked: workoutService.toolsUnlocked,
+                    threshold: apiService.profile?.hrThresholdBpm ?? Config.defaultHRThreshold
+                )
+
+                // Watch connectivity status
+                WatchStatusView()
+
+                Spacer()
+
+                // Control buttons
+                if workoutService.isActive {
+                    Button(role: .destructive) {
+                        Task {
+                            do {
+                                watchConnectivity.sendStopWorkout()
+                                try await workoutService.stopWorkout()
+                            } catch {
+                                showingError = true
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            Image(systemName: "stop.fill")
+                            Text("Stop Workout")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(.red)
+                        .foregroundStyle(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                    }
+                } else {
+                    Button {
+                        Task {
+                            do {
+                                try await workoutService.startWorkout()
+                                watchConnectivity.sendStartWorkout()
+                            } catch {
+                                showingError = true
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            Image(systemName: "play.fill")
+                            Text("Start Workout")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(.green)
+                        .foregroundStyle(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                    }
+                }
+            }
+            .padding()
+            .navigationTitle("Workout")
+            .task {
+                // Check for active session on appear
+                await workoutService.checkActiveSession()
+
+                // Fetch profile for threshold
+                try? await apiService.fetchProfile()
+            }
+            .alert("Error", isPresented: $showingError) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(workoutService.error ?? "An error occurred")
+            }
+        }
+    }
+}
+
+// MARK: - Status Card
+
+struct StatusCard: View {
+    let isActive: Bool
+    let bpm: Int
+    let toolsUnlocked: Bool
+    let threshold: Int
+
+    var body: some View {
+        VStack(spacing: 20) {
+            // Heart rate display
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Text("\(bpm)")
+                    .font(.system(size: 72, weight: .bold, design: .rounded))
+                    .foregroundStyle(bpm >= threshold ? .green : .red)
+
+                Text("BPM")
+                    .font(.title2)
+                    .foregroundStyle(.secondary)
+            }
+
+            // Status indicator
+            HStack(spacing: 8) {
+                Circle()
+                    .fill(toolsUnlocked ? .green : .red)
+                    .frame(width: 12, height: 12)
+
+                Text(toolsUnlocked ? "Tools Unlocked" : "Tools Locked")
+                    .font(.headline)
+                    .foregroundStyle(toolsUnlocked ? .green : .red)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .background(
+                Capsule()
+                    .fill(toolsUnlocked ? .green.opacity(0.15) : .red.opacity(0.15))
+            )
+
+            // Threshold indicator
+            Text("Threshold: \(threshold) BPM")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            // Workout status
+            if isActive {
+                HStack {
+                    Image(systemName: "figure.run")
+                    Text("Workout Active")
+                }
+                .font(.caption)
+                .foregroundStyle(.green)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(32)
+        .background(
+            RoundedRectangle(cornerRadius: 24)
+                .fill(.ultraThinMaterial)
+        )
+    }
+}
+
+// MARK: - Watch Status
+
+struct WatchStatusView: View {
+    @EnvironmentObject var watchConnectivity: WatchConnectivityService
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "applewatch")
+                .font(.title2)
+                .foregroundStyle(watchConnectivity.isReachable ? .green : .secondary)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(watchConnectivity.isWatchAppInstalled ? "Apple Watch" : "Watch Not Found")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+
+                Text(watchConnectivity.isReachable ? "Connected" : "Not Connected")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+
+            if let lastBPM = watchConnectivity.lastReceivedBPM {
+                Text("\(lastBPM)")
+                    .font(.headline)
+                    .foregroundStyle(.red)
+            }
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(.ultraThinMaterial)
+        )
+    }
+}
+
+#Preview {
+    WorkoutView()
+        .environmentObject(WorkoutService.shared)
+        .environmentObject(WatchConnectivityService.shared)
+        .environmentObject(APIService.shared)
+}

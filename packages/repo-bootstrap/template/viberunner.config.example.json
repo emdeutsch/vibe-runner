@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "user_key": "YOUR_GITHUB_USERNAME",
+  "signal_ref_pattern": "refs/viberunner/hr/{user_key}",
+  "payload_filename": "hr-signal.json",
+  "public_key": "YOUR_PUBLIC_KEY_HEX",
+  "public_key_version": 1,
+  "ttl_seconds": 15
+}
