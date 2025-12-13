@@ -1,0 +1,817 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		047C9076A4CD4BD710EE76E9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C595B6F87FF2698677B08C /* ContentView.swift */; };
+		07E7C27F6E4031FF931442DE /* WatchConnectivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E5671337D3C6B6222E63DF /* WatchConnectivityService.swift */; };
+		0FBBBD6FE395DB1544FDE195 /* viberunnerWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA8DE2CD0B81969995D479D /* viberunnerWatchApp.swift */; };
+		1C9A0152AC0086A70B539295 /* ActiveWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C68A8F08146CD64111A928A5 /* ActiveWorkoutView.swift */; };
+		321B3EBA414B880D67773F38 /* viberunner-watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 10F94C41D61EB4972286B692 /* viberunner-watch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		373F4994B03E74355ACFF549 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678C9C834DA491CED4B232D6 /* HistoryView.swift */; };
+		3C1DCCF94EBA33AD318E20B6 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C0C61679733F809E60305D /* ComplicationController.swift */; };
+		45957B5380BD8E31654D3CE2 /* GateReposView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1675D473EA30F74EB383079C /* GateReposView.swift */; };
+		524831474D1154F6E34E7B06 /* StartWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195F839A7A1D039204C6983C /* StartWorkoutView.swift */; };
+		62E1060D74F5B585EF322321 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 40A5DEB5D25930111B7282D3 /* Supabase */; };
+		647E8B6B6E90A4C4EB977942 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB81F623B4C8FB8B8EA17AE /* Models.swift */; };
+		64B7E34A412D0226CB254C0D /* WorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA7F784CB28ED6FAE563D92 /* WorkoutManager.swift */; };
+		65EFCEB825FE8B0D2A982BDA /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470D56C9127763801AA478FC /* AuthService.swift */; };
+		762E8841D6F0F9E7B6EAE260 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69595AEA6271CE292294F37D /* Config.swift */; };
+		845451366BF8D35BD23DA81B /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 937AF3C45AF65C62CB12531A /* LoginView.swift */; };
+		862D8247AE0695C174EB729A /* WorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9591228D2F4C2F41E6D7F2C /* WorkoutView.swift */; };
+		945EE60CB6D1C587256524E7 /* WorkoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907EDBEC8D09DF58A54F1643 /* WorkoutService.swift */; };
+		A25639499B66DEDAEB7ED9F4 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9919DD183A1F347DEA3D9C47 /* MainTabView.swift */; };
+		A4637D356837F7F391CCAF66 /* PhoneConnectivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7778C0DA413EBAB9FC75140C /* PhoneConnectivityService.swift */; };
+		B1DBA3228460150F65BE6416 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B456C4FD142FCEC6147BA431 /* APIService.swift */; };
+		CFD26333E071434EDB5BB9D4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D9521F4FF4C9B86F2633C35 /* ContentView.swift */; };
+		D2682FF75BDD815FF326C451 /* WorkoutDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480ED0D8C8AA6ED7CE2D6F3C /* WorkoutDetailView.swift */; };
+		DD3AFD9522BE6E663892614B /* HeartRateChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3033C10836B66EB70741992 /* HeartRateChartView.swift */; };
+		E7A95F82151C024BC86F0DCF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DBDE77354A904774C93BF2 /* SettingsView.swift */; };
+		F18EE5116102B2A236F5A869 /* CountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E76B80D299DEFA5E8A153B5 /* CountdownView.swift */; };
+		F5A9CE3D08923240A70EC3D0 /* viberunnerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5960495A4E2D15EDC9C9DC87 /* viberunnerApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		343958B9DC51B808EEF6E39D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A395DF5C4CB9F2D1B0D563DF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 65C33E78EAE8141B8B5DC569;
+			remoteInfo = "viberunner-watch";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		86993D7DD010FAE213F0A660 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				321B3EBA414B880D67773F38 /* viberunner-watch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		05C595B6F87FF2698677B08C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		10F94C41D61EB4972286B692 /* viberunner-watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "viberunner-watch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1675D473EA30F74EB383079C /* GateReposView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GateReposView.swift; sourceTree = "<group>"; };
+		195F839A7A1D039204C6983C /* StartWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartWorkoutView.swift; sourceTree = "<group>"; };
+		1E76B80D299DEFA5E8A153B5 /* CountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownView.swift; sourceTree = "<group>"; };
+		2EE9AF9DF1AEEA5DF4E71F3A /* Local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig; sourceTree = "<group>"; };
+		355A8650F98CF5158F1BD742 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
+		37E5671337D3C6B6222E63DF /* WatchConnectivityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnectivityService.swift; sourceTree = "<group>"; };
+		470D56C9127763801AA478FC /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		480ED0D8C8AA6ED7CE2D6F3C /* WorkoutDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetailView.swift; sourceTree = "<group>"; };
+		5960495A4E2D15EDC9C9DC87 /* viberunnerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = viberunnerApp.swift; sourceTree = "<group>"; };
+		66DBDE77354A904774C93BF2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		678C9C834DA491CED4B232D6 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		69595AEA6271CE292294F37D /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		7778C0DA413EBAB9FC75140C /* PhoneConnectivityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneConnectivityService.swift; sourceTree = "<group>"; };
+		7AB81F623B4C8FB8B8EA17AE /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		80C0C61679733F809E60305D /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
+		82132005D0EA19C827A0139D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		907EDBEC8D09DF58A54F1643 /* WorkoutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutService.swift; sourceTree = "<group>"; };
+		937AF3C45AF65C62CB12531A /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		9919DD183A1F347DEA3D9C47 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		9D9521F4FF4C9B86F2633C35 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A3335C1888404F3AF2E386F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B456C4FD142FCEC6147BA431 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		BEA7F784CB28ED6FAE563D92 /* WorkoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutManager.swift; sourceTree = "<group>"; };
+		C3033C10836B66EB70741992 /* HeartRateChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateChartView.swift; sourceTree = "<group>"; };
+		C68A8F08146CD64111A928A5 /* ActiveWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveWorkoutView.swift; sourceTree = "<group>"; };
+		C9591228D2F4C2F41E6D7F2C /* WorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutView.swift; sourceTree = "<group>"; };
+		CB982E379A556F98878F413B /* viberunner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = viberunner.entitlements; sourceTree = "<group>"; };
+		D03F2A88FEDA2CA4D06E35D8 /* viberunner-watch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "viberunner-watch.entitlements"; sourceTree = "<group>"; };
+		EDA8DE2CD0B81969995D479D /* viberunnerWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = viberunnerWatchApp.swift; sourceTree = "<group>"; };
+		FA0D3D293421FA93F15D80D3 /* viberunner.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = viberunner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		183A984A04FEAE00010598C8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				62E1060D74F5B585EF322321 /* Supabase in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		06687E82E01AB4C44E3E0080 = {
+			isa = PBXGroup;
+			children = (
+				87581CE22834C0BDC47FAD65 /* Config */,
+				4D8D4DEDD185B79601618903 /* Sources */,
+				6F64398A89D45451CC289903 /* Sources */,
+				6C5A103A379BBCA242F5D5D5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1048FA46E65B1DAE8FE56B90 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				9D9521F4FF4C9B86F2633C35 /* ContentView.swift */,
+				EDA8DE2CD0B81969995D479D /* viberunnerWatchApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		334DAA4D3881E5CC55D21FAE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FA2AC809E009B40AD34CBBF9 /* Components */,
+				1675D473EA30F74EB383079C /* GateReposView.swift */,
+				678C9C834DA491CED4B232D6 /* HistoryView.swift */,
+				937AF3C45AF65C62CB12531A /* LoginView.swift */,
+				66DBDE77354A904774C93BF2 /* SettingsView.swift */,
+				480ED0D8C8AA6ED7CE2D6F3C /* WorkoutDetailView.swift */,
+				C9591228D2F4C2F41E6D7F2C /* WorkoutView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		4D8D4DEDD185B79601618903 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				F6DAA83C4CF49C0D9F73CB79 /* App */,
+				861171C12178DD0674A877A6 /* Models */,
+				9FC2652323311A46A00CAA07 /* Services */,
+				334DAA4D3881E5CC55D21FAE /* Views */,
+				A3335C1888404F3AF2E386F2 /* Info.plist */,
+				CB982E379A556F98878F413B /* viberunner.entitlements */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		5BD36289D89EC00DE0E39C27 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C68A8F08146CD64111A928A5 /* ActiveWorkoutView.swift */,
+				1E76B80D299DEFA5E8A153B5 /* CountdownView.swift */,
+				195F839A7A1D039204C6983C /* StartWorkoutView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6C5A103A379BBCA242F5D5D5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				10F94C41D61EB4972286B692 /* viberunner-watch.app */,
+				FA0D3D293421FA93F15D80D3 /* viberunner.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6F64398A89D45451CC289903 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				1048FA46E65B1DAE8FE56B90 /* App */,
+				B9F9840964FD6DD1FC25DB19 /* Complications */,
+				9FF438BAA206D499C41E2AF1 /* Services */,
+				5BD36289D89EC00DE0E39C27 /* Views */,
+				82132005D0EA19C827A0139D /* Info.plist */,
+				D03F2A88FEDA2CA4D06E35D8 /* viberunner-watch.entitlements */,
+			);
+			name = Sources;
+			path = "../../watch/viberunner-watch/Sources";
+			sourceTree = "<group>";
+		};
+		861171C12178DD0674A877A6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7AB81F623B4C8FB8B8EA17AE /* Models.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		87581CE22834C0BDC47FAD65 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				2EE9AF9DF1AEEA5DF4E71F3A /* Local.xcconfig */,
+				355A8650F98CF5158F1BD742 /* Production.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		9FC2652323311A46A00CAA07 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B456C4FD142FCEC6147BA431 /* APIService.swift */,
+				470D56C9127763801AA478FC /* AuthService.swift */,
+				69595AEA6271CE292294F37D /* Config.swift */,
+				37E5671337D3C6B6222E63DF /* WatchConnectivityService.swift */,
+				907EDBEC8D09DF58A54F1643 /* WorkoutService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		9FF438BAA206D499C41E2AF1 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				7778C0DA413EBAB9FC75140C /* PhoneConnectivityService.swift */,
+				BEA7F784CB28ED6FAE563D92 /* WorkoutManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		B9F9840964FD6DD1FC25DB19 /* Complications */ = {
+			isa = PBXGroup;
+			children = (
+				80C0C61679733F809E60305D /* ComplicationController.swift */,
+			);
+			path = Complications;
+			sourceTree = "<group>";
+		};
+		F6DAA83C4CF49C0D9F73CB79 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				05C595B6F87FF2698677B08C /* ContentView.swift */,
+				9919DD183A1F347DEA3D9C47 /* MainTabView.swift */,
+				5960495A4E2D15EDC9C9DC87 /* viberunnerApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		FA2AC809E009B40AD34CBBF9 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				C3033C10836B66EB70741992 /* HeartRateChartView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		65C33E78EAE8141B8B5DC569 /* viberunner-watch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 79DAAD2C784F3B499DCCFA5C /* Build configuration list for PBXNativeTarget "viberunner-watch" */;
+			buildPhases = (
+				22534099CE39543D8FF8E58D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "viberunner-watch";
+			packageProductDependencies = (
+			);
+			productName = "viberunner-watch";
+			productReference = 10F94C41D61EB4972286B692 /* viberunner-watch.app */;
+			productType = "com.apple.product-type.application";
+		};
+		68BDD775D6318FAEF87ECEC1 /* viberunner */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 996CE45C0E8C1B6784E7D117 /* Build configuration list for PBXNativeTarget "viberunner" */;
+			buildPhases = (
+				46AE1CA7FC875AD051C8542E /* Sources */,
+				183A984A04FEAE00010598C8 /* Frameworks */,
+				86993D7DD010FAE213F0A660 /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9CA6343B7C3EB61EB2A28123 /* PBXTargetDependency */,
+			);
+			name = viberunner;
+			packageProductDependencies = (
+				40A5DEB5D25930111B7282D3 /* Supabase */,
+			);
+			productName = viberunner;
+			productReference = FA0D3D293421FA93F15D80D3 /* viberunner.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A395DF5C4CB9F2D1B0D563DF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					65C33E78EAE8141B8B5DC569 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					68BDD775D6318FAEF87ECEC1 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 1512B0E204C00F5D2E82C2E3 /* Build configuration list for PBXProject "viberunner" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 06687E82E01AB4C44E3E0080;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F93890C55D3D3DA3A2E99172 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				68BDD775D6318FAEF87ECEC1 /* viberunner */,
+				65C33E78EAE8141B8B5DC569 /* viberunner-watch */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		22534099CE39543D8FF8E58D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C9A0152AC0086A70B539295 /* ActiveWorkoutView.swift in Sources */,
+				3C1DCCF94EBA33AD318E20B6 /* ComplicationController.swift in Sources */,
+				CFD26333E071434EDB5BB9D4 /* ContentView.swift in Sources */,
+				F18EE5116102B2A236F5A869 /* CountdownView.swift in Sources */,
+				A4637D356837F7F391CCAF66 /* PhoneConnectivityService.swift in Sources */,
+				524831474D1154F6E34E7B06 /* StartWorkoutView.swift in Sources */,
+				64B7E34A412D0226CB254C0D /* WorkoutManager.swift in Sources */,
+				0FBBBD6FE395DB1544FDE195 /* viberunnerWatchApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		46AE1CA7FC875AD051C8542E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B1DBA3228460150F65BE6416 /* APIService.swift in Sources */,
+				65EFCEB825FE8B0D2A982BDA /* AuthService.swift in Sources */,
+				762E8841D6F0F9E7B6EAE260 /* Config.swift in Sources */,
+				047C9076A4CD4BD710EE76E9 /* ContentView.swift in Sources */,
+				45957B5380BD8E31654D3CE2 /* GateReposView.swift in Sources */,
+				DD3AFD9522BE6E663892614B /* HeartRateChartView.swift in Sources */,
+				373F4994B03E74355ACFF549 /* HistoryView.swift in Sources */,
+				845451366BF8D35BD23DA81B /* LoginView.swift in Sources */,
+				A25639499B66DEDAEB7ED9F4 /* MainTabView.swift in Sources */,
+				647E8B6B6E90A4C4EB977942 /* Models.swift in Sources */,
+				E7A95F82151C024BC86F0DCF /* SettingsView.swift in Sources */,
+				07E7C27F6E4031FF931442DE /* WatchConnectivityService.swift in Sources */,
+				D2682FF75BDD815FF326C451 /* WorkoutDetailView.swift in Sources */,
+				945EE60CB6D1C587256524E7 /* WorkoutService.swift in Sources */,
+				862D8247AE0695C174EB729A /* WorkoutView.swift in Sources */,
+				F5A9CE3D08923240A70EC3D0 /* viberunnerApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9CA6343B7C3EB61EB2A28123 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 65C33E78EAE8141B8B5DC569 /* viberunner-watch */;
+			targetProxy = 343958B9DC51B808EEF6E39D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		15221D3F14939E712ECCADA5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Sources/viberunner.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Sources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited)";
+				PRODUCT_NAME = "$(inherited)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		3221ABA212C475E0CE01CF27 /* Release (Local) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "../../watch/viberunner-watch/Sources/viberunner-watch.entitlements";
+				INFOPLIST_FILE = "../../watch/viberunner-watch/Sources/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.viberunner.app.watchkitapp;
+				PRODUCT_NAME = "viberunner Watch";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = "Release (Local)";
+		};
+		35A902541FF51C323FCB285F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 355A8650F98CF5158F1BD742 /* Production.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.2;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
+		50D1B2274B3BEEFE37ADFE8F /* Release (Local) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Sources/viberunner.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Sources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited)";
+				PRODUCT_NAME = "$(inherited)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Release (Local)";
+		};
+		A39633D942AC76E50AA5300F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Sources/viberunner.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Sources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited)";
+				PRODUCT_NAME = "$(inherited)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		B8F3F264ED04B74B45CC25D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 355A8650F98CF5158F1BD742 /* Production.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.2;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		BD64620A4A2F1F1C490D0E74 /* Debug (Local) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "../../watch/viberunner-watch/Sources/viberunner-watch.entitlements";
+				INFOPLIST_FILE = "../../watch/viberunner-watch/Sources/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.viberunner.app.watchkitapp;
+				PRODUCT_NAME = "viberunner Watch";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = "Debug (Local)";
+		};
+		C6419A0B648C1AFCFE9B739E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "../../watch/viberunner-watch/Sources/viberunner-watch.entitlements";
+				INFOPLIST_FILE = "../../watch/viberunner-watch/Sources/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.viberunner.app.watchkitapp;
+				PRODUCT_NAME = "viberunner Watch";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		DD13A39F8F669D9D92396476 /* Debug (Local) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2EE9AF9DF1AEEA5DF4E71F3A /* Local.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.2;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = "Debug (Local)";
+		};
+		E3D0DE767CC067F3738CFB5E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "../../watch/viberunner-watch/Sources/viberunner-watch.entitlements";
+				INFOPLIST_FILE = "../../watch/viberunner-watch/Sources/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.viberunner.app.watchkitapp;
+				PRODUCT_NAME = "viberunner Watch";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		E6DF3FC7FEE826922BACDE9C /* Release (Local) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2EE9AF9DF1AEEA5DF4E71F3A /* Local.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.2;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = "Release (Local)";
+		};
+		EA803F5192B79107AFF452AB /* Debug (Local) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Sources/viberunner.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Sources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited)";
+				PRODUCT_NAME = "$(inherited)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Debug (Local)";
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1512B0E204C00F5D2E82C2E3 /* Build configuration list for PBXProject "viberunner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B8F3F264ED04B74B45CC25D1 /* Debug */,
+				DD13A39F8F669D9D92396476 /* Debug (Local) */,
+				35A902541FF51C323FCB285F /* Release */,
+				E6DF3FC7FEE826922BACDE9C /* Release (Local) */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		79DAAD2C784F3B499DCCFA5C /* Build configuration list for PBXNativeTarget "viberunner-watch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C6419A0B648C1AFCFE9B739E /* Debug */,
+				BD64620A4A2F1F1C490D0E74 /* Debug (Local) */,
+				E3D0DE767CC067F3738CFB5E /* Release */,
+				3221ABA212C475E0CE01CF27 /* Release (Local) */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		996CE45C0E8C1B6784E7D117 /* Build configuration list for PBXNativeTarget "viberunner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A39633D942AC76E50AA5300F /* Debug */,
+				EA803F5192B79107AFF452AB /* Debug (Local) */,
+				15221D3F14939E712ECCADA5 /* Release */,
+				50D1B2274B3BEEFE37ADFE8F /* Release (Local) */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F93890C55D3D3DA3A2E99172 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase-community/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		40A5DEB5D25930111B7282D3 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F93890C55D3D3DA3A2E99172 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A395DF5C4CB9F2D1B0D563DF /* Project object */;
+}

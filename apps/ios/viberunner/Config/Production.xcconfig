@@ -1,0 +1,12 @@
+// Production Environment
+// Points to production Supabase
+
+// API Configuration
+API_BASE_URL = https:/$()/api.viberunner.com
+SUPABASE_URL = https:/$()/fspwoookcnikhlaytpfd.supabase.co
+SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzcHdvb29rY25pa2hsYXl0cGZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5NjI4ODcsImV4cCI6MjA0OTUzODg4N30.7cCLHaKYlUN37zh4EGZsAQ_QSbwxqnV
+
+// App Identity
+PRODUCT_BUNDLE_IDENTIFIER = com.viberunner.app
+PRODUCT_NAME = Viberunner
+ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon

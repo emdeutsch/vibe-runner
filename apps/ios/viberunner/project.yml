@@ -1,0 +1,109 @@
+name: viberunner
+options:
+  bundleIdPrefix: com.viberunner
+  deploymentTarget:
+    iOS: "26.0"
+    watchOS: "26.0"
+  xcodeVersion: "26.0"
+  generateEmptyDirectories: true
+  groupSortPosition: top
+
+configs:
+  Debug: debug
+  Debug (Local): debug
+  Release: release
+  Release (Local): release
+
+configFiles:
+  Debug: Config/Production.xcconfig
+  Debug (Local): Config/Local.xcconfig
+  Release: Config/Production.xcconfig
+  Release (Local): Config/Local.xcconfig
+
+settings:
+  base:
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+    SWIFT_VERSION: "6.2"
+
+packages:
+  Supabase:
+    url: https://github.com/supabase-community/supabase-swift.git
+    from: "2.0.0"
+
+targets:
+  viberunner:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+        excludes:
+          - "**/.DS_Store"
+    dependencies:
+      - package: Supabase
+      - target: viberunner-watch
+    settings:
+      base:
+        INFOPLIST_FILE: Sources/Info.plist
+        PRODUCT_NAME: $(inherited)
+        PRODUCT_BUNDLE_IDENTIFIER: $(inherited)
+        TARGETED_DEVICE_FAMILY: "1"
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: false
+    entitlements:
+      path: Sources/viberunner.entitlements
+      properties:
+        com.apple.developer.healthkit: true
+        com.apple.developer.healthkit.access: []
+
+  viberunner-watch:
+    type: application
+    platform: watchOS
+    sources:
+      - path: ../../watch/viberunner-watch/Sources
+        excludes:
+          - "**/.DS_Store"
+    settings:
+      base:
+        INFOPLIST_FILE: ../../watch/viberunner-watch/Sources/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.viberunner.app.watchkitapp
+        PRODUCT_NAME: viberunner Watch
+        TARGETED_DEVICE_FAMILY: "4"
+        WATCHOS_DEPLOYMENT_TARGET: "10.0"
+    entitlements:
+      path: ../../watch/viberunner-watch/Sources/viberunner-watch.entitlements
+      properties:
+        com.apple.developer.healthkit: true
+        com.apple.developer.healthkit.access: []
+
+schemes:
+  Viberunner:
+    build:
+      targets:
+        viberunner: all
+        viberunner-watch: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+
+  Viberunner (Local):
+    build:
+      targets:
+        viberunner: all
+        viberunner-watch: all
+    run:
+      config: Debug (Local)
+    test:
+      config: Debug (Local)
+    profile:
+      config: Release (Local)
+    analyze:
+      config: Debug (Local)
+    archive:
+      config: Release (Local)

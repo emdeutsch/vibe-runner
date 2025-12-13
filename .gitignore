@@ -45,3 +45,15 @@ apps/watch/DerivedData/
 # Temporary files
 *.tmp
 *.temp
+
+# Turborepo
+.turbo/
+
+# Supabase local
+supabase/.branches/
+supabase/.temp/
+
+# Xcode user data
+*.xcuserstate
+xcuserdata/
+*.xcworkspace/xcuserdata/
