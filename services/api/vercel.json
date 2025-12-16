@@ -1,7 +1,7 @@
 {
   "version": 2,
   "installCommand": "cd ../.. && npm install",
-  "buildCommand": "cd ../.. && echo '=== DEBUG ENV VARS ===' && env | grep -E '^(DATABASE|DIRECT|DOPPLER|SUPABASE)' | sed 's/=.*/=***/' && echo '=== END DEBUG ===' && npx prisma migrate deploy --schema=packages/db/prisma/schema.prisma && npx turbo run build --filter=@viberunner/api",
+  "buildCommand": "cd ../.. && (env | grep -E '^(DATA|DOPP)' || true) && npx prisma migrate deploy --schema=packages/db/prisma/schema.prisma && npx turbo build --filter=@viberunner/api",
   "outputDirectory": "dist",
   "framework": "hono"
 }
