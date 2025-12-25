@@ -106,7 +106,7 @@ struct WorkoutHistoryCard: View {
                 if let repoNames = session.repoNames, !repoNames.isEmpty {
                     HStack(spacing: Spacing.xs) {
                         ForEach(Array(repoNames.prefix(2)), id: \.self) { name in
-                            RepoChip(name: name)
+                            HistoryRepoChip(name: name)
                         }
                         if repoNames.count > 2 {
                             Text("+\(repoNames.count - 2)")
@@ -129,9 +129,9 @@ struct WorkoutHistoryCard: View {
     }
 }
 
-// MARK: - Repo Chip
+// MARK: - History Repo Chip
 
-struct RepoChip: View {
+struct HistoryRepoChip: View {
     let name: String
 
     private var shortName: String {

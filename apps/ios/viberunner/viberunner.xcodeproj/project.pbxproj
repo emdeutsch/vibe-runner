@@ -13,6 +13,9 @@
 		0123456789ABCDEF01234504 /* ActiveReposSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABCDEF0123456789ABCDEF04 /* ActiveReposSection.swift */; };
 		0123456789ABCDEF01234505 /* WatchConnectionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABCDEF0123456789ABCDEF05 /* WatchConnectionCard.swift */; };
 		0123456789ABCDEF01234506 /* DebugHRSimulatorCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABCDEF0123456789ABCDEF06 /* DebugHRSimulatorCard.swift */; };
+		0123456789ABCDEF01234507 /* PostWorkoutSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABCDEF0123456789ABCDEF07 /* PostWorkoutSummaryView.swift */; };
+		0123456789ABCDEF01234508 /* RepoCommitGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABCDEF0123456789ABCDEF08 /* RepoCommitGroup.swift */; };
+		0123456789ABCDEF01234509 /* WorkoutHistoryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABCDEF0123456789ABCDEF09 /* WorkoutHistoryCard.swift */; };
 		047C9076A4CD4BD710EE76E9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C595B6F87FF2698677B08C /* ContentView.swift */; };
 		07E7C27F6E4031FF931442DE /* WatchConnectivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E5671337D3C6B6222E63DF /* WatchConnectivityService.swift */; };
 		0FBBBD6FE395DB1544FDE195 /* viberunnerWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA8DE2CD0B81969995D479D /* viberunnerWatchApp.swift */; };
@@ -104,6 +107,9 @@
 		ABCDEF0123456789ABCDEF04 /* ActiveReposSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveReposSection.swift; sourceTree = "<group>"; };
 		ABCDEF0123456789ABCDEF05 /* WatchConnectionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnectionCard.swift; sourceTree = "<group>"; };
 		ABCDEF0123456789ABCDEF06 /* DebugHRSimulatorCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugHRSimulatorCard.swift; sourceTree = "<group>"; };
+		ABCDEF0123456789ABCDEF07 /* PostWorkoutSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostWorkoutSummaryView.swift; sourceTree = "<group>"; };
+		ABCDEF0123456789ABCDEF08 /* RepoCommitGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoCommitGroup.swift; sourceTree = "<group>"; };
+		ABCDEF0123456789ABCDEF09 /* WorkoutHistoryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutHistoryCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +150,7 @@
 				1675D473EA30F74EB383079C /* GateReposView.swift */,
 				678C9C834DA491CED4B232D6 /* HistoryView.swift */,
 				937AF3C45AF65C62CB12531A /* LoginView.swift */,
+				ABCDEF0123456789ABCDEF07 /* PostWorkoutSummaryView.swift */,
 				66DBDE77354A904774C93BF2 /* SettingsView.swift */,
 				480ED0D8C8AA6ED7CE2D6F3C /* WorkoutDetailView.swift */,
 				C9591228D2F4C2F41E6D7F2C /* WorkoutView.swift */,
@@ -257,10 +264,20 @@
 		FA2AC809E009B40AD34CBBF9 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				ABCDEF0123456789ABCD0009 /* History */,
 				ABCDEF0123456789ABCD0007 /* Workout */,
 				C3033C10836B66EB70741992 /* HeartRateChartView.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		ABCDEF0123456789ABCD0009 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				ABCDEF0123456789ABCDEF08 /* RepoCommitGroup.swift */,
+				ABCDEF0123456789ABCDEF09 /* WorkoutHistoryCard.swift */,
+			);
+			path = History;
 			sourceTree = "<group>";
 		};
 		ABCDEF0123456789ABCD0007 /* Workout */ = {
@@ -411,6 +428,9 @@
 				0123456789ABCDEF01234504 /* ActiveReposSection.swift in Sources */,
 				0123456789ABCDEF01234505 /* WatchConnectionCard.swift in Sources */,
 				0123456789ABCDEF01234506 /* DebugHRSimulatorCard.swift in Sources */,
+				0123456789ABCDEF01234507 /* PostWorkoutSummaryView.swift in Sources */,
+				0123456789ABCDEF01234508 /* RepoCommitGroup.swift in Sources */,
+				0123456789ABCDEF01234509 /* WorkoutHistoryCard.swift in Sources */,
 				B1DBA3228460150F65BE6416 /* APIService.swift in Sources */,
 				65EFCEB825FE8B0D2A982BDA /* AuthService.swift in Sources */,
 				762E8841D6F0F9E7B6EAE260 /* Config.swift in Sources */,
