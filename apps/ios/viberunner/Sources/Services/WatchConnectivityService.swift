@@ -30,25 +30,41 @@ class WatchConnectivityService: NSObject, ObservableObject {
 
     // MARK: - Send Commands to Watch
 
-    func sendStartWorkout() {
-        guard let session = session, session.isReachable else {
-            print("Watch not reachable")
+    /// Notify watch that phone has started a workout (for UI indicator)
+    func sendWorkoutStarted() {
+        guard let session = session else {
+            print("WCSession not available")
             return
         }
 
-        session.sendMessage(["command": "startWorkout"], replyHandler: nil) { error in
-            print("Failed to send startWorkout: \(error)")
+        if session.isReachable {
+            session.sendMessage(["command": "workoutStarted"], replyHandler: nil) { error in
+                print("Failed to send workoutStarted: \(error)")
+                // Fallback to application context
+                try? session.updateApplicationContext(["workoutActive": true])
+            }
+        } else {
+            // Send via application context for delivery when watch becomes active
+            try? session.updateApplicationContext(["workoutActive": true])
         }
     }
 
-    func sendStopWorkout() {
-        guard let session = session, session.isReachable else {
-            print("Watch not reachable")
+    /// Notify watch that phone has stopped the workout
+    func sendWorkoutStopped() {
+        guard let session = session else {
+            print("WCSession not available")
             return
         }
 
-        session.sendMessage(["command": "stopWorkout"], replyHandler: nil) { error in
-            print("Failed to send stopWorkout: \(error)")
+        if session.isReachable {
+            session.sendMessage(["command": "workoutStopped"], replyHandler: nil) { error in
+                print("Failed to send workoutStopped: \(error)")
+                // Fallback to application context
+                try? session.updateApplicationContext(["workoutActive": false])
+            }
+        } else {
+            // Send via application context for delivery when watch becomes active
+            try? session.updateApplicationContext(["workoutActive": false])
         }
     }
 
@@ -71,14 +87,44 @@ class WatchConnectivityService: NSObject, ObservableObject {
         }
     }
 
+    /// Attempt to wake the watch app and prompt it to start HR monitoring
+    /// Note: WatchConnectivity can't force-launch the watch app, but we can:
+    /// 1. Send a message if reachable (watch app is open)
+    /// 2. Send application context that will be delivered when watch app opens
+    func requestWatchAppLaunch() {
+        guard let session = session else {
+            print("WCSession not available")
+            return
+        }
+
+        guard session.isWatchAppInstalled else {
+            print("Watch app not installed")
+            return
+        }
+
+        // If already reachable, watch app is open - just ping it
+        if session.isReachable {
+            session.sendMessage(["command": "ping"], replyHandler: { response in
+                print("Watch app responded: \(response)")
+            }) { error in
+                print("Watch ping failed: \(error)")
+            }
+        } else {
+            // Watch app is not open - send context that will be received when user opens it
+            // The watch app will auto-start HR monitoring when it opens
+            try? session.updateApplicationContext(["requestedLaunch": Date().timeIntervalSince1970])
+            print("Watch app not reachable - user needs to open watch app manually")
+        }
+    }
+
     // MARK: - Process Heart Rate
 
     private func processHeartRate(_ bpm: Int, timestamp: TimeInterval? = nil) async {
         lastReceivedBPM = bpm
         lastReceivedTimestamp = timestamp.map { Date(timeIntervalSince1970: $0) } ?? Date()
 
-        // Forward to workout service
-        await WorkoutService.shared.ingestHeartRate(bpm)
+        // Forward to workout service - this updates display always, sends to API only during active workout
+        await WorkoutService.shared.updateHeartRate(bpm)
     }
 }
 

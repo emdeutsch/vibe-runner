@@ -80,7 +80,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     private func makeTemplate(for complication: CLKComplication) -> CLKComplicationTemplate? {
         let workoutManager = WorkoutManager.shared
         let bpm = workoutManager.currentHeartRate
-        let isActive = workoutManager.isWorkoutActive
+        let isActive = workoutManager.isPhoneWorkoutActive
         let hrOk = bpm >= workoutManager.threshold
 
         switch complication.family {

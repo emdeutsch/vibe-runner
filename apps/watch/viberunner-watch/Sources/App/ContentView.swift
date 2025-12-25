@@ -2,17 +2,14 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var workoutManager: WorkoutManager
+    @EnvironmentObject var phoneConnectivity: PhoneConnectivityService
 
     var body: some View {
-        NavigationStack {
-            if workoutManager.isPreparing {
-                CountdownView()
-            } else if workoutManager.isWorkoutActive {
-                ActiveWorkoutView()
-            } else {
-                StartWorkoutView()
+        HRMonitorView()
+            .onAppear {
+                // Request authorization and start monitoring when view appears
+                workoutManager.requestAuthorizationIfNeeded()
             }
-        }
     }
 }
 

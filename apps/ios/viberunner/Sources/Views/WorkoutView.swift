@@ -39,7 +39,7 @@ struct WorkoutView: View {
                     Button(role: .destructive) {
                         Task {
                             do {
-                                watchConnectivity.sendStopWorkout()
+                                watchConnectivity.sendWorkoutStopped()
                                 try await workoutService.stopWorkout()
                             } catch {
                                 showingError = true
@@ -86,7 +86,7 @@ struct WorkoutView: View {
                     Task {
                         do {
                             try await workoutService.startWorkout(repoIds: selectedRepoIds)
-                            watchConnectivity.sendStartWorkout()
+                            watchConnectivity.sendWorkoutStarted()
                         } catch {
                             showingError = true
                         }
@@ -267,49 +267,66 @@ struct StatusCard: View {
     let toolsUnlocked: Bool
     let threshold: Int
 
+    private var heartRateColor: Color {
+        if bpm == 0 {
+            return .secondary
+        }
+        // Only show green/red based on threshold when workout is active
+        if isActive {
+            return bpm >= threshold ? .green : .red
+        }
+        // Otherwise just show red (heart color) for passive monitoring
+        return .red
+    }
+
     var body: some View {
         VStack(spacing: 20) {
             // Heart rate display
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 Text("\(bpm)")
                     .font(.system(size: 72, weight: .bold, design: .rounded))
-                    .foregroundStyle(bpm >= threshold ? .green : .red)
+                    .foregroundStyle(heartRateColor)
 
                 Text("BPM")
                     .font(.title2)
                     .foregroundStyle(.secondary)
             }
 
-            // Status indicator
-            HStack(spacing: 8) {
-                Circle()
-                    .fill(toolsUnlocked ? .green : .red)
-                    .frame(width: 12, height: 12)
-
-                Text(toolsUnlocked ? "Tools Unlocked" : "Tools Locked")
-                    .font(.headline)
-                    .foregroundStyle(toolsUnlocked ? .green : .red)
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-            .background(
-                Capsule()
-                    .fill(toolsUnlocked ? .green.opacity(0.15) : .red.opacity(0.15))
-            )
-
-            // Threshold indicator
-            Text("Threshold: \(threshold) BPM")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
-            // Workout status
+            // Status indicator (only show during active workout)
             if isActive {
+                HStack(spacing: 8) {
+                    Circle()
+                        .fill(toolsUnlocked ? .green : .red)
+                        .frame(width: 12, height: 12)
+
+                    Text(toolsUnlocked ? "Tools Unlocked" : "Tools Locked")
+                        .font(.headline)
+                        .foregroundStyle(toolsUnlocked ? .green : .red)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(
+                    Capsule()
+                        .fill(toolsUnlocked ? .green.opacity(0.15) : .red.opacity(0.15))
+                )
+
+                // Threshold indicator
+                Text("Threshold: \(threshold) BPM")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                // Workout status
                 HStack {
                     Image(systemName: "figure.run")
                     Text("Workout Active")
                 }
                 .font(.caption)
                 .foregroundStyle(.green)
+            } else {
+                // When not active, show instruction
+                Text("Start a workout to gate your repos")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
         }
         .frame(maxWidth: .infinity)
