@@ -3,8 +3,19 @@ import SwiftUI
 struct WatchConnectionCard: View {
     @EnvironmentObject var watchConnectivity: WatchConnectivityService
 
+    /// Consider data "fresh" if received within last 30 seconds
+    private let dataFreshnessThreshold: TimeInterval = 30
+
+    /// Connected = either directly reachable OR receiving data recently
     private var isConnected: Bool {
-        watchConnectivity.isReachable
+        if watchConnectivity.isReachable {
+            return true
+        }
+        // Also consider connected if we've received HR data recently
+        guard let lastTimestamp = watchConnectivity.lastReceivedTimestamp else {
+            return false
+        }
+        return Date().timeIntervalSince(lastTimestamp) < dataFreshnessThreshold
     }
 
     private var statusColor: Color {

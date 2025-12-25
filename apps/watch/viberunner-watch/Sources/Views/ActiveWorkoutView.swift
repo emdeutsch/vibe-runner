@@ -96,15 +96,9 @@ struct HRMonitorView: View {
 
             Spacer()
 
-            // Phone sync status
-            HStack(spacing: 4) {
-                Image(systemName: phoneConnectivity.isReachable ? "iphone.radiowaves.left.and.right" : "iphone.slash")
-                    .font(.caption2)
-
-                Text(phoneConnectivity.isReachable ? "Connected" : "Not Connected")
-                    .font(.caption2)
-            }
-            .foregroundStyle(phoneConnectivity.isReachable ? .green : .secondary)
+            // Phone sync status - show actual data flow state, not just isReachable
+            // isReachable becomes false when screen dims, but data still syncs via applicationContext
+            phoneSyncStatusView
         }
         .padding()
         .onAppear {
@@ -150,6 +144,22 @@ struct HRMonitorView: View {
         }
         // Otherwise just show red (heart color) for passive monitoring
         return .red
+    }
+
+    /// Connected = reachable OR monitoring (data flowing via applicationContext when screen dims)
+    private var isConnectedToPhone: Bool {
+        phoneConnectivity.isReachable || workoutManager.isMonitoring
+    }
+
+    /// Phone sync status view - show connected when data is flowing
+    private var phoneSyncStatusView: some View {
+        HStack(spacing: 4) {
+            Image(systemName: isConnectedToPhone ? "iphone.radiowaves.left.and.right" : "iphone.slash")
+                .font(.caption2)
+            Text(isConnectedToPhone ? "Connected" : "Not Connected")
+                .font(.caption2)
+        }
+        .foregroundStyle(isConnectedToPhone ? .green : .secondary)
     }
 }
 
