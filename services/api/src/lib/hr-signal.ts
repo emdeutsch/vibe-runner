@@ -31,7 +31,17 @@ export async function updateSessionSignalRefs(
       },
     });
 
-    if (gateRepos.length === 0) return;
+    if (gateRepos.length === 0) {
+      // Debug: check if any repos exist for this user at all
+      const allUserRepos = await prisma.gateRepo.findMany({
+        where: { userId },
+        select: { id: true, active: true, activeSessionId: true, githubAppInstallationId: true },
+      });
+      console.log(
+        `[HR Signal] No repos found for session. userId=${userId}, sessionId=${sessionId}, allUserRepos=${JSON.stringify(allUserRepos)}`
+      );
+      return;
+    }
 
     // Create signed payload
     const payload = createSignedPayload(
