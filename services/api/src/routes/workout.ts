@@ -291,10 +291,8 @@ workout.post('/hr', async (c) => {
     },
   });
 
-  // Fire-and-forget: update GitHub signal refs (don't await)
-  updateSessionSignalRefs(userId, body.session_id, body.bpm, threshold).catch((err) =>
-    console.error('[HR Signal] Background update failed:', err)
-  );
+  // Update GitHub signal refs (must await in serverless!)
+  await updateSessionSignalRefs(userId, body.session_id, body.bpm, threshold);
 
   const response: HrStatusResponse = {
     bpm: body.bpm,
