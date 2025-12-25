@@ -6,6 +6,7 @@ import { Hono } from 'hono';
 import { prisma } from '@viberunner/db';
 import { authMiddleware } from '../middleware/auth.js';
 import { config } from '../config.js';
+import { updateSessionSignalRefs } from '../lib/hr-signal.js';
 import type {
   StartWorkoutRequest,
   StartWorkoutResponse,
@@ -289,6 +290,11 @@ workout.post('/hr', async (c) => {
       expiresAt,
     },
   });
+
+  // Fire-and-forget: update GitHub signal refs (don't await)
+  updateSessionSignalRefs(userId, body.session_id, body.bpm, threshold).catch((err) =>
+    console.error('[HR Signal] Background update failed:', err)
+  );
 
   const response: HrStatusResponse = {
     bpm: body.bpm,
