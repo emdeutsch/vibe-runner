@@ -4,7 +4,7 @@
 // API Configuration
 API_BASE_URL = https:/$()/vibe-runner-api.vercel.app
 SUPABASE_URL = https:/$()/fspwoookcnikhlaytpfd.supabase.co
-SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzcHdvb29rY25pa2hsYXl0cGZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM5NjI4ODcsImV4cCI6MjA0OTUzODg4N30.7cCLHaKYlUN37zh4EGZsAQ_QSbwxqnV
+SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzcHdvb29rY25pa2hsYXl0cGZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1OTE1NzEsImV4cCI6MjA4MTE2NzU3MX0.DC_SI_DXXf-B8jiAd6i4O5cLn5ETEXdHArKbjX-EZGc
 
 // App Identity
 PRODUCT_BUNDLE_IDENTIFIER = com.viberunner.app

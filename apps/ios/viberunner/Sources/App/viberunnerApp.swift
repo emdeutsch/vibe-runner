@@ -14,6 +14,10 @@ struct viberunnerApp: App {
                 .environmentObject(apiService)
                 .environmentObject(workoutService)
                 .environmentObject(watchConnectivity)
+                .onAppear {
+                    // Attempt to wake watch app for HR monitoring
+                    watchConnectivity.requestWatchAppLaunch()
+                }
         }
     }
 }

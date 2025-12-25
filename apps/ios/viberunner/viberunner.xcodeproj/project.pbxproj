@@ -16,7 +16,6 @@
 		3C1DCCF94EBA33AD318E20B6 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C0C61679733F809E60305D /* ComplicationController.swift */; };
 		45957B5380BD8E31654D3CE2 /* GateReposView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1675D473EA30F74EB383079C /* GateReposView.swift */; };
 		4FA85717D4DEAC0B6960B1E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2EAF788482995F112AD9FC69 /* Assets.xcassets */; };
-		524831474D1154F6E34E7B06 /* StartWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195F839A7A1D039204C6983C /* StartWorkoutView.swift */; };
 		62E1060D74F5B585EF322321 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 40A5DEB5D25930111B7282D3 /* Supabase */; };
 		647E8B6B6E90A4C4EB977942 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB81F623B4C8FB8B8EA17AE /* Models.swift */; };
 		64B7E34A412D0226CB254C0D /* WorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA7F784CB28ED6FAE563D92 /* WorkoutManager.swift */; };
@@ -33,7 +32,6 @@
 		D7636618E18A23D9D791C9C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76F3A45905D4ECC725E1BD8C /* Assets.xcassets */; };
 		DD3AFD9522BE6E663892614B /* HeartRateChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3033C10836B66EB70741992 /* HeartRateChartView.swift */; };
 		E7A95F82151C024BC86F0DCF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DBDE77354A904774C93BF2 /* SettingsView.swift */; };
-		F18EE5116102B2A236F5A869 /* CountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E76B80D299DEFA5E8A153B5 /* CountdownView.swift */; };
 		F5A9CE3D08923240A70EC3D0 /* viberunnerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5960495A4E2D15EDC9C9DC87 /* viberunnerApp.swift */; };
 /* End PBXBuildFile section */
 
@@ -65,8 +63,6 @@
 		05C595B6F87FF2698677B08C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		10F94C41D61EB4972286B692 /* viberunner-watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "viberunner-watch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1675D473EA30F74EB383079C /* GateReposView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GateReposView.swift; sourceTree = "<group>"; };
-		195F839A7A1D039204C6983C /* StartWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartWorkoutView.swift; sourceTree = "<group>"; };
-		1E76B80D299DEFA5E8A153B5 /* CountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownView.swift; sourceTree = "<group>"; };
 		2EAF788482995F112AD9FC69 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2EE9AF9DF1AEEA5DF4E71F3A /* Local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig; sourceTree = "<group>"; };
 		355A8650F98CF5158F1BD742 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
@@ -161,8 +157,6 @@
 			isa = PBXGroup;
 			children = (
 				C68A8F08146CD64111A928A5 /* ActiveWorkoutView.swift */,
-				1E76B80D299DEFA5E8A153B5 /* CountdownView.swift */,
-				195F839A7A1D039204C6983C /* StartWorkoutView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -367,9 +361,7 @@
 				1C9A0152AC0086A70B539295 /* ActiveWorkoutView.swift in Sources */,
 				3C1DCCF94EBA33AD318E20B6 /* ComplicationController.swift in Sources */,
 				CFD26333E071434EDB5BB9D4 /* ContentView.swift in Sources */,
-				F18EE5116102B2A236F5A869 /* CountdownView.swift in Sources */,
 				A4637D356837F7F391CCAF66 /* PhoneConnectivityService.swift in Sources */,
-				524831474D1154F6E34E7B06 /* StartWorkoutView.swift in Sources */,
 				64B7E34A412D0226CB254C0D /* WorkoutManager.swift in Sources */,
 				0FBBBD6FE395DB1544FDE195 /* viberunnerWatchApp.swift in Sources */,
 			);

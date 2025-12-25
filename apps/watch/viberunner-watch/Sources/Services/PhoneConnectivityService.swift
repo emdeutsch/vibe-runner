@@ -142,16 +142,23 @@ extension PhoneConnectivityService: WCSessionDelegate {
     private func handleMessage(_ message: [String: Any]) {
         if let command = message["command"] as? String {
             switch command {
-            case "startWorkout":
-                WorkoutManager.shared.startWorkout()
+            case "workoutStarted":
+                // Phone started a workout with repos - update UI indicator
+                WorkoutManager.shared.phoneWorkoutStarted()
 
-            case "stopWorkout":
-                WorkoutManager.shared.stopWorkout()
+            case "workoutStopped":
+                // Phone stopped the workout - update UI indicator
+                WorkoutManager.shared.phoneWorkoutStopped()
 
             case "updateThreshold":
                 if let threshold = message["threshold"] as? Int {
                     currentThreshold = threshold
+                    WorkoutManager.shared.threshold = threshold
                 }
+
+            case "ping":
+                // Phone is checking if watch app is alive - ensure monitoring is started
+                WorkoutManager.shared.requestAuthorizationIfNeeded()
 
             default:
                 break

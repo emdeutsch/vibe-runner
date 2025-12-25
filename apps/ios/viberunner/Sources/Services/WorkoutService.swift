@@ -47,7 +47,7 @@ class WorkoutService: ObservableObject {
         try await APIService.shared.stopWorkout()
         currentSessionId = nil
         isActive = false
-        currentBPM = 0
+        // Don't reset currentBPM - keep showing HR from watch
         toolsUnlocked = false
         selectedRepos = []
 
@@ -57,19 +57,28 @@ class WorkoutService: ObservableObject {
 
     // MARK: - HR Sample Ingestion
 
-    func ingestHeartRate(_ bpm: Int) async {
-        guard let sessionId = currentSessionId else { return }
+    /// Update current BPM from watch - always updates display, only sends to API during active workout
+    func updateHeartRate(_ bpm: Int) async {
+        // Always update the displayed BPM
+        currentBPM = bpm
+
+        // Only send to API if we have an active workout session
+        guard let sessionId = currentSessionId, isActive else { return }
 
         do {
             let status = try await APIService.shared.ingestHRSample(
                 sessionId: sessionId,
                 bpm: bpm
             )
-            currentBPM = bpm
             toolsUnlocked = status.toolsUnlocked
         } catch {
             self.error = error.localizedDescription
         }
+    }
+
+    /// Legacy method for backwards compatibility
+    func ingestHeartRate(_ bpm: Int) async {
+        await updateHeartRate(bpm)
     }
 
     // MARK: - Status Polling
@@ -91,9 +100,7 @@ class WorkoutService: ObservableObject {
         do {
             let status = try await APIService.shared.fetchHRStatus()
             toolsUnlocked = status.toolsUnlocked
-            if !isActive {
-                currentBPM = 0
-            }
+            // Don't reset currentBPM - it comes from watch regardless of workout state
         } catch {
             // Ignore polling errors
         }
