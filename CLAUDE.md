@@ -17,6 +17,21 @@ npx prisma migrate deploy
 
 ## iOS Development
 
+### Version Management
+
+**CRITICAL:** Before any TestFlight upload, you MUST:
+
+1. **Check the current TestFlight build number** in App Store Connect (TestFlight → Builds)
+2. **Increment CFBundleVersion** in `apps/ios/viberunner/Sources/Info.plist` to be higher than the latest TestFlight build
+3. **Commit the version bump** to git before or immediately after upload
+
+The build number in git must always match or exceed the latest TestFlight build. Never trust the git value alone - always verify against TestFlight.
+
+| File                                     | Key                          | Purpose                                                              |
+| ---------------------------------------- | ---------------------------- | -------------------------------------------------------------------- |
+| `apps/ios/viberunner/Sources/Info.plist` | `CFBundleShortVersionString` | Marketing version (e.g., "1.0")                                      |
+| `apps/ios/viberunner/Sources/Info.plist` | `CFBundleVersion`            | Build number (e.g., "8") - must increment for each TestFlight upload |
+
 ### TestFlight Upload
 
 See `docs/IOS_TESTFLIGHT_UPLOAD.md` for complete CLI upload workflow.
@@ -24,10 +39,15 @@ See `docs/IOS_TESTFLIGHT_UPLOAD.md` for complete CLI upload workflow.
 **Quick upload:**
 
 ```bash
+# 1. First, check current build in TestFlight and update CFBundleVersion in Info.plist
+
+# 2. Then build and upload:
 cd apps/ios/viberunner && \
 xcodebuild -scheme "Viberunner" -archivePath ./build/Viberunner.xcarchive archive -allowProvisioningUpdates && \
 xcodebuild -exportArchive -archivePath ./build/Viberunner.xcarchive -exportPath ./build/export -exportOptionsPlist ./build/ExportOptions.plist -allowProvisioningUpdates && \
 xcrun altool --upload-app --type ios --file ./build/export/Viberunner.ipa --apiKey 45C93UF2KA --apiIssuer 2643b0ce-38e5-4865-9237-d7979d42aeed
+
+# 3. Commit the version bump if not already done
 ```
 
 ### Local Development
