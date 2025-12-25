@@ -353,33 +353,21 @@ export async function updateSignalRef(
     parents: [],
   });
 
-  // Simple update or create - keep it fast
+  // Always delete then create - simple and reliable
   const shortRef = refName.replace('refs/', '');
 
+  // Delete existing ref (ignore errors - might not exist)
   try {
-    // Try update first (most common case - ref exists)
-    await octokit.rest.git.updateRef({
-      owner,
-      repo,
-      ref: shortRef,
-      sha: commit.sha,
-      force: true,
-    });
-  } catch (e: unknown) {
-    const status =
-      e && typeof e === 'object' && 'status' in e ? (e as { status: number }).status : 0;
-
-    if (status === 404) {
-      // Ref doesn't exist, create it
-      await octokit.rest.git.createRef({
-        owner,
-        repo,
-        ref: refName,
-        sha: commit.sha,
-      });
-    } else {
-      // For any other error (including 422), just throw - don't do complex fallbacks
-      throw e;
-    }
+    await octokit.rest.git.deleteRef({ owner, repo, ref: shortRef });
+  } catch {
+    // Ignore - ref might not exist
   }
+
+  // Create fresh ref
+  await octokit.rest.git.createRef({
+    owner,
+    repo,
+    ref: refName,
+    sha: commit.sha,
+  });
 }
