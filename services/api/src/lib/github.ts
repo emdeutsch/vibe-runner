@@ -354,23 +354,47 @@ export async function updateSignalRef(
   });
 
   // Try to update the ref, create if it doesn't exist
+  const shortRef = refName.replace('refs/', '');
   try {
     await octokit.rest.git.updateRef({
       owner,
       repo,
-      ref: refName.replace('refs/', ''),
+      ref: shortRef,
       sha: commit.sha,
       force: true,
     });
   } catch (error: unknown) {
-    // If ref doesn't exist (404), create it
-    if (error && typeof error === 'object' && 'status' in error && error.status === 404) {
-      await octokit.rest.git.createRef({
-        owner,
-        repo,
-        ref: refName,
-        sha: commit.sha,
-      });
+    if (error && typeof error === 'object' && 'status' in error) {
+      const status = (error as { status: number }).status;
+      if (status === 404) {
+        // Ref doesn't exist, create it
+        await octokit.rest.git.createRef({
+          owner,
+          repo,
+          ref: refName,
+          sha: commit.sha,
+        });
+      } else if (status === 422) {
+        // Ref exists but can't be updated (orphan commit conflict)
+        // Delete and recreate
+        try {
+          await octokit.rest.git.deleteRef({
+            owner,
+            repo,
+            ref: shortRef,
+          });
+        } catch {
+          // Ignore delete errors
+        }
+        await octokit.rest.git.createRef({
+          owner,
+          repo,
+          ref: refName,
+          sha: commit.sha,
+        });
+      } else {
+        throw error;
+      }
     } else {
       throw error;
     }
