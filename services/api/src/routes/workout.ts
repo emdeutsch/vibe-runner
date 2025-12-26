@@ -185,136 +185,106 @@ workout.post('/stop', async (c) => {
     try {
       const octokit = await createInstallationOctokit(repo.githubAppInstallationId);
 
-      // Use Events API to get PushEvents from ALL branches (not just default)
-      const { data: events } = await octokit.rest.activity.listRepoEvents({
+      // Fetch commits from ALL branches (Events API doesn't capture feature branch pushes)
+      // Step 1: Get all branch refs
+      const { data: refs } = await octokit.rest.git.listMatchingRefs({
         owner: repo.owner,
         repo: repo.name,
-        per_page: 100,
+        ref: 'heads/',
       });
 
-      console.log('[stop] Events fetched from GitHub:', events.length);
+      const branchNames = refs.map((r) => r.ref.replace('refs/heads/', ''));
+      console.log('[stop] Found branches:', branchNames.length, branchNames);
 
-      // Log all PushEvents for debugging
-      const allPushEvents = events.filter((e) => e.type === 'PushEvent');
-      console.log('[stop] All PushEvents:', allPushEvents.length);
-      allPushEvents.forEach((e) => {
-        const payload = e.payload as {
-          ref?: string;
-          commits?: Array<{ sha: string; message: string }>;
-        };
-        console.log(
-          '[stop] PushEvent:',
-          e.created_at,
-          'ref:',
-          payload.ref,
-          'commits:',
-          payload.commits?.length
-        );
-      });
+      // Step 2: For each branch, fetch commits within our time window
+      // Add 2 minute buffer to account for clock skew
+      const windowStart = new Date(session.startedAt.getTime() - 2 * 60 * 1000);
+      const windowEnd = new Date(endedAt.getTime() + 2 * 60 * 1000);
+      console.log('[stop] Time window:', windowStart.toISOString(), '-', windowEnd.toISOString());
 
-      // Filter to PushEvents within our time window
-      // Add 5 minute buffer on each end to account for clock skew and API delays
-      const windowStart = new Date(session.startedAt.getTime() - 5 * 60 * 1000);
-      const windowEnd = new Date(endedAt.getTime() + 5 * 60 * 1000);
-      console.log(
-        '[stop] Time window (with 5min buffer):',
-        windowStart.toISOString(),
-        '-',
-        windowEnd.toISOString()
-      );
-
-      const pushEvents = events.filter((e) => {
-        if (e.type !== 'PushEvent') return false;
-        const eventDate = new Date(e.created_at || '');
-        const inWindow = eventDate >= windowStart && eventDate <= windowEnd;
-        if (!inWindow) {
-          console.log('[stop] PushEvent outside window:', e.created_at);
-        }
-        return inWindow;
-      });
-
-      console.log('[stop] PushEvents in time window:', pushEvents.length);
-
-      // Extract commits from push events
       const seenShas = new Set<string>();
-      for (const event of pushEvents) {
-        const payload = event.payload as {
-          commits?: Array<{ sha: string; message: string; author?: { name?: string } }>;
-        };
-        if (!payload.commits) continue;
+      let totalCommitsFound = 0;
 
-        console.log(
-          '[stop] PushEvent at',
-          event.created_at,
-          'has',
-          payload.commits.length,
-          'commits'
-        );
-
-        for (const commit of payload.commits) {
-          if (seenShas.has(commit.sha)) continue;
-          seenShas.add(commit.sha);
-
-          // Fetch full commit for stats and file info
-          const { data: fullCommit } = await octokit.rest.repos.getCommit({
+      for (const branch of branchNames) {
+        try {
+          const { data: commits } = await octokit.rest.repos.listCommits({
             owner: repo.owner,
             repo: repo.name,
-            ref: commit.sha,
+            sha: branch,
+            since: windowStart.toISOString(),
+            until: windowEnd.toISOString(),
+            per_page: 100,
           });
 
-          const commitDate = new Date(
-            fullCommit.commit.author?.date ||
-              fullCommit.commit.committer?.date ||
-              event.created_at ||
-              ''
-          );
+          console.log('[stop] Branch', branch, 'has', commits.length, 'commits in window');
 
-          console.log(
-            '[stop] Saving commit',
-            commit.sha.substring(0, 7),
-            'msg:',
-            commit.message?.substring(0, 30)
-          );
+          for (const commit of commits) {
+            if (seenShas.has(commit.sha)) continue;
+            seenShas.add(commit.sha);
+            totalCommitsFound++;
 
-          // Upsert commit
-          const saved = await prisma.sessionCommit.upsert({
-            where: {
-              sessionId_commitSha: {
-                sessionId: session.id,
-                commitSha: commit.sha,
+            const commitDate = new Date(
+              commit.commit.author?.date || commit.commit.committer?.date || ''
+            );
+
+            console.log(
+              '[stop] Saving commit',
+              commit.sha.substring(0, 7),
+              'msg:',
+              commit.commit.message?.substring(0, 30)
+            );
+
+            // Fetch full commit for stats
+            const { data: fullCommit } = await octokit.rest.repos.getCommit({
+              owner: repo.owner,
+              repo: repo.name,
+              ref: commit.sha,
+            });
+
+            // Upsert commit
+            const saved = await prisma.sessionCommit.upsert({
+              where: {
+                sessionId_commitSha: {
+                  sessionId: session.id,
+                  commitSha: commit.sha,
+                },
               },
-            },
-            create: {
-              sessionId: session.id,
-              repoOwner: repo.owner,
-              repoName: repo.name,
-              commitSha: commit.sha,
-              commitMsg: commit.message?.substring(0, 1000) || '',
-              linesAdded: fullCommit.stats?.additions ?? null,
-              linesRemoved: fullCommit.stats?.deletions ?? null,
-              committedAt: commitDate,
-            },
-            update: {},
-          });
-
-          // Save files changed in this commit
-          if (fullCommit.files && fullCommit.files.length > 0) {
-            await prisma.sessionCommitFile.deleteMany({
-              where: { commitId: saved.id },
+              create: {
+                sessionId: session.id,
+                repoOwner: repo.owner,
+                repoName: repo.name,
+                commitSha: commit.sha,
+                commitMsg: commit.commit.message?.substring(0, 1000) || '',
+                linesAdded: fullCommit.stats?.additions ?? null,
+                linesRemoved: fullCommit.stats?.deletions ?? null,
+                committedAt: commitDate,
+              },
+              update: {},
             });
 
-            await prisma.sessionCommitFile.createMany({
-              data: fullCommit.files.map((f) => ({
-                commitId: saved.id,
-                filename: f.filename,
-                status: f.status || 'modified',
-                additions: f.additions ?? null,
-                deletions: f.deletions ?? null,
-              })),
-            });
+            // Save files changed in this commit
+            if (fullCommit.files && fullCommit.files.length > 0) {
+              await prisma.sessionCommitFile.deleteMany({
+                where: { commitId: saved.id },
+              });
+
+              await prisma.sessionCommitFile.createMany({
+                data: fullCommit.files.map((f) => ({
+                  commitId: saved.id,
+                  filename: f.filename,
+                  status: f.status || 'modified',
+                  additions: f.additions ?? null,
+                  deletions: f.deletions ?? null,
+                })),
+              });
+            }
           }
+        } catch (branchError) {
+          console.error(`[stop] Error fetching commits for branch ${branch}:`, branchError);
         }
       }
+
+      console.log('[stop] Total unique commits saved:', totalCommitsFound);
 
       // Also fetch PRs created or updated during the session
       const { data: pullRequests } = await octokit.rest.pulls.list({
