@@ -142,11 +142,31 @@ workout.post('/stop', async (c) => {
   });
 
   // Fetch commits from GitHub for each repo that was active during a session
+  console.log('[stop] Active repos for commit fetching:', activeRepos.length);
   for (const repo of activeRepos) {
+    console.log(
+      '[stop] Checking repo:',
+      repo.owner,
+      repo.name,
+      'installationId:',
+      repo.githubAppInstallationId,
+      'sessionId:',
+      repo.activeSessionId
+    );
     if (!repo.githubAppInstallationId || !repo.activeSessionId) continue;
 
     const session = activeSessions.find((s) => s.id === repo.activeSessionId);
-    if (!session) continue;
+    if (!session) {
+      console.log('[stop] No session found for repo');
+      continue;
+    }
+
+    console.log(
+      '[stop] Session times - started:',
+      session.startedAt.toISOString(),
+      'ended:',
+      endedAt.toISOString()
+    );
 
     try {
       const octokit = await createInstallationOctokit(repo.githubAppInstallationId);
@@ -159,10 +179,22 @@ workout.post('/stop', async (c) => {
         per_page: 100,
       });
 
+      console.log('[stop] Commits fetched from GitHub:', commits.length);
+
       for (const commit of commits) {
         // Get commit date and skip if after session end
         const commitDate = new Date(
           commit.commit.author?.date || commit.commit.committer?.date || ''
+        );
+        console.log(
+          '[stop] Commit',
+          commit.sha.substring(0, 7),
+          'date:',
+          commitDate.toISOString(),
+          'vs endedAt:',
+          endedAt.toISOString(),
+          'skip?',
+          commitDate > endedAt
         );
         if (isNaN(commitDate.getTime()) || commitDate > endedAt) continue;
 
