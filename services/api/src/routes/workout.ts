@@ -287,6 +287,7 @@ workout.post('/stop', async (c) => {
       console.log('[stop] Total unique commits saved:', totalCommitsFound);
 
       // Also fetch PRs created or updated during the session
+      console.log('[stop] Fetching PRs for', repo.owner, repo.name);
       const { data: pullRequests } = await octokit.rest.pulls.list({
         owner: repo.owner,
         repo: repo.name,
@@ -296,6 +297,15 @@ workout.post('/stop', async (c) => {
         per_page: 50,
       });
 
+      console.log('[stop] Found', pullRequests.length, 'PRs total');
+      console.log(
+        '[stop] Session window for PRs:',
+        session.startedAt.toISOString(),
+        '-',
+        endedAt.toISOString()
+      );
+
+      let prsMatched = 0;
       for (const pr of pullRequests) {
         const prCreatedAt = new Date(pr.created_at);
         const prUpdatedAt = new Date(pr.updated_at);
@@ -304,7 +314,20 @@ workout.post('/stop', async (c) => {
         const createdDuringSession = prCreatedAt >= session.startedAt && prCreatedAt <= endedAt;
         const updatedDuringSession = prUpdatedAt >= session.startedAt && prUpdatedAt <= endedAt;
 
-        if (!createdDuringSession && !updatedDuringSession) continue;
+        if (!createdDuringSession && !updatedDuringSession) {
+          console.log(
+            '[stop] PR #',
+            pr.number,
+            'outside window. created:',
+            pr.created_at,
+            'updated:',
+            pr.updated_at
+          );
+          continue;
+        }
+
+        prsMatched++;
+        console.log('[stop] PR #', pr.number, 'matched! created:', pr.created_at);
 
         // Determine merged state
         const state = pr.merged_at ? 'merged' : pr.state;
@@ -337,6 +360,8 @@ workout.post('/stop', async (c) => {
           },
         });
       }
+
+      console.log('[stop] Total PRs matched and saved:', prsMatched);
     } catch (error) {
       // Log but don't fail the stop - commits are nice-to-have
       console.error(`Failed to fetch commits for ${repo.owner}/${repo.name}:`, error);
