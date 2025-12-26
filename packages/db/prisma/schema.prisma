@@ -42,12 +42,13 @@ model WorkoutSession {
   source    String    @default("watch") // watch, ble
   active    Boolean   @default(true)
 
-  profile   Profile          @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  hrSamples HrSample[]
-  hrBuckets HrBucket[]
-  summary   WorkoutSummary?
-  commits   SessionCommit[]
-  activeGateRepos GateRepo[]   // Repos selected for this workout session
+  profile         Profile              @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  hrSamples       HrSample[]
+  hrBuckets       HrBucket[]
+  summary         WorkoutSummary?
+  commits         SessionCommit[]
+  pullRequests    SessionPullRequest[]
+  activeGateRepos GateRepo[]           // Repos selected for this workout session
 
   @@index([userId, active])
   @@index([userId, startedAt])
@@ -196,10 +197,50 @@ model SessionCommit {
   committedAt  DateTime @map("committed_at")
   createdAt    DateTime @default(now()) @map("created_at")
 
-  session WorkoutSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  session WorkoutSession     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  files   SessionCommitFile[]
 
   @@unique([sessionId, commitSha])
   @@index([sessionId])
   @@map("session_commits")
+  @@schema("public")
+}
+
+// Files changed in a commit
+model SessionCommitFile {
+  id        String @id @default(uuid())
+  commitId  String @map("commit_id")
+  filename  String
+  status    String // added, modified, removed
+  additions Int?
+  deletions Int?
+
+  commit SessionCommit @relation(fields: [commitId], references: [id], onDelete: Cascade)
+
+  @@index([commitId])
+  @@map("session_commit_files")
+  @@schema("public")
+}
+
+// Pull requests created/merged during workout sessions
+model SessionPullRequest {
+  id        String    @id @default(uuid())
+  sessionId String    @map("session_id")
+  repoOwner String    @map("repo_owner")
+  repoName  String    @map("repo_name")
+  prNumber  Int       @map("pr_number")
+  title     String
+  state     String    // open, closed, merged
+  htmlUrl   String    @map("html_url")
+  createdAt DateTime  @map("created_at")
+  mergedAt  DateTime? @map("merged_at")
+  additions Int?
+  deletions Int?
+
+  session WorkoutSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, prNumber, repoOwner, repoName])
+  @@index([sessionId])
+  @@map("session_pull_requests")
   @@schema("public")
 }
