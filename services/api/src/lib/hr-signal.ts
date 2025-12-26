@@ -24,26 +24,37 @@ export async function updateSessionSignalRefs(
   bpm: number,
   thresholdBpm: number
 ): Promise<void> {
-  try {
-    const now = new Date();
+  const now = new Date();
 
-    // Check debounce using raw SQL to avoid Prisma client field issues
+  try {
+    // Check debounce using raw SQL
     try {
-      const result = await prisma.$queryRaw<Array<{ last_signal_ref_update_at: Date | null }>>`
+      const result = await prisma.$queryRaw<
+        Array<{ last_signal_ref_update_at: string | Date | null }>
+      >`
         SELECT last_signal_ref_update_at FROM hr_status WHERE user_id = ${userId} LIMIT 1
       `;
-      const lastUpdate = result[0]?.last_signal_ref_update_at;
-      if (lastUpdate) {
+      const rawValue = result[0]?.last_signal_ref_update_at;
+      if (rawValue) {
+        // Parse date from string if needed
+        const lastUpdate = rawValue instanceof Date ? rawValue : new Date(rawValue);
         const timeSinceLastUpdate = now.getTime() - lastUpdate.getTime();
+        console.log(
+          `[HR Signal] Debounce: lastUpdate=${lastUpdate.toISOString()}, timeSince=${timeSinceLastUpdate}ms`
+        );
         if (timeSinceLastUpdate < GITHUB_UPDATE_DEBOUNCE_MS) {
-          return; // Skip, too soon
+          console.log('[HR Signal] Skipping (debounced)');
+          return;
         }
+      } else {
+        console.log('[HR Signal] No previous update timestamp, proceeding');
       }
     } catch (debounceErr) {
-      console.error('[HR Signal] Debounce check failed, proceeding anyway:', debounceErr);
+      console.error('[HR Signal] Debounce check failed:', debounceErr);
+      // Continue anyway
     }
 
-    // Find gate repos selected for this session with GitHub App installed
+    // Find gate repos
     const gateRepos = await prisma.gateRepo.findMany({
       where: {
         userId,
@@ -52,6 +63,8 @@ export async function updateSessionSignalRefs(
         githubAppInstallationId: { not: null },
       },
     });
+
+    console.log(`[HR Signal] Found ${gateRepos.length} repos for session=${sessionId}`);
 
     if (gateRepos.length === 0) {
       return;
@@ -68,38 +81,39 @@ export async function updateSessionSignalRefs(
     );
 
     const payloadJson = JSON.stringify(payload);
+    console.log(`[HR Signal] Payload created: bpm=${bpm}, hr_ok=${payload.hr_ok}`);
 
     // Update all repos in parallel
     const results = await Promise.allSettled(
       gateRepos.map(async (repo) => {
+        console.log(`[HR Signal] Updating ${repo.owner}/${repo.name}...`);
         const octokit = await createInstallationOctokit(repo.githubAppInstallationId!);
         await updateSignalRef(octokit, repo.owner, repo.name, repo.signalRef, payloadJson);
-        console.log(`[HR Signal] Updated ${repo.owner}/${repo.name}: hr_ok=${payload.hr_ok}`);
+        console.log(`[HR Signal] SUCCESS: ${repo.owner}/${repo.name}`);
       })
     );
 
-    // If at least one succeeded, update the timestamp
+    // Update timestamp if any succeeded
     const anySuccess = results.some((r) => r.status === 'fulfilled');
+    console.log(`[HR Signal] Results: ${results.length} total, anySuccess=${anySuccess}`);
+
     if (anySuccess) {
-      try {
-        await prisma.$executeRaw`
-          UPDATE hr_status SET last_signal_ref_update_at = ${now} WHERE user_id = ${userId}
-        `;
-      } catch (updateErr) {
-        console.error('[HR Signal] Failed to update debounce timestamp:', updateErr);
-      }
+      await prisma.$executeRaw`
+        UPDATE hr_status SET last_signal_ref_update_at = ${now} WHERE user_id = ${userId}
+      `;
+      console.log('[HR Signal] Updated debounce timestamp');
     }
 
-    // Log any failures
+    // Log failures
     results.forEach((result, i) => {
       if (result.status === 'rejected') {
         console.error(
-          `[HR Signal] Failed to update ${gateRepos[i].owner}/${gateRepos[i].name}:`,
+          `[HR Signal] FAILED ${gateRepos[i].owner}/${gateRepos[i].name}:`,
           result.reason
         );
       }
     });
   } catch (error) {
-    console.error('[HR Signal] Error updating refs:', error);
+    console.error('[HR Signal] FATAL error:', error);
   }
 }
