@@ -268,4 +268,61 @@ github.get('/debug-commits/:repoId', async (c) => {
   return c.json(debugInfo);
 });
 
+// DEBUG: Test GitHub Events API (what we use for commit fetching)
+github.get('/debug-events/:repoId', async (c) => {
+  const repoId = c.req.param('repoId');
+
+  const repo = await prisma.gateRepo.findFirst({
+    where: { id: repoId },
+  });
+
+  if (!repo) {
+    return c.json({ error: 'Repo not found' }, 404);
+  }
+
+  if (!repo.githubAppInstallationId) {
+    return c.json({ error: 'No GitHub App installation ID', repo });
+  }
+
+  try {
+    const octokit = await createInstallationOctokit(repo.githubAppInstallationId);
+
+    // Fetch events (same as stop handler)
+    const { data: events } = await octokit.rest.activity.listRepoEvents({
+      owner: repo.owner,
+      repo: repo.name,
+      per_page: 100,
+    });
+
+    // Filter to PushEvents
+    const pushEvents = events.filter((e) => e.type === 'PushEvent');
+
+    return c.json({
+      repo: { owner: repo.owner, name: repo.name },
+      totalEvents: events.length,
+      eventTypes: [...new Set(events.map((e) => e.type))],
+      pushEventsCount: pushEvents.length,
+      pushEvents: pushEvents.map((e) => {
+        const payload = e.payload as {
+          ref?: string;
+          commits?: Array<{ sha: string; message: string }>;
+        };
+        return {
+          created_at: e.created_at,
+          ref: payload.ref,
+          commitsCount: payload.commits?.length,
+          commits: payload.commits?.map((c) => ({
+            sha: c.sha.substring(0, 7),
+            message: c.message?.substring(0, 50),
+          })),
+        };
+      }),
+    });
+  } catch (error) {
+    return c.json({
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+});
+
 export { github };
