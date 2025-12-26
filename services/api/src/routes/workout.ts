@@ -171,77 +171,102 @@ workout.post('/stop', async (c) => {
     try {
       const octokit = await createInstallationOctokit(repo.githubAppInstallationId);
 
-      // Fetch commits since session started
-      const { data: commits } = await octokit.rest.repos.listCommits({
+      // Use Events API to get PushEvents from ALL branches (not just default)
+      const { data: events } = await octokit.rest.activity.listRepoEvents({
         owner: repo.owner,
         repo: repo.name,
-        since: session.startedAt.toISOString(),
         per_page: 100,
       });
 
-      console.log('[stop] Commits fetched from GitHub:', commits.length);
+      console.log('[stop] Events fetched from GitHub:', events.length);
 
-      for (const commit of commits) {
-        // Get commit date and skip if after session end
-        const commitDate = new Date(
-          commit.commit.author?.date || commit.commit.committer?.date || ''
-        );
+      // Filter to PushEvents within our time window
+      const pushEvents = events.filter((e) => {
+        if (e.type !== 'PushEvent') return false;
+        const eventDate = new Date(e.created_at || '');
+        return eventDate >= session.startedAt && eventDate <= endedAt;
+      });
+
+      console.log('[stop] PushEvents in time window:', pushEvents.length);
+
+      // Extract commits from push events
+      const seenShas = new Set<string>();
+      for (const event of pushEvents) {
+        const payload = event.payload as {
+          commits?: Array<{ sha: string; message: string; author?: { name?: string } }>;
+        };
+        if (!payload.commits) continue;
+
         console.log(
-          '[stop] Commit',
-          commit.sha.substring(0, 7),
-          'date:',
-          commitDate.toISOString(),
-          'vs endedAt:',
-          endedAt.toISOString(),
-          'skip?',
-          commitDate > endedAt
+          '[stop] PushEvent at',
+          event.created_at,
+          'has',
+          payload.commits.length,
+          'commits'
         );
-        if (isNaN(commitDate.getTime()) || commitDate > endedAt) continue;
 
-        // Fetch full commit for file stats
-        const { data: fullCommit } = await octokit.rest.repos.getCommit({
-          owner: repo.owner,
-          repo: repo.name,
-          ref: commit.sha,
-        });
+        for (const commit of payload.commits) {
+          if (seenShas.has(commit.sha)) continue;
+          seenShas.add(commit.sha);
 
-        // Upsert commit
-        const saved = await prisma.sessionCommit.upsert({
-          where: {
-            sessionId_commitSha: {
-              sessionId: session.id,
-              commitSha: commit.sha,
+          // Fetch full commit for stats and file info
+          const { data: fullCommit } = await octokit.rest.repos.getCommit({
+            owner: repo.owner,
+            repo: repo.name,
+            ref: commit.sha,
+          });
+
+          const commitDate = new Date(
+            fullCommit.commit.author?.date ||
+              fullCommit.commit.committer?.date ||
+              event.created_at ||
+              ''
+          );
+
+          console.log(
+            '[stop] Saving commit',
+            commit.sha.substring(0, 7),
+            'msg:',
+            commit.message?.substring(0, 30)
+          );
+
+          // Upsert commit
+          const saved = await prisma.sessionCommit.upsert({
+            where: {
+              sessionId_commitSha: {
+                sessionId: session.id,
+                commitSha: commit.sha,
+              },
             },
-          },
-          create: {
-            sessionId: session.id,
-            repoOwner: repo.owner,
-            repoName: repo.name,
-            commitSha: commit.sha,
-            commitMsg: commit.commit.message?.substring(0, 1000) || '',
-            linesAdded: fullCommit.stats?.additions ?? null,
-            linesRemoved: fullCommit.stats?.deletions ?? null,
-            committedAt: commitDate,
-          },
-          update: {},
-        });
-
-        // Save files changed in this commit
-        if (fullCommit.files && fullCommit.files.length > 0) {
-          // Delete existing files for this commit (in case of re-run)
-          await prisma.sessionCommitFile.deleteMany({
-            where: { commitId: saved.id },
+            create: {
+              sessionId: session.id,
+              repoOwner: repo.owner,
+              repoName: repo.name,
+              commitSha: commit.sha,
+              commitMsg: commit.message?.substring(0, 1000) || '',
+              linesAdded: fullCommit.stats?.additions ?? null,
+              linesRemoved: fullCommit.stats?.deletions ?? null,
+              committedAt: commitDate,
+            },
+            update: {},
           });
 
-          await prisma.sessionCommitFile.createMany({
-            data: fullCommit.files.map((f) => ({
-              commitId: saved.id,
-              filename: f.filename,
-              status: f.status || 'modified',
-              additions: f.additions ?? null,
-              deletions: f.deletions ?? null,
-            })),
-          });
+          // Save files changed in this commit
+          if (fullCommit.files && fullCommit.files.length > 0) {
+            await prisma.sessionCommitFile.deleteMany({
+              where: { commitId: saved.id },
+            });
+
+            await prisma.sessionCommitFile.createMany({
+              data: fullCommit.files.map((f) => ({
+                commitId: saved.id,
+                filename: f.filename,
+                status: f.status || 'modified',
+                additions: f.additions ?? null,
+                deletions: f.deletions ?? null,
+              })),
+            });
+          }
         }
       }
 
