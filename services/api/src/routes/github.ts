@@ -8,7 +8,7 @@ import { Hono } from 'hono';
 import { prisma } from '@viberunner/db';
 import { authMiddleware } from '../middleware/auth.js';
 import { encrypt, decrypt } from '../lib/encryption.js';
-import { getGitHubUser, createUserOctokit } from '../lib/github.js';
+import { getGitHubUser, createUserOctokit, createInstallationOctokit } from '../lib/github.js';
 
 const github = new Hono();
 
@@ -191,6 +191,82 @@ github.get('/repos', authMiddleware, async (c) => {
     console.error('GitHub repos list error:', error);
     return c.json({ error: 'Failed to list repositories' }, 500);
   }
+});
+
+// DEBUG: Test GitHub App installation and commit fetching
+github.get('/debug-commits/:repoId', authMiddleware, async (c) => {
+  const userId = c.get('userId');
+  const repoId = c.req.param('repoId');
+
+  const repo = await prisma.gateRepo.findFirst({
+    where: { id: repoId, userId },
+  });
+
+  if (!repo) {
+    return c.json({ error: 'Repo not found' }, 404);
+  }
+
+  const debugInfo: Record<string, unknown> = {
+    repo: {
+      id: repo.id,
+      owner: repo.owner,
+      name: repo.name,
+      installationId: repo.githubAppInstallationId,
+      activeSessionId: repo.activeSessionId,
+    },
+  };
+
+  if (!repo.githubAppInstallationId) {
+    debugInfo.error = 'No GitHub App installation ID';
+    return c.json(debugInfo);
+  }
+
+  try {
+    // Test creating installation octokit
+    debugInfo.step = 'creating_octokit';
+    const octokit = await createInstallationOctokit(repo.githubAppInstallationId);
+    debugInfo.octokitCreated = true;
+
+    // Test fetching commits
+    debugInfo.step = 'fetching_commits';
+    const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(); // Last 24 hours
+    const { data: commits } = await octokit.rest.repos.listCommits({
+      owner: repo.owner,
+      repo: repo.name,
+      since,
+      per_page: 10,
+    });
+
+    debugInfo.commitsFound = commits.length;
+    debugInfo.commits = commits.map((c) => ({
+      sha: c.sha.substring(0, 7),
+      message: c.commit.message?.substring(0, 50),
+      date: c.commit.author?.date,
+    }));
+
+    // Test fetching a single commit with stats
+    if (commits.length > 0) {
+      debugInfo.step = 'fetching_commit_details';
+      const { data: fullCommit } = await octokit.rest.repos.getCommit({
+        owner: repo.owner,
+        repo: repo.name,
+        ref: commits[0].sha,
+      });
+
+      debugInfo.firstCommitStats = {
+        additions: fullCommit.stats?.additions,
+        deletions: fullCommit.stats?.deletions,
+        filesCount: fullCommit.files?.length,
+      };
+    }
+
+    debugInfo.success = true;
+  } catch (error) {
+    debugInfo.error = error instanceof Error ? error.message : String(error);
+    debugInfo.errorStack = error instanceof Error ? error.stack : undefined;
+  }
+
+  return c.json(debugInfo);
 });
 
 export { github };
