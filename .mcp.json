@@ -6,6 +6,10 @@
       "headers": {
         "Authorization": "Bearer sbp_90f893265e55e681c88283fcb30225b7558c39e8"
       }
+    },
+    "vercel": {
+      "transport": "http",
+      "url": "https://mcp.vercel.com"
     }
   }
 }

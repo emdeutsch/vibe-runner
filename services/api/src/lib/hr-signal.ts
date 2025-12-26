@@ -25,21 +25,22 @@ export async function updateSessionSignalRefs(
   thresholdBpm: number
 ): Promise<void> {
   try {
-    // Check if we should debounce this update
-    const hrStatus = await prisma.hrStatus.findUnique({
-      where: { userId },
-      select: { lastSignalRefUpdateAt: true },
-    });
-
     const now = new Date();
-    const lastUpdate = hrStatus?.lastSignalRefUpdateAt;
 
-    if (lastUpdate) {
-      const timeSinceLastUpdate = now.getTime() - lastUpdate.getTime();
-      if (timeSinceLastUpdate < GITHUB_UPDATE_DEBOUNCE_MS) {
-        // Skip this update, too soon since last one
-        return;
+    // Check debounce using raw SQL to avoid Prisma client field issues
+    try {
+      const result = await prisma.$queryRaw<Array<{ last_signal_ref_update_at: Date | null }>>`
+        SELECT last_signal_ref_update_at FROM hr_status WHERE user_id = ${userId} LIMIT 1
+      `;
+      const lastUpdate = result[0]?.last_signal_ref_update_at;
+      if (lastUpdate) {
+        const timeSinceLastUpdate = now.getTime() - lastUpdate.getTime();
+        if (timeSinceLastUpdate < GITHUB_UPDATE_DEBOUNCE_MS) {
+          return; // Skip, too soon
+        }
       }
+    } catch (debounceErr) {
+      console.error('[HR Signal] Debounce check failed, proceeding anyway:', debounceErr);
     }
 
     // Find gate repos selected for this session with GitHub App installed
@@ -80,10 +81,13 @@ export async function updateSessionSignalRefs(
     // If at least one succeeded, update the timestamp
     const anySuccess = results.some((r) => r.status === 'fulfilled');
     if (anySuccess) {
-      await prisma.hrStatus.update({
-        where: { userId },
-        data: { lastSignalRefUpdateAt: now },
-      });
+      try {
+        await prisma.$executeRaw`
+          UPDATE hr_status SET last_signal_ref_update_at = ${now} WHERE user_id = ${userId}
+        `;
+      } catch (updateErr) {
+        console.error('[HR Signal] Failed to update debounce timestamp:', updateErr);
+      }
     }
 
     // Log any failures
