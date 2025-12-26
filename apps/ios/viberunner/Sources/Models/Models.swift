@@ -295,10 +295,62 @@ struct SessionCommit: Codable, Identifiable {
         String(commitSha.prefix(7))
     }
 
+    var fullName: String {
+        "\(repoOwner)/\(repoName)"
+    }
+
     var commitDate: Date? {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         return formatter.date(from: committedAt)
+    }
+}
+
+struct SessionPullRequest: Codable, Identifiable {
+    let id: String
+    let repoOwner: String
+    let repoName: String
+    let prNumber: Int
+    let title: String
+    let state: String  // open, closed, merged
+    let htmlUrl: String
+    let createdAt: String
+    let mergedAt: String?
+    let additions: Int?
+    let deletions: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case id, title, state, additions, deletions
+        case repoOwner = "repo_owner"
+        case repoName = "repo_name"
+        case prNumber = "pr_number"
+        case htmlUrl = "html_url"
+        case createdAt = "created_at"
+        case mergedAt = "merged_at"
+    }
+
+    var fullName: String {
+        "\(repoOwner)/\(repoName)"
+    }
+
+    var isMerged: Bool {
+        state == "merged" || mergedAt != nil
+    }
+
+    var stateIcon: String {
+        switch state {
+        case "merged": return "arrow.triangle.merge"
+        case "closed": return "xmark.circle"
+        default: return "arrow.triangle.pull"
+        }
+    }
+
+    var stateColor: String {
+        switch state {
+        case "merged": return "purple"
+        case "closed": return "red"
+        default: return "green"
+        }
     }
 }
 
@@ -310,11 +362,13 @@ struct WorkoutSessionDetail: Codable, Identifiable {
     let source: String
     let summary: WorkoutSummary?
     let commits: [SessionCommit]
+    let pullRequests: [SessionPullRequest]?
 
     enum CodingKeys: String, CodingKey {
         case id, active, source, summary, commits
         case startedAt = "started_at"
         case endedAt = "ended_at"
+        case pullRequests = "pull_requests"
     }
 }
 
@@ -411,6 +465,7 @@ struct PostWorkoutSummary: Codable {
     let totalLinesAdded: Int
     let totalLinesRemoved: Int
     let totalCommits: Int
+    let totalPullRequests: Int?
 
     enum CodingKeys: String, CodingKey {
         case session
@@ -418,6 +473,11 @@ struct PostWorkoutSummary: Codable {
         case totalLinesAdded = "total_lines_added"
         case totalLinesRemoved = "total_lines_removed"
         case totalCommits = "total_commits"
+        case totalPullRequests = "total_pull_requests"
+    }
+
+    var pullRequests: [SessionPullRequest] {
+        session.pullRequests ?? []
     }
 }
 

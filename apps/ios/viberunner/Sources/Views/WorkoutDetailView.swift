@@ -32,8 +32,15 @@ struct WorkoutDetailView: View {
 
                     chartSection
 
+                    if !session.commits.isEmpty || !(session.pullRequests ?? []).isEmpty {
+                        codingStatsSection(session)
+                    }
+
+                    if let prs = session.pullRequests, !prs.isEmpty {
+                        pullRequestsSection(prs)
+                    }
+
                     if !session.commits.isEmpty {
-                        codingStatsSection(session.commits)
                         groupedCommitsSection(session.commits)
                     }
                 }
@@ -148,7 +155,9 @@ struct WorkoutDetailView: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
     }
 
-    private func codingStatsSection(_ commits: [SessionCommit]) -> some View {
+    private func codingStatsSection(_ session: WorkoutSessionDetail) -> some View {
+        let commits = session.commits
+        let prs = session.pullRequests ?? []
         let totalAdded = commits.compactMap { $0.linesAdded }.reduce(0, +)
         let totalRemoved = commits.compactMap { $0.linesRemoved }.reduce(0, +)
         let repoCount = Set(commits.map { "\($0.repoOwner)/\($0.repoName)" }).count
@@ -190,14 +199,86 @@ struct WorkoutDetailView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
+
+                if !prs.isEmpty {
+                    VStack(spacing: Spacing.xs) {
+                        Text("\(prs.count)")
+                            .font(.title3.weight(.bold).monospacedDigit())
+                        Text("PRs")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
 
-            Text("\(repoCount) \(repoCount == 1 ? "repository" : "repositories")")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+            if repoCount > 0 {
+                Text("\(repoCount) \(repoCount == 1 ? "repository" : "repositories")")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
         }
         .padding()
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+    }
+
+    private func pullRequestsSection(_ prs: [SessionPullRequest]) -> some View {
+        VStack(alignment: .leading, spacing: Spacing.md) {
+            HStack {
+                Image(systemName: "arrow.triangle.pull")
+                    .foregroundStyle(.purple)
+                Text("Pull Requests")
+                    .font(.headline)
+                Spacer()
+            }
+
+            ForEach(prs) { pr in
+                prRow(pr)
+            }
+        }
+        .padding()
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+    }
+
+    private func prRow(_ pr: SessionPullRequest) -> some View {
+        VStack(alignment: .leading, spacing: Spacing.xs) {
+            HStack {
+                Image(systemName: pr.stateIcon)
+                    .foregroundStyle(prStateColor(pr.state))
+                    .font(.caption)
+
+                Text("#\(pr.prNumber)")
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(.secondary)
+
+                Text(pr.title)
+                    .font(.subheadline.weight(.medium))
+                    .lineLimit(2)
+
+                Spacer()
+            }
+
+            HStack(spacing: Spacing.md) {
+                Text(pr.fullName)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                Spacer()
+
+                Text(pr.state.capitalized)
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(prStateColor(pr.state))
+            }
+        }
+        .padding(Spacing.sm)
+        .background(Color.secondary.opacity(0.1), in: RoundedRectangle(cornerRadius: Radius.sm))
+    }
+
+    private func prStateColor(_ state: String) -> Color {
+        switch state {
+        case "merged": return .purple
+        case "closed": return .red
+        default: return .green
+        }
     }
 
     private func groupedCommitsSection(_ commits: [SessionCommit]) -> some View {

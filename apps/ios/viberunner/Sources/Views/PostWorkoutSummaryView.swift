@@ -36,6 +36,11 @@ struct PostWorkoutSummaryView: View {
                             // Coding Summary Card
                             codingSummaryCard(summary)
 
+                            // Pull Requests Section
+                            if !summary.pullRequests.isEmpty {
+                                pullRequestsSection(summary.pullRequests)
+                            }
+
                             // Repos Breakdown
                             if !summary.repoBreakdown.isEmpty {
                                 reposBreakdownSection(summary.repoBreakdown)
@@ -223,7 +228,7 @@ struct PostWorkoutSummaryView: View {
                 Spacer()
             }
 
-            if summary.totalCommits > 0 {
+            if summary.totalCommits > 0 || !summary.pullRequests.isEmpty {
                 HStack(spacing: Spacing.xl) {
                     VStack(spacing: Spacing.xs) {
                         HStack(spacing: 2) {
@@ -256,19 +261,94 @@ struct PostWorkoutSummaryView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
+
+                    if !summary.pullRequests.isEmpty {
+                        VStack(spacing: Spacing.xs) {
+                            Text("\(summary.pullRequests.count)")
+                                .font(.title3.weight(.bold).monospacedDigit())
+                            Text("PRs")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                 }
 
                 Text("\(summary.repoBreakdown.count) \(summary.repoBreakdown.count == 1 ? "repository" : "repositories")")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             } else {
-                Text("No commits during this workout")
+                Text("No coding activity during this workout")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
         }
         .padding(Spacing.md)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: Radius.lg))
+    }
+
+    // MARK: - Pull Requests Section
+
+    private func pullRequestsSection(_ pullRequests: [SessionPullRequest]) -> some View {
+        VStack(alignment: .leading, spacing: Spacing.md) {
+            HStack {
+                Image(systemName: "arrow.triangle.pull")
+                    .foregroundStyle(.purple)
+                Text("Pull Requests")
+                    .font(.headline)
+                Spacer()
+                Text("\(pullRequests.count)")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+
+            ForEach(pullRequests) { pr in
+                prRow(pr)
+            }
+        }
+        .padding(Spacing.md)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: Radius.lg))
+    }
+
+    private func prRow(_ pr: SessionPullRequest) -> some View {
+        VStack(alignment: .leading, spacing: Spacing.xs) {
+            HStack {
+                Image(systemName: pr.stateIcon)
+                    .foregroundStyle(prStateColor(pr.state))
+                    .font(.caption)
+
+                Text("#\(pr.prNumber)")
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(.secondary)
+
+                Text(pr.title)
+                    .font(.subheadline.weight(.medium))
+                    .lineLimit(1)
+
+                Spacer()
+            }
+
+            HStack(spacing: Spacing.md) {
+                Text(pr.fullName)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                Spacer()
+
+                Text(pr.state.capitalized)
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(prStateColor(pr.state))
+            }
+        }
+        .padding(Spacing.sm)
+        .background(Color.secondary.opacity(0.1), in: RoundedRectangle(cornerRadius: Radius.sm))
+    }
+
+    private func prStateColor(_ state: String) -> Color {
+        switch state {
+        case "merged": return .purple
+        case "closed": return .red
+        default: return .green
+        }
     }
 
     // MARK: - Repos Breakdown Section

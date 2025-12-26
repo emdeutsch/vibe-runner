@@ -681,6 +681,9 @@ workout.get('/sessions/:sessionId', async (c) => {
       commits: {
         orderBy: { committedAt: 'desc' },
       },
+      pullRequests: {
+        orderBy: { createdAt: 'desc' },
+      },
     },
   });
 
@@ -715,6 +718,19 @@ workout.get('/sessions/:sessionId', async (c) => {
       lines_added: c.linesAdded,
       lines_removed: c.linesRemoved,
       committed_at: c.committedAt.toISOString(),
+    })),
+    pull_requests: session.pullRequests.map((pr) => ({
+      id: pr.id,
+      repo_owner: pr.repoOwner,
+      repo_name: pr.repoName,
+      pr_number: pr.prNumber,
+      title: pr.title,
+      state: pr.state,
+      html_url: pr.htmlUrl,
+      created_at: pr.createdAt.toISOString(),
+      merged_at: pr.mergedAt?.toISOString() ?? null,
+      additions: pr.additions,
+      deletions: pr.deletions,
     })),
   });
 });
@@ -793,6 +809,9 @@ workout.get('/sessions/:sessionId/post-summary', async (c) => {
       summary: true,
       commits: {
         orderBy: { committedAt: 'desc' },
+      },
+      pullRequests: {
+        orderBy: { createdAt: 'desc' },
       },
     },
   });
@@ -876,6 +895,19 @@ workout.get('/sessions/:sessionId/post-summary', async (c) => {
         lines_removed: c.linesRemoved,
         committed_at: c.committedAt.toISOString(),
       })),
+      pull_requests: session.pullRequests.map((pr) => ({
+        id: pr.id,
+        repo_owner: pr.repoOwner,
+        repo_name: pr.repoName,
+        pr_number: pr.prNumber,
+        title: pr.title,
+        state: pr.state,
+        html_url: pr.htmlUrl,
+        created_at: pr.createdAt.toISOString(),
+        merged_at: pr.mergedAt?.toISOString() ?? null,
+        additions: pr.additions,
+        deletions: pr.deletions,
+      })),
     },
     repo_breakdown: repoBreakdown.map((r) => ({
       owner: r.owner,
@@ -889,6 +921,7 @@ workout.get('/sessions/:sessionId/post-summary', async (c) => {
     total_lines_added: totalLinesAdded,
     total_lines_removed: totalLinesRemoved,
     total_commits: session.commits.length,
+    total_pull_requests: session.pullRequests.length,
   });
 });
 
