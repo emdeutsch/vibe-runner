@@ -1,0 +1,900 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		08F656B195ADB610A0C6B879 /* WatchConnectionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20499A9BDD31478BA6C868C8 /* WatchConnectionCard.swift */; };
+		11CA0D57DE17E7120D1409E8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9377535085C39CEE0B98C417 /* SettingsView.swift */; };
+		13E6989F3651FA34C9619C05 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81C4E31BE2F46ABB8C0E6A48 /* Assets.xcassets */; };
+		2095C90AE15FFAE6E2C1D7C2 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9952F6652999F210EB3525E /* DesignTokens.swift */; };
+		217B73B89A54164186B7BF00 /* DebugHRSimulatorCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890D73B5D251E581DC3B983E /* DebugHRSimulatorCard.swift */; };
+		2DF0CEF9D0604519E63A294C /* GateReposView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74820ECD34DC5D6D74788CE /* GateReposView.swift */; };
+		3D5AE87350268A947653B752 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201230A0F9AEEBBAFFFBF981 /* AuthService.swift */; };
+		42D55D1132156891BEBFA846 /* HeartRateChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72174C776B3335A01076F947 /* HeartRateChartView.swift */; };
+		4F4A63B5A46495CC3A6A4483 /* HeartRateCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAB45219B53495E6684291E /* HeartRateCard.swift */; };
+		52A57BB50D3D43A297C73705 /* WorkoutHistoryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879561A4D9434D77F01DA7A8 /* WorkoutHistoryCard.swift */; };
+		53E7248DDE8EE626677133C6 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348D4B24F14A494FF83243EB /* LoginView.swift */; };
+		56DD1781E141822A2230070B /* vibeworkoutWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3798DB6F288CBD2E2B987BF7 /* vibeworkoutWatchApp.swift */; };
+		65B6E917B69E74D5AA8B44D4 /* WorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7A5308E9BB2343202DA4D /* WorkoutManager.swift */; };
+		6F2F127640E2B44AE8292D8B /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2105CCFAC00B5437E92E1A9 /* Models.swift */; };
+		70AB79974EF4F3769FE0B946 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193BA6790E21424304A4F676 /* ContentView.swift */; };
+		72100057FB47A996E1C2201A /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1E56B12EC46D2B688FED33 /* MainTabView.swift */; };
+		7E051106345E65639AE3587F /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = C1BA3109F15AD34CB5C05032 /* Supabase */; };
+		80CB54300E371D2434B7410E /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5FE28534ADA460956F221B /* ComplicationController.swift */; };
+		9539224A858A32F78ABE08AA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB5D6965ED25936F6A9EB0F /* ContentView.swift */; };
+		954FFAFBF0A3567A209D1480 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D128503C53C1D659B3B164 /* APIService.swift */; };
+		995686E62FECA58F95F2FC16 /* WorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4F63EBCA880614B2228B3A /* WorkoutView.swift */; };
+		9A5BE1B6FDEACD5D35E06FBC /* RepoCommitGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A86B122981866BA77D5D018 /* RepoCommitGroup.swift */; };
+		9D2CF7A124D63C2CAF838D79 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA809CE443F13C8D8BC86E2 /* HistoryView.swift */; };
+		AA6EC1B6D5E780C59D456744 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653D72D1C1F460BF06F38F32 /* Config.swift */; };
+		B33373F2158FFE624F51AA86 /* ActiveWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32123B71391FF157D228D2EB /* ActiveWorkoutView.swift */; };
+		B634E07D7F50CEA144B70C3D /* PhoneConnectivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B70C1C572E99B720E798FE2 /* PhoneConnectivityService.swift */; };
+		B7E5B67CA509DA9B2E98566C /* vibeworkout-watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = FB1BE2BD106CDF77C4549BFD /* vibeworkout-watch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C2C1681E6042BDBA307DA36F /* WatchConnectivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB52C8E65CCFD73A43F27C1 /* WatchConnectivityService.swift */; };
+		C508E556B4DC0A1692FE4F7C /* WorkoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4D00494EBAE27FE0A47480 /* WorkoutService.swift */; };
+		C8929F2859E1A176A53A3CE0 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE606DE05845516CF84F3B0C /* ButtonStyles.swift */; };
+		D28CD448878358A392BB85FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 076C386299FFAAF19587D95A /* Assets.xcassets */; };
+		DE70C3D13BF97D42F848B372 /* ActiveReposSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF11B5927F66740DC2201D6 /* ActiveReposSection.swift */; };
+		F20CB5EA9EB6BDE40428ABB1 /* vibeworkoutApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183C96E5E71DD4DF3A671FFF /* vibeworkoutApp.swift */; };
+		F7B47F47F13643E42FE8A827 /* WorkoutDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CB4955A83635CE8D86A52E /* WorkoutDetailView.swift */; };
+		FCA0A72652C339CB024C57BD /* PostWorkoutSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD538274CDD96865597CAAA1 /* PostWorkoutSummaryView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E4C14A87F5E6356E47EDB8EC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EDC727BA17CFC646DB9FB71E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7E41934E8C53F7AC2E8DE334;
+			remoteInfo = "vibeworkout-watch";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		159C1C1F09D1F815E8A4B906 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				B7E5B67CA509DA9B2E98566C /* vibeworkout-watch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		076C386299FFAAF19587D95A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		183C96E5E71DD4DF3A671FFF /* vibeworkoutApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = vibeworkoutApp.swift; sourceTree = "<group>"; };
+		193BA6790E21424304A4F676 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		201230A0F9AEEBBAFFFBF981 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		20499A9BDD31478BA6C868C8 /* WatchConnectionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnectionCard.swift; sourceTree = "<group>"; };
+		21A7A5308E9BB2343202DA4D /* WorkoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutManager.swift; sourceTree = "<group>"; };
+		32123B71391FF157D228D2EB /* ActiveWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveWorkoutView.swift; sourceTree = "<group>"; };
+		348D4B24F14A494FF83243EB /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		3781DDC10C0581914B64BF9A /* vibeworkout.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = vibeworkout.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3798DB6F288CBD2E2B987BF7 /* vibeworkoutWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = vibeworkoutWatchApp.swift; sourceTree = "<group>"; };
+		3DB5D6965ED25936F6A9EB0F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		3E1E56B12EC46D2B688FED33 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		4A86B122981866BA77D5D018 /* RepoCommitGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoCommitGroup.swift; sourceTree = "<group>"; };
+		5A4D00494EBAE27FE0A47480 /* WorkoutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutService.swift; sourceTree = "<group>"; };
+		5D4B4A3C44F083ACDE88CB6B /* Local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig; sourceTree = "<group>"; };
+		60362DDAFE4612DF5DB6C795 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		653D72D1C1F460BF06F38F32 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		72174C776B3335A01076F947 /* HeartRateChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateChartView.swift; sourceTree = "<group>"; };
+		81C4E31BE2F46ABB8C0E6A48 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		879561A4D9434D77F01DA7A8 /* WorkoutHistoryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutHistoryCard.swift; sourceTree = "<group>"; };
+		88D128503C53C1D659B3B164 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		890D73B5D251E581DC3B983E /* DebugHRSimulatorCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugHRSimulatorCard.swift; sourceTree = "<group>"; };
+		8AA809CE443F13C8D8BC86E2 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		8B70C1C572E99B720E798FE2 /* PhoneConnectivityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneConnectivityService.swift; sourceTree = "<group>"; };
+		9377535085C39CEE0B98C417 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		9DA548B9544683851F9EC927 /* vibeworkout.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = vibeworkout.entitlements; sourceTree = "<group>"; };
+		A9952F6652999F210EB3525E /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
+		AA4F63EBCA880614B2228B3A /* WorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutView.swift; sourceTree = "<group>"; };
+		B2105CCFAC00B5437E92E1A9 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		B6CB4955A83635CE8D86A52E /* WorkoutDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetailView.swift; sourceTree = "<group>"; };
+		BAB52C8E65CCFD73A43F27C1 /* WatchConnectivityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnectivityService.swift; sourceTree = "<group>"; };
+		BBAB45219B53495E6684291E /* HeartRateCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateCard.swift; sourceTree = "<group>"; };
+		DF9187DB98B0DD3727C2CB8A /* vibeworkout-watch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "vibeworkout-watch.entitlements"; sourceTree = "<group>"; };
+		E74820ECD34DC5D6D74788CE /* GateReposView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GateReposView.swift; sourceTree = "<group>"; };
+		EBF11B5927F66740DC2201D6 /* ActiveReposSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveReposSection.swift; sourceTree = "<group>"; };
+		FAF7B40456844E561D14B117 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
+		FB1BE2BD106CDF77C4549BFD /* vibeworkout-watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "vibeworkout-watch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD538274CDD96865597CAAA1 /* PostWorkoutSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostWorkoutSummaryView.swift; sourceTree = "<group>"; };
+		FD5FE28534ADA460956F221B /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
+		FE606DE05845516CF84F3B0C /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
+		FF2090A28F8559FB141318E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		14670F8BB0E54DC8018C2E86 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E051106345E65639AE3587F /* Supabase in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		13E1FE5F183453B2F3B37953 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				193BA6790E21424304A4F676 /* ContentView.swift */,
+				3E1E56B12EC46D2B688FED33 /* MainTabView.swift */,
+				183C96E5E71DD4DF3A671FFF /* vibeworkoutApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		2B50C6C6A6583ABCFB2CD826 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				32123B71391FF157D228D2EB /* ActiveWorkoutView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2FF9BD4D78CF715B2387C59D /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				FE606DE05845516CF84F3B0C /* ButtonStyles.swift */,
+				A9952F6652999F210EB3525E /* DesignTokens.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		2FFED2CED6C4EA978CD25CCA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FB1BE2BD106CDF77C4549BFD /* vibeworkout-watch.app */,
+				3781DDC10C0581914B64BF9A /* vibeworkout.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		44CDAC5ABE86684D96744A49 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				13E1FE5F183453B2F3B37953 /* App */,
+				2FF9BD4D78CF715B2387C59D /* Design */,
+				E86D6E3713C9C0AE4D75ECEA /* Models */,
+				DFDC4AF2B8945B5ACFA3ED95 /* Services */,
+				F90F6AEFE4A69C73B1B9ADF5 /* Views */,
+				076C386299FFAAF19587D95A /* Assets.xcassets */,
+				FF2090A28F8559FB141318E5 /* Info.plist */,
+				9DA548B9544683851F9EC927 /* vibeworkout.entitlements */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		59FE4CC8A472E828439E047E /* History */ = {
+			isa = PBXGroup;
+			children = (
+				4A86B122981866BA77D5D018 /* RepoCommitGroup.swift */,
+				879561A4D9434D77F01DA7A8 /* WorkoutHistoryCard.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		5ED5ADB31650C57B131A542A /* Workout */ = {
+			isa = PBXGroup;
+			children = (
+				EBF11B5927F66740DC2201D6 /* ActiveReposSection.swift */,
+				890D73B5D251E581DC3B983E /* DebugHRSimulatorCard.swift */,
+				BBAB45219B53495E6684291E /* HeartRateCard.swift */,
+				20499A9BDD31478BA6C868C8 /* WatchConnectionCard.swift */,
+			);
+			path = Workout;
+			sourceTree = "<group>";
+		};
+		6D5FA1A0BD7598D3B7E98186 /* Complications */ = {
+			isa = PBXGroup;
+			children = (
+				FD5FE28534ADA460956F221B /* ComplicationController.swift */,
+			);
+			path = Complications;
+			sourceTree = "<group>";
+		};
+		76376753FFED0D1DD8C7AF6B /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				7CEAF791642B776321AB46E9 /* App */,
+				6D5FA1A0BD7598D3B7E98186 /* Complications */,
+				E2A7C937422773257E1A9FF0 /* Services */,
+				2B50C6C6A6583ABCFB2CD826 /* Views */,
+				81C4E31BE2F46ABB8C0E6A48 /* Assets.xcassets */,
+				60362DDAFE4612DF5DB6C795 /* Info.plist */,
+				DF9187DB98B0DD3727C2CB8A /* vibeworkout-watch.entitlements */,
+			);
+			name = Sources;
+			path = "../../watch/vibeworkout-watch/Sources";
+			sourceTree = "<group>";
+		};
+		7CEAF791642B776321AB46E9 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				3DB5D6965ED25936F6A9EB0F /* ContentView.swift */,
+				3798DB6F288CBD2E2B987BF7 /* vibeworkoutWatchApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		899BD5547191F55431026EFE = {
+			isa = PBXGroup;
+			children = (
+				F9073189E5F00D9FF1BE5940 /* Config */,
+				44CDAC5ABE86684D96744A49 /* Sources */,
+				76376753FFED0D1DD8C7AF6B /* Sources */,
+				2FFED2CED6C4EA978CD25CCA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C16AE8DC5F78035914A21EAE /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				59FE4CC8A472E828439E047E /* History */,
+				5ED5ADB31650C57B131A542A /* Workout */,
+				72174C776B3335A01076F947 /* HeartRateChartView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		DFDC4AF2B8945B5ACFA3ED95 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				88D128503C53C1D659B3B164 /* APIService.swift */,
+				201230A0F9AEEBBAFFFBF981 /* AuthService.swift */,
+				653D72D1C1F460BF06F38F32 /* Config.swift */,
+				BAB52C8E65CCFD73A43F27C1 /* WatchConnectivityService.swift */,
+				5A4D00494EBAE27FE0A47480 /* WorkoutService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		E2A7C937422773257E1A9FF0 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				8B70C1C572E99B720E798FE2 /* PhoneConnectivityService.swift */,
+				21A7A5308E9BB2343202DA4D /* WorkoutManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		E86D6E3713C9C0AE4D75ECEA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B2105CCFAC00B5437E92E1A9 /* Models.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F9073189E5F00D9FF1BE5940 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				5D4B4A3C44F083ACDE88CB6B /* Local.xcconfig */,
+				FAF7B40456844E561D14B117 /* Production.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		F90F6AEFE4A69C73B1B9ADF5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C16AE8DC5F78035914A21EAE /* Components */,
+				E74820ECD34DC5D6D74788CE /* GateReposView.swift */,
+				8AA809CE443F13C8D8BC86E2 /* HistoryView.swift */,
+				348D4B24F14A494FF83243EB /* LoginView.swift */,
+				FD538274CDD96865597CAAA1 /* PostWorkoutSummaryView.swift */,
+				9377535085C39CEE0B98C417 /* SettingsView.swift */,
+				B6CB4955A83635CE8D86A52E /* WorkoutDetailView.swift */,
+				AA4F63EBCA880614B2228B3A /* WorkoutView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7E41934E8C53F7AC2E8DE334 /* vibeworkout-watch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7D88C7B9654734CA7EB7EF36 /* Build configuration list for PBXNativeTarget "vibeworkout-watch" */;
+			buildPhases = (
+				D5EA8A8DEC3ABD38423D5564 /* Sources */,
+				7548FFFF9EF863EA1297BAC2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "vibeworkout-watch";
+			packageProductDependencies = (
+			);
+			productName = "vibeworkout-watch";
+			productReference = FB1BE2BD106CDF77C4549BFD /* vibeworkout-watch.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AD197F95187DF673E0247969 /* vibeworkout */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 08E4A3F4DC541746561F050F /* Build configuration list for PBXNativeTarget "vibeworkout" */;
+			buildPhases = (
+				6FAC7DAF150F6FB6A7C63C8A /* Sources */,
+				29D0F0C6FB25C686124EFC92 /* Resources */,
+				14670F8BB0E54DC8018C2E86 /* Frameworks */,
+				159C1C1F09D1F815E8A4B906 /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				251A74B4959C99A90243C06A /* PBXTargetDependency */,
+			);
+			name = vibeworkout;
+			packageProductDependencies = (
+				C1BA3109F15AD34CB5C05032 /* Supabase */,
+			);
+			productName = vibeworkout;
+			productReference = 3781DDC10C0581914B64BF9A /* vibeworkout.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EDC727BA17CFC646DB9FB71E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					7E41934E8C53F7AC2E8DE334 = {
+						DevelopmentTeam = B9JJ3C9FR3;
+						ProvisioningStyle = Automatic;
+					};
+					AD197F95187DF673E0247969 = {
+						DevelopmentTeam = B9JJ3C9FR3;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 3AFEC33967BE124F4B21581C /* Build configuration list for PBXProject "vibeworkout" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 899BD5547191F55431026EFE;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C75C4F06D0F019C6CFFB9C98 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AD197F95187DF673E0247969 /* vibeworkout */,
+				7E41934E8C53F7AC2E8DE334 /* vibeworkout-watch */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		29D0F0C6FB25C686124EFC92 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D28CD448878358A392BB85FE /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7548FFFF9EF863EA1297BAC2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				13E6989F3651FA34C9619C05 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6FAC7DAF150F6FB6A7C63C8A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				954FFAFBF0A3567A209D1480 /* APIService.swift in Sources */,
+				DE70C3D13BF97D42F848B372 /* ActiveReposSection.swift in Sources */,
+				3D5AE87350268A947653B752 /* AuthService.swift in Sources */,
+				C8929F2859E1A176A53A3CE0 /* ButtonStyles.swift in Sources */,
+				AA6EC1B6D5E780C59D456744 /* Config.swift in Sources */,
+				70AB79974EF4F3769FE0B946 /* ContentView.swift in Sources */,
+				217B73B89A54164186B7BF00 /* DebugHRSimulatorCard.swift in Sources */,
+				2095C90AE15FFAE6E2C1D7C2 /* DesignTokens.swift in Sources */,
+				2DF0CEF9D0604519E63A294C /* GateReposView.swift in Sources */,
+				4F4A63B5A46495CC3A6A4483 /* HeartRateCard.swift in Sources */,
+				42D55D1132156891BEBFA846 /* HeartRateChartView.swift in Sources */,
+				9D2CF7A124D63C2CAF838D79 /* HistoryView.swift in Sources */,
+				53E7248DDE8EE626677133C6 /* LoginView.swift in Sources */,
+				72100057FB47A996E1C2201A /* MainTabView.swift in Sources */,
+				6F2F127640E2B44AE8292D8B /* Models.swift in Sources */,
+				FCA0A72652C339CB024C57BD /* PostWorkoutSummaryView.swift in Sources */,
+				9A5BE1B6FDEACD5D35E06FBC /* RepoCommitGroup.swift in Sources */,
+				11CA0D57DE17E7120D1409E8 /* SettingsView.swift in Sources */,
+				08F656B195ADB610A0C6B879 /* WatchConnectionCard.swift in Sources */,
+				C2C1681E6042BDBA307DA36F /* WatchConnectivityService.swift in Sources */,
+				F7B47F47F13643E42FE8A827 /* WorkoutDetailView.swift in Sources */,
+				52A57BB50D3D43A297C73705 /* WorkoutHistoryCard.swift in Sources */,
+				C508E556B4DC0A1692FE4F7C /* WorkoutService.swift in Sources */,
+				995686E62FECA58F95F2FC16 /* WorkoutView.swift in Sources */,
+				F20CB5EA9EB6BDE40428ABB1 /* vibeworkoutApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D5EA8A8DEC3ABD38423D5564 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B33373F2158FFE624F51AA86 /* ActiveWorkoutView.swift in Sources */,
+				80CB54300E371D2434B7410E /* ComplicationController.swift in Sources */,
+				9539224A858A32F78ABE08AA /* ContentView.swift in Sources */,
+				B634E07D7F50CEA144B70C3D /* PhoneConnectivityService.swift in Sources */,
+				65B6E917B69E74D5AA8B44D4 /* WorkoutManager.swift in Sources */,
+				56DD1781E141822A2230070B /* vibeworkoutWatchApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		251A74B4959C99A90243C06A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7E41934E8C53F7AC2E8DE334 /* vibeworkout-watch */;
+			targetProxy = E4C14A87F5E6356E47EDB8EC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		034A5993641E0AEEE50C8130 /* Release (Local) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5D4B4A3C44F083ACDE88CB6B /* Local.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = B9JJ3C9FR3;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = "Release (Local)";
+		};
+		062B1762F47DFAA521513588 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FAF7B40456844E561D14B117 /* Production.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = B9JJ3C9FR3;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		0BBC0CAEF174626E4EF25FB6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Sources/vibeworkout.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Sources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited)";
+				PRODUCT_NAME = "$(inherited)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		1BFFAAC6636FB19E8449B30E /* Debug (Local) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Sources/vibeworkout.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Sources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited)";
+				PRODUCT_NAME = "$(inherited)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Debug (Local)";
+		};
+		2B917E2F075C5D93AFD9F92E /* Debug (Local) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5D4B4A3C44F083ACDE88CB6B /* Local.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = B9JJ3C9FR3;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = "Debug (Local)";
+		};
+		60830DA20A93954D7AD8D0FF /* Debug (Local) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "../../watch/vibeworkout-watch/Sources/vibeworkout-watch.entitlements";
+				COMPANION_APP_BUNDLE_IDENTIFIER = com.vibeworkout.app.local;
+				INFOPLIST_FILE = "../../watch/vibeworkout-watch/Sources/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.vibeworkout.app.local.watchkitapp;
+				PRODUCT_NAME = "vibeworkout-watch";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = "Debug (Local)";
+		};
+		697FC92234863D2992EFDCCA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "../../watch/vibeworkout-watch/Sources/vibeworkout-watch.entitlements";
+				COMPANION_APP_BUNDLE_IDENTIFIER = com.vibeworkout.app;
+				INFOPLIST_FILE = "../../watch/vibeworkout-watch/Sources/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.vibeworkout.app.watchkitapp;
+				PRODUCT_NAME = "vibeworkout-watch";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		8A1622DE09FB2AD4D1FAC4A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "../../watch/vibeworkout-watch/Sources/vibeworkout-watch.entitlements";
+				COMPANION_APP_BUNDLE_IDENTIFIER = com.vibeworkout.app;
+				INFOPLIST_FILE = "../../watch/vibeworkout-watch/Sources/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.vibeworkout.app.watchkitapp;
+				PRODUCT_NAME = "vibeworkout-watch";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		9F8C9EAF68ACC666AE8FFEA6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FAF7B40456844E561D14B117 /* Production.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = B9JJ3C9FR3;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		B7CB136A39DD11DE71D3ACF1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Sources/vibeworkout.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Sources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited)";
+				PRODUCT_NAME = "$(inherited)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		E2640E95577165E0E1010E53 /* Release (Local) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Sources/vibeworkout.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Sources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited)";
+				PRODUCT_NAME = "$(inherited)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Release (Local)";
+		};
+		FB1DB628B64BBC21DB39CDDA /* Release (Local) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "../../watch/vibeworkout-watch/Sources/vibeworkout-watch.entitlements";
+				COMPANION_APP_BUNDLE_IDENTIFIER = com.vibeworkout.app.local;
+				INFOPLIST_FILE = "../../watch/vibeworkout-watch/Sources/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.vibeworkout.app.local.watchkitapp;
+				PRODUCT_NAME = "vibeworkout-watch";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = "Release (Local)";
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		08E4A3F4DC541746561F050F /* Build configuration list for PBXNativeTarget "vibeworkout" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0BBC0CAEF174626E4EF25FB6 /* Debug */,
+				1BFFAAC6636FB19E8449B30E /* Debug (Local) */,
+				B7CB136A39DD11DE71D3ACF1 /* Release */,
+				E2640E95577165E0E1010E53 /* Release (Local) */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		3AFEC33967BE124F4B21581C /* Build configuration list for PBXProject "vibeworkout" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				062B1762F47DFAA521513588 /* Debug */,
+				2B917E2F075C5D93AFD9F92E /* Debug (Local) */,
+				9F8C9EAF68ACC666AE8FFEA6 /* Release */,
+				034A5993641E0AEEE50C8130 /* Release (Local) */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7D88C7B9654734CA7EB7EF36 /* Build configuration list for PBXNativeTarget "vibeworkout-watch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A1622DE09FB2AD4D1FAC4A6 /* Debug */,
+				60830DA20A93954D7AD8D0FF /* Debug (Local) */,
+				697FC92234863D2992EFDCCA /* Release */,
+				FB1DB628B64BBC21DB39CDDA /* Release (Local) */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C75C4F06D0F019C6CFFB9C98 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase-community/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C1BA3109F15AD34CB5C05032 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C75C4F06D0F019C6CFFB9C98 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = EDC727BA17CFC646DB9FB71E /* Project object */;
+}

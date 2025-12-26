@@ -5,7 +5,7 @@
  */
 
 import { Hono } from 'hono';
-import { prisma } from '@viberunner/db';
+import { prisma } from '@vibeworkout/db';
 import { authMiddleware } from '../middleware/auth.js';
 import { encrypt, decrypt } from '../lib/encryption.js';
 import { getGitHubUser, createUserOctokit, createInstallationOctokit } from '../lib/github.js';

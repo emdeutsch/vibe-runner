@@ -1,8 +1,8 @@
 {
-  "name": "@viberunner/repo-bootstrap",
+  "name": "@vibeworkout/repo-bootstrap",
   "version": "0.1.0",
   "private": true,
-  "description": "Bootstrap files for viberunner gate repos",
+  "description": "Bootstrap files for vibeworkout gate repos",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {

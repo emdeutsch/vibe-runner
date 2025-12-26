@@ -23,7 +23,7 @@ export const config = {
   githubAppId: requireEnv('GITHUB_APP_ID'),
   githubAppPrivateKey: requireEnv('GITHUB_APP_PRIVATE_KEY'),
 
-  // Viberunner signing keys (Ed25519)
+  // Vibeworkout signing keys (Ed25519)
   signerPrivateKey: requireEnv('SIGNER_PRIVATE_KEY'),
   signerPublicKey: requireEnv('SIGNER_PUBLIC_KEY'),
 

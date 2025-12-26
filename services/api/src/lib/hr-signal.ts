@@ -4,8 +4,8 @@
  * Updates GitHub refs for gate repos when HR samples arrive.
  */
 
-import { prisma } from '@viberunner/db';
-import { createSignedPayload } from '@viberunner/shared';
+import { prisma } from '@vibeworkout/db';
+import { createSignedPayload } from '@vibeworkout/shared';
 import { config } from '../config.js';
 import { createInstallationOctokit, updateSignalRef } from './github.js';
 

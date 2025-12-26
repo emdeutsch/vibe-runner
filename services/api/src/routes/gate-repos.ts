@@ -3,7 +3,7 @@
  */
 
 import { Hono } from 'hono';
-import { prisma } from '@viberunner/db';
+import { prisma } from '@vibeworkout/db';
 import { authMiddleware } from '../middleware/auth.js';
 import { decrypt } from '../lib/encryption.js';
 import {
@@ -16,13 +16,13 @@ import {
   type RepoCreationOptions,
 } from '../lib/github.js';
 import { config } from '../config.js';
-import { buildSignalRef, PAYLOAD_FILENAME, SIGNAL_REF_PATTERN } from '@viberunner/shared';
+import { buildSignalRef, PAYLOAD_FILENAME, SIGNAL_REF_PATTERN } from '@vibeworkout/shared';
 import type {
   CreateGateRepoRequest,
   CreateGateRepoResponse,
   GateRepoResponse,
   GateRepoConfig,
-} from '@viberunner/shared';
+} from '@vibeworkout/shared';
 
 const gateRepos = new Hono();
 
@@ -38,7 +38,7 @@ function generateBootstrapFiles(
 ): Array<{ path: string; content: string; executable?: boolean }> {
   const signalRef = buildSignalRef(userKey);
 
-  // viberunner.config.json
+  // vibeworkout.config.json
   const configContent: GateRepoConfig = {
     version: 1,
     user_key: userKey,
@@ -72,16 +72,16 @@ function generateBootstrapFiles(
       PreToolUse: [
         {
           matcher: '*',
-          hooks: [{ type: 'command', command: './scripts/viberunner-hr-check' }],
+          hooks: [{ type: 'command', command: './scripts/vibeworkout-hr-check' }],
         },
       ],
     },
   };
 
-  // scripts/viberunner-hr-check - The enforcement script (must match template version)
+  // scripts/vibeworkout-hr-check - The enforcement script (must match template version)
   const hrCheckScript = `#!/usr/bin/env bash
 #
-# viberunner HR check script
+# vibeworkout HR check script
 # Verifies HR signal is valid before allowing Claude Code tool execution
 #
 # Exit codes:
@@ -91,7 +91,7 @@ function generateBootstrapFiles(
 
 set -e
 
-CONFIG_FILE="viberunner.config.json"
+CONFIG_FILE="vibeworkout.config.json"
 SCRIPT_DIR="$(cd "$(dirname "\${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 
@@ -106,7 +106,7 @@ hex_to_bin() {
   elif command -v python3 >/dev/null 2>&1; then
     python3 -c "import sys; sys.stdout.buffer.write(bytes.fromhex('$hex'))" > "$outfile"
   else
-    echo "viberunner: no hex decoder (need xxd, perl, or python3) — tools locked" >&2
+    echo "vibeworkout: no hex decoder (need xxd, perl, or python3) — tools locked" >&2
     exit 2
   fi
 }
@@ -121,48 +121,48 @@ bin_to_hex() {
   elif command -v python3 >/dev/null 2>&1; then
     python3 -c "import sys; print(sys.stdin.buffer.read().hex(), end='')" < "$infile"
   else
-    echo "viberunner: no hex encoder (need xxd, perl, or python3) — tools locked" >&2
+    echo "vibeworkout: no hex encoder (need xxd, perl, or python3) — tools locked" >&2
     exit 2
   fi
 }
 
 # Check for required tools
-command -v jq >/dev/null 2>&1 || { echo "viberunner: jq not installed — tools locked" >&2; exit 2; }
-command -v openssl >/dev/null 2>&1 || { echo "viberunner: openssl not installed — tools locked" >&2; exit 2; }
+command -v jq >/dev/null 2>&1 || { echo "vibeworkout: jq not installed — tools locked" >&2; exit 2; }
+command -v openssl >/dev/null 2>&1 || { echo "vibeworkout: openssl not installed — tools locked" >&2; exit 2; }
 
 # Read config
 if [[ ! -f "$REPO_ROOT/$CONFIG_FILE" ]]; then
-  echo "viberunner: config not found — tools locked" >&2
+  echo "vibeworkout: config not found — tools locked" >&2
   exit 2
 fi
 
 USER_KEY=$(jq -r '.user_key' "$REPO_ROOT/$CONFIG_FILE")
 PUBLIC_KEY=$(jq -r '.public_key' "$REPO_ROOT/$CONFIG_FILE")
 TTL_SECONDS=$(jq -r '.ttl_seconds' "$REPO_ROOT/$CONFIG_FILE")
-SIGNAL_REF="refs/viberunner/hr/$USER_KEY"
+SIGNAL_REF="refs/vibeworkout/hr/$USER_KEY"
 
 # Validate config values
 if [[ -z "$USER_KEY" || "$USER_KEY" == "null" ]]; then
-  echo "viberunner: invalid user_key in config — tools locked" >&2
+  echo "vibeworkout: invalid user_key in config — tools locked" >&2
   exit 2
 fi
 
 if [[ -z "$PUBLIC_KEY" || "$PUBLIC_KEY" == "null" ]]; then
-  echo "viberunner: invalid public_key in config — tools locked" >&2
+  echo "vibeworkout: invalid public_key in config — tools locked" >&2
   exit 2
 fi
 
 # Fetch the signal ref from origin
-TEMP_REF="refs/viberunner-check/hr-signal"
+TEMP_REF="refs/vibeworkout-check/hr-signal"
 if ! git fetch origin "$SIGNAL_REF:$TEMP_REF" --quiet 2>/dev/null; then
-  echo "viberunner: HR signal not found (fetch failed) — tools locked" >&2
+  echo "vibeworkout: HR signal not found (fetch failed) — tools locked" >&2
   exit 2
 fi
 
 # Read payload from the ref
 PAYLOAD=$(git show "$TEMP_REF:hr-signal.json" 2>/dev/null)
 if [[ -z "$PAYLOAD" ]]; then
-  echo "viberunner: HR payload missing — tools locked" >&2
+  echo "vibeworkout: HR payload missing — tools locked" >&2
   exit 2
 fi
 
@@ -184,13 +184,13 @@ SIG=$(echo "$PAYLOAD" | jq -r '.sig')
 if [[ "$V" == "null" || "$PAYLOAD_USER_KEY" == "null" || "$SESSION_ID" == "null" || \\
       "$HR_OK" == "null" || "$BPM" == "null" || "$THRESHOLD_BPM" == "null" || \\
       "$EXP_UNIX" == "null" || "$NONCE" == "null" || "$SIG" == "null" ]]; then
-  echo "viberunner: malformed payload — tools locked" >&2
+  echo "vibeworkout: malformed payload — tools locked" >&2
   exit 2
 fi
 
 # Validate user_key matches
 if [[ "$PAYLOAD_USER_KEY" != "$USER_KEY" ]]; then
-  echo "viberunner: user_key mismatch — tools locked" >&2
+  echo "vibeworkout: user_key mismatch — tools locked" >&2
   exit 2
 fi
 
@@ -198,7 +198,7 @@ fi
 NOW=$(date +%s)
 if [[ "$EXP_UNIX" -le "$NOW" ]]; then
   EXPIRED_AGO=$((NOW - EXP_UNIX))
-  echo "viberunner: HR signal expired \${EXPIRED_AGO}s ago — tools locked" >&2
+  echo "vibeworkout: HR signal expired \${EXPIRED_AGO}s ago — tools locked" >&2
   exit 2
 fi
 
@@ -238,32 +238,32 @@ echo -n "$CANONICAL" > "$MSG_FILE"
 
 # Verify Ed25519 signature
 if ! openssl pkeyutl -verify -pubin -inkey "$PUB_KEY_PEM" -sigfile "$SIG_BIN" -in "$MSG_FILE" -rawin 2>/dev/null; then
-  echo "viberunner: invalid signature — tools locked" >&2
+  echo "vibeworkout: invalid signature — tools locked" >&2
   exit 2
 fi
 
 # Check hr_ok flag
 if [[ "$HR_OK" != "true" ]]; then
-  echo "viberunner: HR $BPM below threshold $THRESHOLD_BPM — tools locked" >&2
+  echo "vibeworkout: HR $BPM below threshold $THRESHOLD_BPM — tools locked" >&2
   exit 2
 fi
 
 # All checks passed - output session info for commit tagging
-# Claude can parse this to extract session_id for [vr:SESSION_ID] tags
-echo "viberunner: HR $BPM ✓ — session_id=$SESSION_ID"
+# Claude can parse this to extract session_id for [vw:SESSION_ID] tags
+echo "vibeworkout: HR $BPM ✓ — session_id=$SESSION_ID"
 exit 0
 `;
 
   // CLAUDE.md - Instructions for Claude
-  const claudeMd = `# viberunner HR-Gated Repository
+  const claudeMd = `# vibeworkout HR-Gated Repository
 
-This repository is protected by viberunner. Claude Code tool calls (edit, write, bash, etc.) are gated by the user's live heart rate.
+This repository is protected by vibeworkout. Claude Code tool calls (edit, write, bash, etc.) are gated by the user's live heart rate.
 
 ## How it works
 
 - You can **chat anytime** without restrictions
 - **Tool calls are blocked** unless the user's heart rate is above their configured threshold
-- When tools are locked, you'll see: \`viberunner: HR below threshold — tools locked\`
+- When tools are locked, you'll see: \`vibeworkout: HR below threshold — tools locked\`
 
 ## When tools are locked
 
@@ -276,13 +276,13 @@ Switch to **planning and review mode**:
 
 ## Commit Tagging
 
-When making commits in this repository, **always include a viberunner session tag** in your commit message. This allows the user to see which commits were made during each workout session.
+When making commits in this repository, **always include a vibeworkout session tag** in your commit message. This allows the user to see which commits were made during each workout session.
 
-**Format:** Add \`[vr:SESSION_ID]\` at the end of your commit message, where \`SESSION_ID\` is from the current HR signal.
+**Format:** Add \`[vw:SESSION_ID]\` at the end of your commit message, where \`SESSION_ID\` is from the current HR signal.
 
 Example:
 \`\`\`
-feat: add user authentication flow [vr:abc123-def456]
+feat: add user authentication flow [vw:abc123-def456]
 \`\`\`
 
 The session ID is available in the HR signal payload. If you can't determine the session ID, omit the tag — don't make one up.
@@ -302,9 +302,9 @@ To temporarily disable HR gating:
 `;
 
   return [
-    { path: 'viberunner.config.json', content: JSON.stringify(configContent, null, 2) },
+    { path: 'vibeworkout.config.json', content: JSON.stringify(configContent, null, 2) },
     { path: '.claude/settings.json', content: JSON.stringify(claudeSettings, null, 2) },
-    { path: 'scripts/viberunner-hr-check', content: hrCheckScript, executable: true },
+    { path: 'scripts/vibeworkout-hr-check', content: hrCheckScript, executable: true },
     { path: 'CLAUDE.md', content: claudeMd },
   ];
 }
@@ -546,7 +546,7 @@ gateRepos.post('/', async (c) => {
         config.templateRepoName,
         body.org || githubAccount.username, // Use org if specified
         body.name,
-        body.description || 'viberunner HR-gated repository',
+        body.description || 'vibeworkout HR-gated repository',
         body.private ?? true
       );
     } catch {
@@ -557,7 +557,7 @@ gateRepos.post('/', async (c) => {
           octokit,
           body.org,
           body.name,
-          body.description || 'viberunner HR-gated repository',
+          body.description || 'vibeworkout HR-gated repository',
           body.private ?? true,
           repoOptions
         );
@@ -566,7 +566,7 @@ gateRepos.post('/', async (c) => {
         repoInfo = await createEmptyRepo(
           octokit,
           body.name,
-          body.description || 'viberunner HR-gated repository',
+          body.description || 'vibeworkout HR-gated repository',
           body.private ?? true,
           repoOptions
         );
@@ -579,7 +579,7 @@ gateRepos.post('/', async (c) => {
         repoInfo.owner,
         repoInfo.name,
         files,
-        'Initialize viberunner HR gating'
+        'Initialize vibeworkout HR gating'
       );
     }
 

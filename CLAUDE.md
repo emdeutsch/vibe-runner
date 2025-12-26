@@ -22,15 +22,15 @@ npx prisma migrate deploy
 **CRITICAL:** Before any TestFlight upload, you MUST:
 
 1. **ASK THE USER** for the current TestFlight build number (they must check App Store Connect → TestFlight → Builds)
-2. **Increment CFBundleVersion** in `apps/ios/viberunner/Sources/Info.plist` to be higher than that number
+2. **Increment CFBundleVersion** in `apps/ios/vibeworkout/Sources/Info.plist` to be higher than that number
 3. **Commit the version bump** to git before or immediately after upload
 
 **WARNING TO AGENTS:** NEVER look at git history or Info.plist to determine the current build number. Git is often out of sync with TestFlight. You MUST ask the user to check TestFlight directly. Uploading a duplicate or lower build number will fail and waste time.
 
 | File                                     | Key                          | Purpose                                                                         |
 | ---------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------- |
-| `apps/ios/viberunner/Sources/Info.plist` | `CFBundleShortVersionString` | Marketing version (e.g., "1.0")                                                 |
-| `apps/ios/viberunner/Sources/Info.plist` | `CFBundleVersion`            | Build number - must increment for each TestFlight upload (ask user for current) |
+| `apps/ios/vibeworkout/Sources/Info.plist` | `CFBundleShortVersionString` | Marketing version (e.g., "1.0")                                                 |
+| `apps/ios/vibeworkout/Sources/Info.plist` | `CFBundleVersion`            | Build number - must increment for each TestFlight upload (ask user for current) |
 
 ### TestFlight Upload
 
@@ -42,10 +42,10 @@ See `docs/IOS_TESTFLIGHT_UPLOAD.md` for complete CLI upload workflow.
 # 1. First, check current build in TestFlight and update CFBundleVersion in Info.plist
 
 # 2. Then build and upload:
-cd apps/ios/viberunner && \
-xcodebuild -scheme "Viberunner" -archivePath ./build/Viberunner.xcarchive archive -allowProvisioningUpdates && \
-xcodebuild -exportArchive -archivePath ./build/Viberunner.xcarchive -exportPath ./build/export -exportOptionsPlist ./build/ExportOptions.plist -allowProvisioningUpdates && \
-xcrun altool --upload-app --type ios --file ./build/export/Viberunner.ipa --apiKey 45C93UF2KA --apiIssuer 2643b0ce-38e5-4865-9237-d7979d42aeed
+cd apps/ios/vibeworkout && \
+xcodebuild -scheme "Vibeworkout" -archivePath ./build/Vibeworkout.xcarchive archive -allowProvisioningUpdates && \
+xcodebuild -exportArchive -archivePath ./build/Vibeworkout.xcarchive -exportPath ./build/export -exportOptionsPlist ./build/ExportOptions.plist -allowProvisioningUpdates && \
+xcrun altool --upload-app --type ios --file ./build/export/Vibeworkout.ipa --apiKey 45C93UF2KA --apiIssuer 2643b0ce-38e5-4865-9237-d7979d42aeed
 
 # 3. Commit the version bump if not already done
 ```
@@ -61,7 +61,7 @@ scripts/ios-deploy.sh
 This script:
 
 - Detects the connected iOS device
-- Builds the "Viberunner (Local)" scheme
+- Builds the "Vibeworkout (Local)" scheme
 - Installs the app on the device
 - Attempts to launch it (requires unlocked device)
 
@@ -69,7 +69,7 @@ This script:
 
 **Best approach: Run from Xcode with debugger attached.**
 
-1. Open `apps/ios/viberunner/viberunner.xcodeproj` in Xcode
+1. Open `apps/ios/vibeworkout/vibeworkout.xcodeproj` in Xcode
 2. Select your iPhone as the target device
 3. Press `Cmd + R` to build and run
 4. View logs in Debug Console: `Cmd + Shift + Y`
@@ -85,7 +85,7 @@ To share logs with Claude: copy/paste relevant lines from Xcode's debug console.
 
 For GitHub OAuth to work locally, the Supabase dashboard must have the app's callback URL in its redirect allowlist:
 
-- Callback URL: `viberunner://github-callback`
+- Callback URL: `vibeworkout://github-callback`
 - Supabase dashboard: http://localhost:54423 → Authentication → URL Configuration → Redirect URLs
 
 ### Local Services
@@ -96,4 +96,4 @@ Start local Supabase:
 cd /Users/evandeutsch/vibe-runner && npx supabase start
 ```
 
-The iOS app connects to Supabase at `http://192.168.1.144:54421` (configured in `apps/ios/viberunner/Config/Local.xcconfig`).
+The iOS app connects to Supabase at `http://192.168.1.144:54421` (configured in `apps/ios/vibeworkout/Config/Local.xcconfig`).

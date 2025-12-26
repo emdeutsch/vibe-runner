@@ -1,6 +1,6 @@
-# viberunner Setup Guide
+# vibeworkout Setup Guide
 
-This guide walks through setting up all components of viberunner.
+This guide walks through setting up all components of vibeworkout.
 
 ## Prerequisites
 
@@ -33,7 +33,7 @@ This is for user authentication and repo creation.
 1. Go to GitHub Settings > Developer settings > OAuth Apps
 2. Click "New OAuth App"
 3. Fill in:
-   - Application name: `viberunner`
+   - Application name: `vibeworkout`
    - Homepage URL: `https://your-app-domain.com`
    - Authorization callback URL: `https://your-api-domain.com/api/github/callback`
 4. Create the app and note the Client ID and Client Secret
@@ -52,7 +52,7 @@ This is for pushing HR signal refs to gate repos.
 1. Go to GitHub Settings > Developer settings > GitHub Apps
 2. Click "New GitHub App"
 3. Fill in:
-   - GitHub App name: `viberunner`
+   - GitHub App name: `vibeworkout`
    - Homepage URL: `https://your-app-domain.com`
    - Webhook URL: `https://your-api-domain.com/api/gate-repos/webhook/installation`
    - Webhook secret: Generate a random string
@@ -72,8 +72,8 @@ This is for pushing HR signal refs to gate repos.
 ### Clone Repository
 
 ```bash
-git clone https://github.com/viberunner/viberunner.git
-cd viberunner
+git clone https://github.com/evandeutsch/vibe-workout.git
+cd vibe-workout
 ```
 
 ### Install Dependencies
@@ -86,7 +86,7 @@ npm install
 
 ```bash
 npx tsx -e "
-import { generateKeyPair } from '@viberunner/shared';
+import { generateKeyPair } from '@vibeworkout/shared';
 const keys = generateKeyPair();
 console.log('SIGNER_PRIVATE_KEY=' + keys.privateKey);
 console.log('SIGNER_PUBLIC_KEY=' + keys.publicKey);
@@ -190,7 +190,7 @@ npm run dev
 ### Open in Xcode
 
 ```bash
-open apps/ios/viberunner/viberunner.xcodeproj
+open apps/ios/vibeworkout/vibeworkout.xcodeproj
 ```
 
 ### Configure App
@@ -247,7 +247,7 @@ The watchOS app should be part of the iOS workspace.
 1. Go to Repos tab
 2. Tap "Create Gate Repo"
 3. Enter a name
-4. After creation, install the viberunner GitHub App
+4. After creation, install the vibeworkout GitHub App
 
 ### 5. Start Workout
 
@@ -274,7 +274,7 @@ The watchOS app should be part of the iOS workspace.
 ### "Invalid signature"
 
 - Ensure API and worker use the same signing keys
-- Verify the public key in `viberunner.config.json` matches
+- Verify the public key in `vibeworkout.config.json` matches
 
 ### "HR signal expired"
 

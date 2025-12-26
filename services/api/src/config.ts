@@ -32,9 +32,9 @@ export const config = {
   // GitHub App (for pushing refs)
   githubAppId: requireEnv('GITHUB_APP_ID'),
   githubAppPrivateKey: requireEnv('GITHUB_APP_PRIVATE_KEY'),
-  githubAppSlug: optionalEnv('GITHUB_APP_SLUG', 'viberunner-ai'),
+  githubAppSlug: optionalEnv('GITHUB_APP_SLUG', 'vibeworkout'),
 
-  // Viberunner signing keys (Ed25519)
+  // Vibeworkout signing keys (Ed25519)
   signerPrivateKey: requireEnv('SIGNER_PRIVATE_KEY'),
   signerPublicKey: requireEnv('SIGNER_PUBLIC_KEY'),
 
@@ -46,7 +46,7 @@ export const config = {
   hrTtlSeconds: parseInt(optionalEnv('HR_TTL_SECONDS', '15'), 10),
 
   // GitHub template repo (optional, for bootstrapping gate repos)
-  templateRepoOwner: optionalEnv('TEMPLATE_REPO_OWNER', 'viberunner'),
+  templateRepoOwner: optionalEnv('TEMPLATE_REPO_OWNER', 'vibeworkout'),
   templateRepoName: optionalEnv('TEMPLATE_REPO_NAME', 'gate-repo-template'),
 };
 

@@ -1,6 +1,6 @@
-# Contributing to viberunner
+# Contributing to vibeworkout
 
-Thank you for your interest in contributing to viberunner! This document provides guidelines for contributing to the project.
+Thank you for your interest in contributing to vibeworkout! This document provides guidelines for contributing to the project.
 
 ## Code of Conduct
 

@@ -13,10 +13,10 @@ This document explains how to build and upload the iOS app to TestFlight using t
 From the project root:
 
 ```bash
-cd apps/ios/viberunner && \
-xcodebuild -scheme "Viberunner" -archivePath ./build/Viberunner.xcarchive archive -allowProvisioningUpdates && \
-xcodebuild -exportArchive -archivePath ./build/Viberunner.xcarchive -exportPath ./build/export -exportOptionsPlist ./build/ExportOptions.plist -allowProvisioningUpdates && \
-xcrun altool --upload-app --type ios --file ./build/export/Viberunner.ipa --apiKey <KEY_ID> --apiIssuer <ISSUER_ID>
+cd apps/ios/vibeworkout && \
+xcodebuild -scheme "Vibeworkout" -archivePath ./build/Vibeworkout.xcarchive archive -allowProvisioningUpdates && \
+xcodebuild -exportArchive -archivePath ./build/Vibeworkout.xcarchive -exportPath ./build/export -exportOptionsPlist ./build/ExportOptions.plist -allowProvisioningUpdates && \
+xcrun altool --upload-app --type ios --file ./build/export/Vibeworkout.ipa --apiKey <KEY_ID> --apiIssuer <ISSUER_ID>
 ```
 
 ## Step-by-Step
@@ -24,13 +24,13 @@ xcrun altool --upload-app --type ios --file ./build/export/Viberunner.ipa --apiK
 ### 1. Archive the App
 
 ```bash
-cd apps/ios/viberunner
-xcodebuild -scheme "Viberunner" -archivePath ./build/Viberunner.xcarchive archive -allowProvisioningUpdates
+cd apps/ios/vibeworkout
+xcodebuild -scheme "Vibeworkout" -archivePath ./build/Vibeworkout.xcarchive archive -allowProvisioningUpdates
 ```
 
 This builds the **Production** scheme which points to:
 
-- API: `https://vibe-runner-api.vercel.app`
+- API: `https://www.vibeworkout.ai`
 - Supabase: Production instance
 
 ### 2. Export the Archive
@@ -56,7 +56,7 @@ Then export:
 
 ```bash
 xcodebuild -exportArchive \
-  -archivePath ./build/Viberunner.xcarchive \
+  -archivePath ./build/Vibeworkout.xcarchive \
   -exportPath ./build/export \
   -exportOptionsPlist ./build/ExportOptions.plist \
   -allowProvisioningUpdates
@@ -67,7 +67,7 @@ xcodebuild -exportArchive \
 ```bash
 xcrun altool --upload-app \
   --type ios \
-  --file ./build/export/Viberunner.ipa \
+  --file ./build/export/Vibeworkout.ipa \
   --apiKey 45C93UF2KA \
   --apiIssuer 2643b0ce-38e5-4865-9237-d7979d42aeed
 ```
@@ -75,18 +75,18 @@ xcrun altool --upload-app \
 ### 4. Wait for Processing
 
 After upload, Apple processes the build (5-15 minutes). Check status at:
-**App Store Connect → Viberunner → TestFlight**
+**App Store Connect → Vibeworkout → TestFlight**
 
 ## Local Development Build
 
-For local testing (not TestFlight), use the "Viberunner (Local)" scheme which points to your local API server.
+For local testing (not TestFlight), use the "Vibeworkout (Local)" scheme which points to your local API server.
 
 ## Schemes
 
 | Scheme             | API URL                              | Use Case                |
 | ------------------ | ------------------------------------ | ----------------------- |
-| Viberunner         | `https://vibe-runner-api.vercel.app` | Production / TestFlight |
-| Viberunner (Local) | `http://<local-ip>:3000`             | Local development       |
+| Vibeworkout         | `https://www.vibeworkout.ai`         | Production / TestFlight |
+| Vibeworkout (Local) | `http://<local-ip>:3000`             | Local development       |
 
 ## Troubleshooting
 

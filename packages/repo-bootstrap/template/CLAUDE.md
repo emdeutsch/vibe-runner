@@ -1,12 +1,12 @@
-# viberunner HR-Gated Repository
+# vibeworkout HR-Gated Repository
 
-This repository is protected by viberunner. Claude Code tool calls (edit, write, bash, etc.) are gated by the user's live heart rate.
+This repository is protected by vibeworkout. Claude Code tool calls (edit, write, bash, etc.) are gated by the user's live heart rate.
 
 ## How it works
 
 - You can **chat anytime** without restrictions
 - **Tool calls are blocked** unless the user's heart rate is above their configured threshold
-- When tools are locked, you'll see: `viberunner: HR below threshold — tools locked`
+- When tools are locked, you'll see: `vibeworkout: HR below threshold — tools locked`
 
 ## When tools are locked
 
@@ -19,7 +19,7 @@ Switch to **planning and review mode**:
 
 ## Configuration
 
-See `viberunner.config.json` for this repo's configuration:
+See `vibeworkout.config.json` for this repo's configuration:
 - `user_key`: Your unique identifier
 - `signal_ref_pattern`: Where HR signals are stored
 - `public_key`: Ed25519 public key for signature verification
@@ -27,13 +27,13 @@ See `viberunner.config.json` for this repo's configuration:
 
 ## Commit Tagging
 
-When making commits in this repository, **always include a viberunner session tag** in your commit message. This allows the user to see which commits were made during each workout session.
+When making commits in this repository, **always include a vibeworkout session tag** in your commit message. This allows the user to see which commits were made during each workout session.
 
-**Format:** Add `[vr:SESSION_ID]` at the end of your commit message, where `SESSION_ID` is from the current HR signal.
+**Format:** Add `[vw:SESSION_ID]` at the end of your commit message, where `SESSION_ID` is from the current HR signal.
 
 Example:
 ```
-feat: add user authentication flow [vr:abc123-def456]
+feat: add user authentication flow [vw:abc123-def456]
 ```
 
 The session ID is available in the HR signal payload. If you can't determine the session ID, omit the tag — don't make one up.
@@ -47,4 +47,4 @@ To temporarily disable HR gating:
 
 ## Learn more
 
-Visit [viberunner](https://github.com/viberunner/viberunner) for documentation and support.
+Visit [vibeworkout](https://github.com/evandeutsch/vibe-workout) for documentation and support.

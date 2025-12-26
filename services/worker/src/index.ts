@@ -1,5 +1,5 @@
 /**
- * viberunner Worker
+ * vibeworkout Worker
  *
  * Continuously updates HR signal refs in gate repos for users with active workouts.
  *
@@ -10,11 +10,11 @@
  * The worker:
  * 1. Computes hr_ok = bpm >= threshold AND sample is fresh
  * 2. Creates signed payload with exp_unix = now + ttl_seconds
- * 3. Pushes payload to refs/viberunner/hr/<user_key> in each gate repo
+ * 3. Pushes payload to refs/vibeworkout/hr/<user_key> in each gate repo
  */
 
-import { prisma } from '@viberunner/db';
-import { createSignedPayload } from '@viberunner/shared';
+import { prisma } from '@vibeworkout/db';
+import { createSignedPayload } from '@vibeworkout/shared';
 import { config } from './config.js';
 import { createInstallationOctokit, updateSignalRef } from './github.js';
 
@@ -98,7 +98,7 @@ let isShuttingDown = false;
  * Main worker loop
  */
 async function runWorker(): Promise<void> {
-  console.log('viberunner worker starting...');
+  console.log('vibeworkout worker starting...');
   console.log(`Poll interval: ${config.pollIntervalMs}ms`);
   console.log(`HR stale threshold: ${config.hrStaleThresholdSeconds}s`);
   console.log(`HR TTL: ${config.hrTtlSeconds}s`);

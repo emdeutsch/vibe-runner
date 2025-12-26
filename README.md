@@ -1,8 +1,8 @@
-# viberunner
+# vibeworkout
 
 **HR-gated Claude Code tools via repo-local GitHub ref**
 
-viberunner is a workout app + enforcement system that lets users keep chatting with Claude, but blocks Claude Code tool calls (edit/write/bash/git/etc.) unless the user's live heart rate (HR) is above a configurable threshold.
+vibeworkout is a workout app + enforcement system that lets users keep chatting with Claude, but blocks Claude Code tool calls (edit/write/bash/git/etc.) unless the user's live heart rate (HR) is above a configurable threshold.
 
 ## How It Works
 
@@ -18,13 +18,13 @@ Each "gate repo" contains:
 - A bash script that fetches and verifies a signed HR signal from a git ref
 - If verification fails: tools are locked with a clear message
 
-The HR signal lives in a special git ref (`refs/viberunner/hr/<user_key>`) that's updated every ~5 seconds by the viberunner backend while you're working out.
+The HR signal lives in a special git ref (`refs/vibeworkout/hr/<user_key>`) that's updated every ~5 seconds by the vibeworkout backend while you're working out.
 
 ## Architecture
 
 ```
 ┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
-│   Apple Watch   │────▶│    iPhone App    │────▶│  viberunner API │
+│   Apple Watch   │────▶│    iPhone App    │────▶│  vibeworkout API │
 │  (HR streaming) │     │ (forward to API) │     │  (stores HR)    │
 └─────────────────┘     └──────────────────┘     └────────┬────────┘
                                                           │
@@ -38,12 +38,12 @@ The HR signal lives in a special git ref (`refs/viberunner/hr/<user_key>`) that'
 ## Repository Structure
 
 ```
-viberunner/
+vibeworkout/
 ├── apps/
 │   ├── ios/                    # iOS app (SwiftUI)
-│   │   └── viberunner/
+│   │   └── vibeworkout/
 │   └── watch/                  # watchOS app (SwiftUI)
-│       └── viberunner-watch/
+│       └── vibeworkout-watch/
 ├── services/
 │   ├── api/                    # Hono API server
 │   └── worker/                 # HR signal ref updater
@@ -67,8 +67,8 @@ viberunner/
 ### 1. Clone and Install
 
 ```bash
-git clone https://github.com/viberunner/viberunner.git
-cd viberunner
+git clone https://github.com/evandeutsch/vibe-workout.git
+cd vibe-workout
 npm install
 ```
 
@@ -95,7 +95,7 @@ GITHUB_OAUTH_CALLBACK_URL=http://localhost:3000/api/github/callback
 GITHUB_APP_ID=your-app-id
 GITHUB_APP_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\n..."
 
-# Viberunner signing keys (generate with: npx tsx scripts/generate-keys.ts)
+# Vibeworkout signing keys (generate with: npx tsx scripts/generate-keys.ts)
 SIGNER_PRIVATE_KEY=your-private-key-hex
 SIGNER_PUBLIC_KEY=your-public-key-hex
 
@@ -139,16 +139,16 @@ Open the Xcode projects in `apps/ios` and `apps/watch`, configure your developme
 1. Sign in with GitHub (Supabase auth)
 2. Connect GitHub (OAuth) in Settings
 3. Go to "Repos" tab and tap "Create Gate Repo"
-4. Install the viberunner GitHub App on the new repo
+4. Install the vibeworkout GitHub App on the new repo
 
 ### Manually
 
 You can also bootstrap an existing repo:
 
 1. Copy files from `packages/repo-bootstrap/template/` to your repo
-2. Update `viberunner.config.json` with your `user_key` and `public_key`
-3. Make the hook script executable: `chmod +x scripts/viberunner-hr-check`
-4. Install the viberunner GitHub App on the repo
+2. Update `vibeworkout.config.json` with your `user_key` and `public_key`
+3. Make the hook script executable: `chmod +x scripts/vibeworkout-hr-check`
+4. Install the vibeworkout GitHub App on the repo
 
 ## How Enforcement Works
 
@@ -162,19 +162,19 @@ Every gate repo has `.claude/settings.json`:
     "PreToolUse": [
       {
         "matcher": "*",
-        "hooks": ["./scripts/viberunner-hr-check"]
+        "hooks": ["./scripts/vibeworkout-hr-check"]
       }
     ]
   }
 }
 ```
 
-This runs `scripts/viberunner-hr-check` before every Claude Code tool call.
+This runs `scripts/vibeworkout-hr-check` before every Claude Code tool call.
 
 ### The HR Check Script
 
 The script:
-1. Fetches `refs/viberunner/hr/<user_key>` from origin
+1. Fetches `refs/vibeworkout/hr/<user_key>` from origin
 2. Reads the JSON payload from that ref
 3. Verifies the Ed25519 signature
 4. Checks that `exp_unix > now` (not expired)
@@ -204,7 +204,7 @@ The signature is computed over canonicalized JSON (sorted keys, no whitespace).
 
 ```bash
 npx tsx -e "
-import { generateKeyPair } from '@viberunner/shared';
+import { generateKeyPair } from '@vibeworkout/shared';
 const keys = generateKeyPair();
 console.log('SIGNER_PRIVATE_KEY=' + keys.privateKey);
 console.log('SIGNER_PUBLIC_KEY=' + keys.publicKey);
@@ -215,7 +215,7 @@ console.log('SIGNER_PUBLIC_KEY=' + keys.publicKey);
 
 ```bash
 # In a gate repo
-./scripts/viberunner-hr-check
+./scripts/vibeworkout-hr-check
 echo $?  # 0 = unlocked, 2 = locked
 ```
 

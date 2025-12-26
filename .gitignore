@@ -36,7 +36,7 @@ apps/ios/*.xcuserstate
 apps/ios/xcuserdata/
 apps/ios/DerivedData/
 apps/ios/.build/
-apps/ios/viberunner/Config/Local.xcconfig
+apps/ios/vibeworkout/Config/Local.xcconfig
 
 # Claude Code
 .claude/

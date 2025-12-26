@@ -1,5 +1,5 @@
 {
-  "name": "@viberunner/worker",
+  "name": "@vibeworkout/worker",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,8 +11,8 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@viberunner/db": "*",
-    "@viberunner/shared": "*",
+    "@vibeworkout/db": "*",
+    "@vibeworkout/shared": "*",
     "octokit": "^3.1.0"
   },
   "devDependencies": {

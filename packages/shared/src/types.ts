@@ -1,5 +1,5 @@
 /**
- * Core types for viberunner HR gating system
+ * Core types for vibeworkout HR gating system
  */
 
 // HR signal payload - stored in git ref as JSON
@@ -27,11 +27,11 @@ export interface HrSignalPayloadUnsigned {
   nonce: string;
 }
 
-// Gate repo configuration stored in viberunner.config.json
+// Gate repo configuration stored in vibeworkout.config.json
 export interface GateRepoConfig {
   version: number;
   user_key: string;
-  signal_ref_pattern: string; // e.g., "refs/viberunner/hr/{user_key}"
+  signal_ref_pattern: string; // e.g., "refs/vibeworkout/hr/{user_key}"
   payload_filename: string; // e.g., "hr-signal.json"
   public_key: string; // Ed25519 public key (hex)
   public_key_version: number;
@@ -156,9 +156,9 @@ export interface GitHubOAuthCallbackRequest {
 export const SIGNAL_VERSION = 1;
 export const DEFAULT_TTL_SECONDS = 15;
 export const PAYLOAD_FILENAME = 'hr-signal.json';
-export const SIGNAL_REF_PATTERN = 'refs/viberunner/hr/{user_key}';
+export const SIGNAL_REF_PATTERN = 'refs/vibeworkout/hr/{user_key}';
 
 // Helper to build signal ref from user_key
 export function buildSignalRef(userKey: string): string {
-  return `refs/viberunner/hr/${userKey}`;
+  return `refs/vibeworkout/hr/${userKey}`;
 }

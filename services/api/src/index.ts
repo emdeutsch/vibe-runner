@@ -1,5 +1,5 @@
 /**
- * viberunner API server
+ * vibeworkout API server
  *
  * Handles:
  * - User profiles and threshold settings
@@ -35,7 +35,7 @@ app.use(
 app.get('/health', (c) => {
   return c.json({
     status: 'ok',
-    service: 'viberunner-api',
+    service: 'vibeworkout-api',
     timestamp: new Date().toISOString(),
   });
 });
@@ -63,9 +63,9 @@ app.onError((err, c) => {
 });
 
 // Start server
-console.log(`Starting viberunner API on port ${config.port}...`);
+console.log(`Starting vibeworkout API on port ${config.port}...`);
 serve({
   fetch: app.fetch,
   port: config.port,
 });
-console.log(`viberunner API listening on http://localhost:${config.port}`);
+console.log(`vibeworkout API listening on http://localhost:${config.port}`);

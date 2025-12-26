@@ -3,10 +3,10 @@
  */
 
 import { Hono } from 'hono';
-import { prisma } from '@viberunner/db';
+import { prisma } from '@vibeworkout/db';
 import { authMiddleware } from '../middleware/auth.js';
 import { config } from '../config.js';
-import type { UpdateThresholdRequest, ProfileResponse } from '@viberunner/shared';
+import type { UpdateThresholdRequest, ProfileResponse } from '@vibeworkout/shared';
 
 const profile = new Hono();
 

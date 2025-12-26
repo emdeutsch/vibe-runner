@@ -1,6 +1,6 @@
-# Viberunner iOS App
+# Vibeworkout iOS App
 
-iOS and watchOS companion apps for viberunner HR gating.
+iOS and watchOS companion apps for vibeworkout HR gating.
 
 ## Requirements
 
@@ -15,9 +15,9 @@ iOS and watchOS companion apps for viberunner HR gating.
 npm run dev
 
 # 2. Open Xcode project
-open apps/ios/viberunner/viberunner.xcodeproj
+open apps/ios/vibeworkout/vibeworkout.xcodeproj
 
-# 3. Select scheme: "Viberunner (Local)"
+# 3. Select scheme: "Vibeworkout (Local)"
 # 4. Set your Development Team in Signing & Capabilities
 # 5. Build & run to your device
 ```
@@ -28,13 +28,13 @@ The app supports two environments via Xcode schemes:
 
 | Scheme | Environment | Bundle ID | Use Case |
 |--------|-------------|-----------|----------|
-| **Viberunner (Local)** | Local Supabase | `com.viberunner.app.local` | Development |
-| **Viberunner** | Production | `com.viberunner.app` | Release |
+| **Vibeworkout (Local)** | Local Supabase | `com.vibeworkout.app.local` | Development |
+| **Vibeworkout** | Production | `com.vibeworkout.app` | Release |
 
 ### Switching Environments
 
 1. Click the scheme selector in Xcode toolbar (next to device selector)
-2. Choose "Viberunner (Local)" or "Viberunner"
+2. Choose "Vibeworkout (Local)" or "Vibeworkout"
 3. Build & run
 
 Both versions can be installed **side-by-side** on the same device (different bundle IDs).
@@ -42,7 +42,7 @@ Both versions can be installed **side-by-side** on the same device (different bu
 ## Project Structure
 
 ```
-apps/ios/viberunner/
+apps/ios/vibeworkout/
 ├── Config/
 │   ├── Local.xcconfig       # Local environment settings
 │   └── Production.xcconfig  # Production environment settings
@@ -53,7 +53,7 @@ apps/ios/viberunner/
 │   ├── Models/              # Data models
 │   └── Info.plist           # App configuration
 ├── project.yml              # XcodeGen spec (generates .xcodeproj)
-└── viberunner.xcodeproj/    # Generated Xcode project
+└── vibeworkout.xcodeproj/    # Generated Xcode project
 ```
 
 ## Configuration Files
@@ -66,16 +66,16 @@ Environment-specific settings are defined in `.xcconfig` files:
 ```
 API_BASE_URL = http://192.168.1.159:3000
 SUPABASE_URL = http://192.168.1.159:54421
-PRODUCT_BUNDLE_IDENTIFIER = com.viberunner.app.local
-PRODUCT_NAME = Viberunner Local
+PRODUCT_BUNDLE_IDENTIFIER = com.vibeworkout.app.local
+PRODUCT_NAME = Vibeworkout Local
 ```
 
 **Production.xcconfig:**
 ```
-API_BASE_URL = https://api.viberunner.com
+API_BASE_URL = https://api.vibeworkout.com
 SUPABASE_URL = https://fspwoookcnikhlaytpfd.supabase.co
-PRODUCT_BUNDLE_IDENTIFIER = com.viberunner.app
-PRODUCT_NAME = Viberunner
+PRODUCT_BUNDLE_IDENTIFIER = com.vibeworkout.app
+PRODUCT_NAME = Vibeworkout
 ```
 
 ### Updating Your Local IP
@@ -92,7 +92,7 @@ ipconfig getifaddr en0
 Then regenerate the project:
 
 ```bash
-cd apps/ios/viberunner
+cd apps/ios/vibeworkout
 xcodegen generate
 ```
 
@@ -109,7 +109,7 @@ After modifying `project.yml`:
 brew install xcodegen
 
 # Regenerate project
-cd apps/ios/viberunner
+cd apps/ios/vibeworkout
 xcodegen generate
 ```
 
@@ -145,8 +145,8 @@ open http://127.0.0.1:54423
 
 ### 3. Build iOS App
 
-1. Open `viberunner.xcodeproj`
-2. Select "Viberunner (Local)" scheme
+1. Open `vibeworkout.xcodeproj`
+2. Select "Vibeworkout (Local)" scheme
 3. Select your iPhone as destination
 4. Press ⌘R to build and run
 
@@ -187,7 +187,7 @@ open http://127.0.0.1:54423
 
 ### Project won't build after pulling
 ```bash
-cd apps/ios/viberunner
+cd apps/ios/vibeworkout
 xcodegen generate
 ```
 

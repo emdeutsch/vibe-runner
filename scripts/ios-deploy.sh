@@ -4,9 +4,9 @@ set -e
 # iOS Build, Install, and Launch Script
 # Usage: ./scripts/ios-deploy.sh
 
-cd "$(dirname "$0")/../apps/ios/viberunner"
+cd "$(dirname "$0")/../apps/ios/vibeworkout"
 
-SCHEME="Viberunner (Local)"
+SCHEME="Vibeworkout (Local)"
 DEVICE_ID=$(xcrun xctrace list devices 2>&1 | grep -E "iPhone.*\(" | grep -v Simulator | head -1 | sed -E 's/.*\(([A-F0-9-]+)\).*/\1/')
 
 if [ -z "$DEVICE_ID" ]; then
@@ -24,7 +24,7 @@ fi
 
 # Build
 echo "🔨 Building $SCHEME..."
-xcodebuild -project viberunner.xcodeproj \
+xcodebuild -project vibeworkout.xcodeproj \
     -scheme "$SCHEME" \
     -destination "platform=iOS,id=$DEVICE_ID" \
     -allowProvisioningUpdates \
@@ -38,7 +38,7 @@ fi
 echo "✅ Build succeeded"
 
 # Find the built app
-APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData/viberunner-*/Build/Products/Debug\ \(Local\)-iphoneos -name "Viberunner Local.app" -type d 2>/dev/null | head -1)
+APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData/vibeworkout-*/Build/Products/Debug\ \(Local\)-iphoneos -name "Vibeworkout Local.app" -type d 2>/dev/null | head -1)
 
 if [ -z "$APP_PATH" ]; then
     echo "❌ Could not find built app"
@@ -51,6 +51,6 @@ xcrun devicectl device install app --device "$DEVICE_ID" "$APP_PATH" 2>&1 | grep
 
 # Launch
 echo "🚀 Launching app..."
-xcrun devicectl device process launch --device "$DEVICE_ID" com.viberunner.app.local 2>&1 | grep -v "^$"
+xcrun devicectl device process launch --device "$DEVICE_ID" com.vibeworkout.app.local 2>&1 | grep -v "^$"
 
 echo "✅ Done!"

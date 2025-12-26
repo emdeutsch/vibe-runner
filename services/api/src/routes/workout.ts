@@ -3,7 +3,7 @@
  */
 
 import { Hono } from 'hono';
-import { prisma } from '@viberunner/db';
+import { prisma } from '@vibeworkout/db';
 import { authMiddleware } from '../middleware/auth.js';
 import { config } from '../config.js';
 import { updateSessionSignalRefs } from '../lib/hr-signal.js';
@@ -13,7 +13,7 @@ import type {
   StartWorkoutResponse,
   IngestHrSampleRequest,
   HrStatusResponse,
-} from '@viberunner/shared';
+} from '@vibeworkout/shared';
 
 const workout = new Hono();
 

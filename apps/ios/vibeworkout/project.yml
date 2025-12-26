@@ -1,0 +1,119 @@
+name: vibeworkout
+options:
+  bundleIdPrefix: com.vibeworkout
+  deploymentTarget:
+    iOS: "17.0"
+    watchOS: "10.0"
+  xcodeVersion: "15.0"
+  generateEmptyDirectories: true
+  groupSortPosition: top
+
+configs:
+  Debug: debug
+  Debug (Local): debug
+  Release: release
+  Release (Local): release
+
+configFiles:
+  Debug: Config/Production.xcconfig
+  Debug (Local): Config/Local.xcconfig
+  Release: Config/Production.xcconfig
+  Release (Local): Config/Local.xcconfig
+
+settings:
+  base:
+    DEVELOPMENT_TEAM: B9JJ3C9FR3
+    CODE_SIGN_STYLE: Automatic
+    SWIFT_VERSION: "5.0"
+
+packages:
+  Supabase:
+    url: https://github.com/supabase-community/supabase-swift.git
+    from: "2.0.0"
+
+targets:
+  vibeworkout:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+        excludes:
+          - "**/.DS_Store"
+    dependencies:
+      - package: Supabase
+      - target: vibeworkout-watch
+    settings:
+      base:
+        INFOPLIST_FILE: Sources/Info.plist
+        PRODUCT_NAME: $(inherited)
+        PRODUCT_BUNDLE_IDENTIFIER: $(inherited)
+        TARGETED_DEVICE_FAMILY: "1"
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: false
+    entitlements:
+      path: Sources/vibeworkout.entitlements
+      properties:
+        com.apple.developer.healthkit: true
+
+  vibeworkout-watch:
+    type: application
+    platform: watchOS
+    sources:
+      - path: ../../watch/vibeworkout-watch/Sources
+        excludes:
+          - "**/.DS_Store"
+    settings:
+      base:
+        INFOPLIST_FILE: ../../watch/vibeworkout-watch/Sources/Info.plist
+        TARGETED_DEVICE_FAMILY: "4"
+        WATCHOS_DEPLOYMENT_TARGET: "10.0"
+        PRODUCT_NAME: vibeworkout-watch
+      configs:
+        Debug:
+          PRODUCT_BUNDLE_IDENTIFIER: com.vibeworkout.app.watchkitapp
+          COMPANION_APP_BUNDLE_IDENTIFIER: com.vibeworkout.app
+        Debug (Local):
+          PRODUCT_BUNDLE_IDENTIFIER: com.vibeworkout.app.local.watchkitapp
+          COMPANION_APP_BUNDLE_IDENTIFIER: com.vibeworkout.app.local
+        Release:
+          PRODUCT_BUNDLE_IDENTIFIER: com.vibeworkout.app.watchkitapp
+          COMPANION_APP_BUNDLE_IDENTIFIER: com.vibeworkout.app
+        Release (Local):
+          PRODUCT_BUNDLE_IDENTIFIER: com.vibeworkout.app.local.watchkitapp
+          COMPANION_APP_BUNDLE_IDENTIFIER: com.vibeworkout.app.local
+    entitlements:
+      path: ../../watch/vibeworkout-watch/Sources/vibeworkout-watch.entitlements
+      properties:
+        com.apple.developer.healthkit: true
+
+schemes:
+  Vibeworkout:
+    build:
+      targets:
+        vibeworkout: all
+        vibeworkout-watch: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+
+  Vibeworkout (Local):
+    build:
+      targets:
+        vibeworkout: all
+        vibeworkout-watch: all
+    run:
+      config: Debug (Local)
+    test:
+      config: Debug (Local)
+    profile:
+      config: Release (Local)
+    analyze:
+      config: Debug (Local)
+    archive:
+      config: Release (Local)

@@ -1,14 +1,14 @@
-# viberunner Architecture
+# vibeworkout Architecture
 
 ## Overview
 
-viberunner is a distributed system that gates Claude Code tool execution based on real-time heart rate data. This document describes the architecture and data flow.
+vibeworkout is a distributed system that gates Claude Code tool execution based on real-time heart rate data. This document describes the architecture and data flow.
 
 ## Components
 
 ### 1. Mobile Apps
 
-#### iOS App (`apps/ios/viberunner`)
+#### iOS App (`apps/ios/vibeworkout`)
 - **Technology**: SwiftUI, Supabase Swift SDK
 - **Responsibilities**:
   - User authentication via Supabase (GitHub OAuth)
@@ -18,7 +18,7 @@ viberunner is a distributed system that gates Claude Code tool execution based o
   - Receiving HR data from Watch and forwarding to API
   - GitHub OAuth flow for repo creation
 
-#### watchOS App (`apps/watch/viberunner-watch`)
+#### watchOS App (`apps/watch/vibeworkout-watch`)
 - **Technology**: SwiftUI, HealthKit, WatchConnectivity
 - **Responsibilities**:
   - Starting/stopping HKWorkoutSession
@@ -110,7 +110,7 @@ Claude Code              Gate Repo                GitHub
     │──────────────────────▶│                       │
     │                       │                       │
     │  PreToolUse hook      │                       │
-    │  viberunner-hr-check  │                       │
+    │  vibeworkout-hr-check  │                       │
     │                       │  Fetch signal ref     │
     │                       │──────────────────────▶│
     │                       │◀──────────────────────│
