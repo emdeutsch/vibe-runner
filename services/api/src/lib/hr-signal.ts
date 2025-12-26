@@ -11,7 +11,7 @@ import { createInstallationOctokit, updateSignalRef } from './github.js';
 
 /**
  * Update HR signal refs for all gate repos in a session.
- * Atomic 1-second debounce ensures only one concurrent request updates GitHub.
+ * Atomic 5-second debounce ensures only one concurrent request updates GitHub.
  */
 export async function updateSessionSignalRefs(
   userId: string,
@@ -26,7 +26,7 @@ export async function updateSessionSignalRefs(
       SET last_signal_ref_update_at = NOW()
       WHERE user_id = ${userId}
         AND (last_signal_ref_update_at IS NULL
-             OR last_signal_ref_update_at < NOW() - INTERVAL '1 second')
+             OR last_signal_ref_update_at < NOW() - INTERVAL '5 seconds')
     `;
 
     if (updated === 0) {
