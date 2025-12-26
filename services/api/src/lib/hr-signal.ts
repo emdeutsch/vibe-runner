@@ -2,7 +2,6 @@
  * HR Signal Update Helper
  *
  * Updates GitHub refs for gate repos when HR samples arrive.
- * Debounced to reduce GitHub API load - only updates every 5 seconds.
  */
 
 import { prisma } from '@viberunner/db';
@@ -12,8 +11,7 @@ import { createInstallationOctokit, updateSignalRef } from './github.js';
 
 /**
  * Update HR signal refs for all gate repos in a session.
- * Debounced: only updates GitHub every 5 seconds to avoid API overload.
- * The database HrStatus is always up-to-date; this just syncs to GitHub.
+ * Updates GitHub on every HR sample for real-time signal freshness.
  */
 export async function updateSessionSignalRefs(
   userId: string,
@@ -22,29 +20,6 @@ export async function updateSessionSignalRefs(
   thresholdBpm: number
 ): Promise<void> {
   try {
-    // Atomic debounce: UPDATE only succeeds if enough time has passed
-    // This prevents race conditions where multiple concurrent requests all pass the check
-    let updated = 0;
-    try {
-      // Use Prisma.sql for raw SQL with literal interval
-      updated = await prisma.$executeRaw`
-        UPDATE hr_status
-        SET last_signal_ref_update_at = NOW()
-        WHERE user_id = ${userId}
-          AND (last_signal_ref_update_at IS NULL
-               OR last_signal_ref_update_at < NOW() - INTERVAL '5 seconds')
-      `;
-    } catch (err) {
-      console.error('[HR Signal] Atomic debounce failed:', err);
-      return;
-    }
-
-    if (updated === 0) {
-      console.log('[HR Signal] Skipping (debounced atomically)');
-      return;
-    }
-    console.log('[HR Signal] Acquired update lock');
-
     // Find gate repos
     const gateRepos = await prisma.gateRepo.findMany({
       where: {
