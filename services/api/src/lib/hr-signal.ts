@@ -11,7 +11,7 @@ import { createInstallationOctokit, updateSignalRef } from './github.js';
 
 /**
  * Update HR signal refs for all gate repos in a session.
- * Updates GitHub on every HR sample for real-time signal freshness.
+ * Atomic 1-second debounce ensures only one concurrent request updates GitHub.
  */
 export async function updateSessionSignalRefs(
   userId: string,
@@ -20,6 +20,19 @@ export async function updateSessionSignalRefs(
   thresholdBpm: number
 ): Promise<void> {
   try {
+    // Atomic debounce: only one concurrent request proceeds, others quickly return
+    const updated = await prisma.$executeRaw`
+      UPDATE hr_status
+      SET last_signal_ref_update_at = NOW()
+      WHERE user_id = ${userId}
+        AND (last_signal_ref_update_at IS NULL
+             OR last_signal_ref_update_at < NOW() - INTERVAL '1 second')
+    `;
+
+    if (updated === 0) {
+      return; // Another request is handling this
+    }
+
     // Find gate repos
     const gateRepos = await prisma.gateRepo.findMany({
       where: {
