@@ -152,13 +152,44 @@ export interface GitHubOAuthCallbackRequest {
   state: string;
 }
 
+// Tool attempt tracking types
+export interface ToolAttemptEntry {
+  ts: string;
+  tool: string;
+  allowed: boolean;
+  session_id: string;
+  bpm: number;
+}
+
+export interface ToolStatsResponse {
+  total_attempts: number;
+  allowed: number;
+  blocked: number;
+  by_tool: Record<string, { allowed: number; blocked: number }>;
+}
+
+export interface ToolAttemptResponse {
+  id: string;
+  tool_name: string;
+  allowed: boolean;
+  bpm: number | null;
+  timestamp: string;
+}
+
 // Constants
 export const SIGNAL_VERSION = 1;
 export const DEFAULT_TTL_SECONDS = 15;
 export const PAYLOAD_FILENAME = 'hr-signal.json';
 export const SIGNAL_REF_PATTERN = 'refs/vibeworkout/hr/{user_key}';
+export const STATS_REF_PATTERN = 'refs/vibeworkout/stats/{user_key}';
+export const STATS_FILENAME = 'tool-stats.jsonl';
 
 // Helper to build signal ref from user_key
 export function buildSignalRef(userKey: string): string {
   return `refs/vibeworkout/hr/${userKey}`;
+}
+
+// Helper to build stats ref from user_key
+export function buildStatsRef(userKey: string): string {
+  return `refs/vibeworkout/stats/${userKey}`;
 }

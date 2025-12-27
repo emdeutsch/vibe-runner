@@ -2,6 +2,20 @@
 
 Track the number of tool calls Claude Code attempts during a workout session, using GitHub as the only external API from the hook.
 
+## Implementation Status
+
+| Component | Status | File(s) |
+|-----------|--------|---------|
+| Prisma ToolAttempt model | ✅ Done | `packages/db/prisma/schema.prisma` |
+| HR check script logging | ✅ Done | `packages/repo-bootstrap/src/index.ts` |
+| Stats sync script | ✅ Done | `packages/repo-bootstrap/src/index.ts` |
+| CLAUDE.md sync instructions | ✅ Done | `packages/repo-bootstrap/src/index.ts` |
+| Shared types | ✅ Done | `packages/shared/src/types.ts` |
+| API: Fetch stats on stop | ✅ Done | `services/api/src/routes/workout.ts` |
+| API: Session responses | ✅ Done | `services/api/src/routes/workout.ts` |
+| Database migration | ⏳ Pending | Run `npx prisma migrate dev` |
+| iOS models & UI | ⏳ Pending | Swift files |
+
 ## Overview
 
 ```

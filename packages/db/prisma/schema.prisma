@@ -48,6 +48,7 @@ model WorkoutSession {
   summary         WorkoutSummary?
   commits         SessionCommit[]
   pullRequests    SessionPullRequest[]
+  toolAttempts    ToolAttempt[]
   activeGateRepos GateRepo[]           // Repos selected for this workout session
 
   @@index([userId, active])
@@ -242,5 +243,24 @@ model SessionPullRequest {
   @@unique([sessionId, prNumber, repoOwner, repoName])
   @@index([sessionId])
   @@map("session_pull_requests")
+  @@schema("public")
+}
+
+// Tool attempts tracked during workout sessions
+model ToolAttempt {
+  id        String   @id @default(uuid())
+  sessionId String   @map("session_id")
+  toolName  String   @map("tool_name")
+  allowed   Boolean
+  bpm       Int?
+  timestamp DateTime
+  createdAt DateTime @default(now()) @map("created_at")
+
+  session WorkoutSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, timestamp, toolName])
+  @@index([sessionId])
+  @@index([sessionId, timestamp])
+  @@map("tool_attempts")
   @@schema("public")
 }

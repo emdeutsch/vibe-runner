@@ -123,6 +123,7 @@ workout.post('/stop', async (c) => {
       id: true,
       owner: true,
       name: true,
+      userKey: true,
       activeSessionId: true,
       githubAppInstallationId: true,
     },
@@ -364,6 +365,88 @@ workout.post('/stop', async (c) => {
       }
 
       console.log('[stop] Total PRs matched and saved:', prsMatched);
+
+      // Fetch tool stats from the stats ref
+      console.log('[stop] Fetching tool stats for', repo.owner, repo.name);
+      try {
+        const statsRef = `refs/vibeworkout/stats/${repo.userKey}`;
+        const shortStatsRef = statsRef.replace('refs/', '');
+
+        const { data: statsRefData } = await octokit.rest.git.getRef({
+          owner: repo.owner,
+          repo: repo.name,
+          ref: shortStatsRef,
+        });
+
+        // Get the commit and tree to find the stats file
+        const { data: statsCommit } = await octokit.rest.git.getCommit({
+          owner: repo.owner,
+          repo: repo.name,
+          commit_sha: statsRefData.object.sha,
+        });
+
+        const { data: statsTree } = await octokit.rest.git.getTree({
+          owner: repo.owner,
+          repo: repo.name,
+          tree_sha: statsCommit.tree.sha,
+        });
+
+        const statsFile = statsTree.tree.find((f) => f.path === 'tool-stats.jsonl');
+        if (statsFile?.sha) {
+          const { data: statsBlob } = await octokit.rest.git.getBlob({
+            owner: repo.owner,
+            repo: repo.name,
+            file_sha: statsFile.sha,
+          });
+
+          const statsContent = Buffer.from(statsBlob.content, 'base64').toString('utf-8');
+          const statsLines = statsContent.trim().split('\n').filter(Boolean);
+
+          console.log('[stop] Found', statsLines.length, 'tool attempt entries');
+
+          for (const line of statsLines) {
+            try {
+              const entry = JSON.parse(line) as {
+                ts: string;
+                tool: string;
+                allowed: boolean;
+                session_id: string;
+                bpm: number;
+              };
+              const timestamp = new Date(entry.ts);
+
+              // Filter to this session's time window
+              if (timestamp < windowStart || timestamp > windowEnd) continue;
+
+              // Also verify session_id matches if available
+              if (entry.session_id && entry.session_id !== session.id) continue;
+
+              await prisma.toolAttempt.upsert({
+                where: {
+                  sessionId_timestamp_toolName: {
+                    sessionId: session.id,
+                    timestamp,
+                    toolName: entry.tool,
+                  },
+                },
+                create: {
+                  sessionId: session.id,
+                  toolName: entry.tool,
+                  allowed: entry.allowed,
+                  bpm: entry.bpm,
+                  timestamp,
+                },
+                update: {},
+              });
+            } catch (parseError) {
+              console.error('[stop] Failed to parse tool stats line:', parseError);
+            }
+          }
+        }
+      } catch (statsError) {
+        // Stats ref may not exist yet - that's fine
+        console.log('[stop] No tool stats found (ref may not exist):', statsError);
+      }
     } catch (error) {
       // Log but don't fail the stop - commits are nice-to-have
       console.error(`Failed to fetch commits for ${repo.owner}/${repo.name}:`, error);
@@ -749,11 +832,33 @@ workout.get('/sessions/:sessionId', async (c) => {
       pullRequests: {
         orderBy: { createdAt: 'desc' },
       },
+      toolAttempts: {
+        orderBy: { timestamp: 'asc' },
+      },
     },
   });
 
   if (!session) {
     return c.json({ error: 'Session not found' }, 404);
+  }
+
+  // Aggregate tool stats
+  const toolStats = {
+    total_attempts: session.toolAttempts.length,
+    allowed: session.toolAttempts.filter((t: { allowed: boolean }) => t.allowed).length,
+    blocked: session.toolAttempts.filter((t: { allowed: boolean }) => !t.allowed).length,
+    by_tool: {} as Record<string, { allowed: number; blocked: number }>,
+  };
+
+  for (const attempt of session.toolAttempts) {
+    if (!toolStats.by_tool[attempt.toolName]) {
+      toolStats.by_tool[attempt.toolName] = { allowed: 0, blocked: 0 };
+    }
+    if (attempt.allowed) {
+      toolStats.by_tool[attempt.toolName].allowed++;
+    } else {
+      toolStats.by_tool[attempt.toolName].blocked++;
+    }
   }
 
   return c.json({
@@ -797,6 +902,7 @@ workout.get('/sessions/:sessionId', async (c) => {
       additions: pr.additions,
       deletions: pr.deletions,
     })),
+    tool_stats: toolStats,
   });
 });
 
@@ -878,11 +984,33 @@ workout.get('/sessions/:sessionId/post-summary', async (c) => {
       pullRequests: {
         orderBy: { createdAt: 'desc' },
       },
+      toolAttempts: {
+        orderBy: { timestamp: 'asc' },
+      },
     },
   });
 
   if (!session) {
     return c.json({ error: 'Session not found' }, 404);
+  }
+
+  // Aggregate tool stats
+  const toolStats = {
+    total_attempts: session.toolAttempts.length,
+    allowed: session.toolAttempts.filter((t: { allowed: boolean }) => t.allowed).length,
+    blocked: session.toolAttempts.filter((t: { allowed: boolean }) => !t.allowed).length,
+    by_tool: {} as Record<string, { allowed: number; blocked: number }>,
+  };
+
+  for (const attempt of session.toolAttempts) {
+    if (!toolStats.by_tool[attempt.toolName]) {
+      toolStats.by_tool[attempt.toolName] = { allowed: 0, blocked: 0 };
+    }
+    if (attempt.allowed) {
+      toolStats.by_tool[attempt.toolName].allowed++;
+    } else {
+      toolStats.by_tool[attempt.toolName].blocked++;
+    }
   }
 
   // Aggregate commits by repo
@@ -993,6 +1121,7 @@ workout.get('/sessions/:sessionId/post-summary', async (c) => {
     total_lines_removed: totalLinesRemoved,
     total_commits: session.commits.length,
     total_pull_requests: session.pullRequests.length,
+    tool_stats: toolStats,
   });
 });
 
@@ -1017,6 +1146,8 @@ workout.delete('/sessions/:sessionId', async (c) => {
   }
 
   // Delete all related data in order (respecting foreign keys)
+  await prisma.toolAttempt.deleteMany({ where: { sessionId } });
+  await prisma.sessionPullRequest.deleteMany({ where: { sessionId } });
   await prisma.sessionCommit.deleteMany({ where: { sessionId } });
   await prisma.hrBucket.deleteMany({ where: { sessionId } });
   await prisma.workoutSummary.deleteMany({ where: { sessionId } });

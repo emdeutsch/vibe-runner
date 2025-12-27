@@ -86,6 +86,16 @@ Switch to **planning and review mode**:
 - Signal ref: \`${signalRef}\`
 - Public key version: 1
 
+## Tool tracking
+
+Tool attempts are logged locally and synced to GitHub when you push code. To manually sync stats:
+
+\`\`\`bash
+./scripts/vibeworkout-stats-sync
+\`\`\`
+
+**After pushing commits**, run the sync script to upload tool attempt data for your workout summary.
+
 ## How to disable
 
 To temporarily disable HR gating:
@@ -117,6 +127,7 @@ set -e
 CONFIG_FILE="vibeworkout.config.json"
 SCRIPT_DIR="$(cd "$(dirname "\${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+STATS_LOG="$REPO_ROOT/.git/vibeworkout-stats.jsonl"
 
 # Check for required tools
 command -v jq >/dev/null 2>&1 || { echo "vibeworkout: jq not installed — tools locked" >&2; exit 2; }
@@ -166,6 +177,7 @@ git update-ref -d "$TEMP_REF" 2>/dev/null || true
 # Extract fields from payload
 V=$(echo "$PAYLOAD" | jq -r '.v')
 PAYLOAD_USER_KEY=$(echo "$PAYLOAD" | jq -r '.user_key')
+SESSION_ID=$(echo "$PAYLOAD" | jq -r '.session_id')
 HR_OK=$(echo "$PAYLOAD" | jq -r '.hr_ok')
 BPM=$(echo "$PAYLOAD" | jq -r '.bpm')
 THRESHOLD_BPM=$(echo "$PAYLOAD" | jq -r '.threshold_bpm')
@@ -234,6 +246,14 @@ if ! openssl pkeyutl -verify -pubin -inkey "$PUB_KEY_PEM" -sigfile "$SIG_BIN" -i
   exit 2
 fi
 
+# Log tool attempt (before final hr_ok check so we capture blocked attempts too)
+# TOOL_NAME is set by Claude Code in the hook environment
+TOOL_NAME="\${TOOL_NAME:-unknown}"
+TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+# Append to local stats log (atomic-ish via >>)
+echo "{\\"ts\\":\\"\$TIMESTAMP\\",\\"tool\\":\\"\$TOOL_NAME\\",\\"allowed\\":$HR_OK,\\"session_id\\":\\"\$SESSION_ID\\",\\"bpm\\":$BPM}" >> "$STATS_LOG" 2>/dev/null || true
+
 # Check hr_ok flag
 if [[ "$HR_OK" != "true" ]]; then
   echo "vibeworkout: HR $BPM below threshold $THRESHOLD_BPM — tools locked" >&2
@@ -244,6 +264,61 @@ fi
 # Optionally show status (comment out for silent operation)
 # echo "vibeworkout: HR $BPM >= $THRESHOLD_BPM — tools unlocked"
 exit 0
+`;
+}
+
+/**
+ * Generate the stats sync script (pushes accumulated tool stats to GitHub)
+ */
+export function generateStatsSyncScript(): string {
+  return `#!/usr/bin/env bash
+#
+# vibeworkout stats sync script
+# Pushes accumulated tool attempt stats to GitHub as an orphan commit
+# Run this after git push or periodically to sync stats
+#
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "\${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+CONFIG_FILE="$REPO_ROOT/vibeworkout.config.json"
+STATS_LOG="$REPO_ROOT/.git/vibeworkout-stats.jsonl"
+
+# Exit early if no stats to sync
+if [[ ! -f "$STATS_LOG" ]] || [[ ! -s "$STATS_LOG" ]]; then
+  exit 0
+fi
+
+# Check for required tools
+command -v jq >/dev/null 2>&1 || { echo "vibeworkout: jq not installed — skipping stats sync" >&2; exit 0; }
+
+# Read config
+if [[ ! -f "$CONFIG_FILE" ]]; then
+  exit 0
+fi
+
+USER_KEY=$(jq -r '.user_key' "$CONFIG_FILE")
+if [[ -z "$USER_KEY" || "$USER_KEY" == "null" ]]; then
+  exit 0
+fi
+
+STATS_REF="refs/vibeworkout/stats/$USER_KEY"
+
+# Create blob from log file
+BLOB_SHA=$(git hash-object -w "$STATS_LOG")
+
+# Create tree with single file
+TREE_SHA=$(printf "100644 blob %s\\ttool-stats.jsonl\\n" "$BLOB_SHA" | git mktree)
+
+# Create orphan commit (no parents) - keeps stats hidden from main history
+COMMIT_SHA=$(git commit-tree "$TREE_SHA" -m "Tool stats update")
+
+# Push to stats ref (force to overwrite previous stats)
+if git push origin "$COMMIT_SHA:$STATS_REF" --force --quiet 2>/dev/null; then
+  # Clear local log on success
+  > "$STATS_LOG"
+fi
 `;
 }
 
@@ -263,6 +338,11 @@ export function generateBootstrapFiles(config: BootstrapConfig): BootstrapFile[]
     {
       path: 'scripts/vibeworkout-hr-check',
       content: generateHrCheckScript(),
+      executable: true,
+    },
+    {
+      path: 'scripts/vibeworkout-stats-sync',
+      content: generateStatsSyncScript(),
       executable: true,
     },
     {
