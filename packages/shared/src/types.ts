@@ -159,6 +159,7 @@ export interface ToolAttemptEntry {
   tool_use_id?: string;
   tool: string;
   allowed?: boolean;
+  gated?: boolean; // false when .vibeworkout-disable is present
   reason?: string;
   succeeded?: boolean;
   session_id?: string;
@@ -173,13 +174,15 @@ export type ToolBlockReason =
   | 'invalid_signature'
   | 'config_missing'
   | 'payload_malformed'
-  | 'user_key_mismatch';
+  | 'user_key_mismatch'
+  | 'gating_disabled';
 
 export interface ToolStatsResponse {
   total_attempts: number;
   allowed: number;
   blocked: number;
   succeeded: number;
+  ungated: number; // Tool calls made with gating disabled
   by_tool: Record<string, { allowed: number; blocked: number; succeeded: number }>;
   by_reason: Record<string, number>;
 }

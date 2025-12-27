@@ -413,6 +413,7 @@ workout.post('/stop', async (c) => {
                 tool_use_id?: string;
                 tool: string;
                 allowed?: boolean;
+                gated?: boolean;
                 reason?: string;
                 succeeded?: boolean;
                 session_id?: string;
@@ -443,6 +444,7 @@ workout.post('/stop', async (c) => {
                   toolName: entry.tool,
                   toolUseId: entry.tool_use_id ?? null,
                   allowed: entry.allowed ?? false,
+                  gated: entry.gated ?? true,
                   reason: entry.reason ?? null,
                   bpm: entry.bpm ?? null,
                   timestamp,
@@ -451,6 +453,7 @@ workout.post('/stop', async (c) => {
                   // Update if we have new data (e.g., tool_use_id)
                   toolUseId: entry.tool_use_id ?? undefined,
                   reason: entry.reason ?? undefined,
+                  gated: entry.gated ?? undefined,
                 },
               });
             } catch (parseError) {
@@ -899,6 +902,7 @@ workout.get('/sessions/:sessionId', async (c) => {
     allowed: session.toolAttempts.filter((t: { allowed: boolean }) => t.allowed).length,
     blocked: session.toolAttempts.filter((t: { allowed: boolean }) => !t.allowed).length,
     succeeded: session.toolAttempts.filter((t: { succeeded: boolean | null }) => t.succeeded === true).length,
+    ungated: session.toolAttempts.filter((t: { gated: boolean }) => !t.gated).length,
     by_tool: {} as Record<string, { allowed: number; blocked: number; succeeded: number }>,
     by_reason: {} as Record<string, number>,
   };
@@ -1059,6 +1063,7 @@ workout.get('/sessions/:sessionId/post-summary', async (c) => {
     allowed: session.toolAttempts.filter((t: { allowed: boolean }) => t.allowed).length,
     blocked: session.toolAttempts.filter((t: { allowed: boolean }) => !t.allowed).length,
     succeeded: session.toolAttempts.filter((t: { succeeded: boolean | null }) => t.succeeded === true).length,
+    ungated: session.toolAttempts.filter((t: { gated: boolean }) => !t.gated).length,
     by_tool: {} as Record<string, { allowed: number; blocked: number; succeeded: number }>,
     by_reason: {} as Record<string, number>,
   };

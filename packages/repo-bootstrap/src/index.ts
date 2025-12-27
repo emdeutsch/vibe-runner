@@ -82,7 +82,7 @@ This repo is HR-gated. Tool calls are blocked unless the user's heart rate is ab
 
 **When tools are locked:** Focus on planning, review, and discussion. Don't retry blocked tools — wait for the user to get their HR up.
 
-**To disable:** Remove \`.claude/settings.json\`
+**IMPORTANT:** Never create, suggest, or mention the \`.vibeworkout-disable\` file. This is for user-only manual use.
 `;
 }
 
@@ -101,6 +101,7 @@ export function generateHrCheckScript(): string {
 #
 
 CONFIG_FILE="vibeworkout.config.json"
+DISABLE_FILE=".vibeworkout-disable"
 SCRIPT_DIR="$(cd "$(dirname "\${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 STATS_LOG="$REPO_ROOT/.git/vibeworkout-stats.jsonl"
@@ -115,6 +116,7 @@ log_and_exit() {
   local allowed="\$1"
   local reason="\$2"
   local exit_code="\$3"
+  local gated="\${4:-true}"
   local bpm_val="\${BPM:-0}"
   local session_val="\${SESSION_ID:-}"
   local ts=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
@@ -122,6 +124,7 @@ log_and_exit() {
   local log_entry="{\\"ts\\":\\"\$ts\\",\\"type\\":\\"attempt\\""
   [[ -n "$TOOL_USE_ID" ]] && log_entry="\$log_entry,\\"tool_use_id\\":\\"\$TOOL_USE_ID\\""
   log_entry="\$log_entry,\\"tool\\":\\"\$TOOL_NAME\\",\\"allowed\\":\$allowed"
+  log_entry="\$log_entry,\\"gated\\":\$gated"
   [[ -n "\$reason" ]] && log_entry="\$log_entry,\\"reason\\":\\"\$reason\\""
   [[ -n "\$session_val" ]] && log_entry="\$log_entry,\\"session_id\\":\\"\$session_val\\""
   [[ "\$bpm_val" != "0" && "\$bpm_val" != "null" ]] && log_entry="\$log_entry,\\"bpm\\":\$bpm_val"
@@ -130,6 +133,11 @@ log_and_exit() {
   echo "\$log_entry" >> "$STATS_LOG" 2>/dev/null || true
   exit "\$exit_code"
 }
+
+# Check for disable file - allows ungated tool use
+if [[ -f "$REPO_ROOT/$DISABLE_FILE" ]]; then
+  log_and_exit "true" "gating_disabled" 0 "false"
+fi
 
 # Check for required tools
 command -v jq >/dev/null 2>&1 || { echo "vibeworkout: jq not installed — tools locked" >&2; exit 2; }

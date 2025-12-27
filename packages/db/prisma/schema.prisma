@@ -253,6 +253,7 @@ model ToolAttempt {
   toolName  String   @map("tool_name")
   toolUseId String?  @map("tool_use_id")
   allowed   Boolean
+  gated     Boolean  @default(true) // false when .vibeworkout-disable is present
   reason    String?  // Block reason: hr_below_threshold, signal_expired, etc.
   succeeded Boolean? // null if blocked, true/false if allowed
   bpm       Int?
