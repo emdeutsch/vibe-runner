@@ -1588,6 +1588,7 @@ workout.get('/stats/projects', async (c) => {
       bpmSum: number;
       bpmCount: number;
       maxBpm: number;
+      minBpm: number;
       timeAboveThresholdSecs: number;
       timeBelowThresholdSecs: number;
       commits: number;
@@ -1620,6 +1621,7 @@ workout.get('/stats/projects', async (c) => {
           bpmSum: 0,
           bpmCount: 0,
           maxBpm: 0,
+          minBpm: 999,
           timeAboveThresholdSecs: 0,
           timeBelowThresholdSecs: 0,
           commits: 0,
@@ -1659,6 +1661,7 @@ workout.get('/stats/projects', async (c) => {
           bpmSum: 0,
           bpmCount: 0,
           maxBpm: 0,
+          minBpm: 999,
           timeAboveThresholdSecs: 0,
           timeBelowThresholdSecs: 0,
           commits: 0,
@@ -1694,6 +1697,9 @@ workout.get('/stats/projects', async (c) => {
           if (session.summary.maxBpm > stats.maxBpm) {
             stats.maxBpm = session.summary.maxBpm;
           }
+          if (session.summary.minBpm > 0 && session.summary.minBpm < stats.minBpm) {
+            stats.minBpm = session.summary.minBpm;
+          }
           stats.timeAboveThresholdSecs += session.summary.timeAboveThresholdSecs;
           stats.timeBelowThresholdSecs += session.summary.timeBelowThresholdSecs;
         }
@@ -1719,6 +1725,7 @@ workout.get('/stats/projects', async (c) => {
       sessionCount: stats.sessionIds.size,
       avgBpm: stats.bpmCount > 0 ? Math.round(stats.bpmSum / stats.bpmCount) : 0,
       maxBpm: stats.maxBpm,
+      minBpm: stats.minBpm === 999 ? 0 : stats.minBpm,
       timeAboveThresholdSecs: stats.timeAboveThresholdSecs,
       timeBelowThresholdSecs: stats.timeBelowThresholdSecs,
     },
