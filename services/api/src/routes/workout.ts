@@ -901,7 +901,9 @@ workout.get('/sessions/:sessionId', async (c) => {
     total_attempts: session.toolAttempts.length,
     allowed: session.toolAttempts.filter((t: { allowed: boolean }) => t.allowed).length,
     blocked: session.toolAttempts.filter((t: { allowed: boolean }) => !t.allowed).length,
-    succeeded: session.toolAttempts.filter((t: { succeeded: boolean | null }) => t.succeeded === true).length,
+    succeeded: session.toolAttempts.filter(
+      (t: { succeeded: boolean | null }) => t.succeeded === true
+    ).length,
     ungated: session.toolAttempts.filter((t: { gated: boolean }) => !t.gated).length,
     by_tool: {} as Record<string, { allowed: number; blocked: number; succeeded: number }>,
     by_reason: {} as Record<string, number>,
@@ -1062,7 +1064,9 @@ workout.get('/sessions/:sessionId/post-summary', async (c) => {
     total_attempts: session.toolAttempts.length,
     allowed: session.toolAttempts.filter((t: { allowed: boolean }) => t.allowed).length,
     blocked: session.toolAttempts.filter((t: { allowed: boolean }) => !t.allowed).length,
-    succeeded: session.toolAttempts.filter((t: { succeeded: boolean | null }) => t.succeeded === true).length,
+    succeeded: session.toolAttempts.filter(
+      (t: { succeeded: boolean | null }) => t.succeeded === true
+    ).length,
     ungated: session.toolAttempts.filter((t: { gated: boolean }) => !t.gated).length,
     by_tool: {} as Record<string, { allowed: number; blocked: number; succeeded: number }>,
     by_reason: {} as Record<string, number>,
@@ -1441,9 +1445,8 @@ workout.get('/stats/overview', async (c) => {
 
   const successRate = allowed > 0 ? Math.round((succeeded / allowed) * 100) / 100 : 0;
 
-  // Build chart data (daily buckets for periods <= 30d, weekly for longer)
-  const useDailyBuckets = period === '7d' || period === '30d';
-  const bucketMs = useDailyBuckets ? 24 * 60 * 60 * 1000 : 7 * 24 * 60 * 60 * 1000;
+  // Build chart data - always use daily buckets, UI handles display
+  const bucketMs = 24 * 60 * 60 * 1000;
   const buckets: Array<{
     date: string;
     durationSecs: number;
@@ -1474,13 +1477,7 @@ workout.get('/stats/overview', async (c) => {
   for (const session of sessions) {
     if (!session.startedAt) continue;
     const sessionDate = session.startedAt.toISOString().split('T')[0];
-    const bucket = buckets.find((b) => {
-      if (useDailyBuckets) return b.date === sessionDate;
-      // For weekly, check if session falls within the week
-      const bDate = new Date(b.date);
-      const sDate = new Date(sessionDate);
-      return sDate >= bDate && sDate < new Date(bDate.getTime() + bucketMs);
-    });
+    const bucket = buckets.find((b) => b.date === sessionDate);
 
     if (bucket) {
       bucket.durationSecs += session.summary?.durationSecs ?? 0;
@@ -1715,7 +1712,7 @@ workout.get('/stats/projects', async (c) => {
   }
 
   // Convert to array and sort
-  let projects = Array.from(repoStats.entries()).map(([key, stats]) => ({
+  const projects = Array.from(repoStats.entries()).map(([key, stats]) => ({
     repoFullName: key,
     repoOwner: stats.repoOwner,
     repoName: stats.repoName,
@@ -1742,7 +1739,9 @@ workout.get('/stats/projects', async (c) => {
       allowed: stats.toolAllowed,
       blocked: stats.toolBlocked,
       successRate:
-        stats.toolAllowed > 0 ? Math.round((stats.toolAllowed / stats.toolAttempts) * 100) / 100 : 0,
+        stats.toolAllowed > 0
+          ? Math.round((stats.toolAllowed / stats.toolAttempts) * 100) / 100
+          : 0,
     },
   }));
 
@@ -1782,16 +1781,12 @@ workout.get('/stats/projects', async (c) => {
 });
 
 // Get single project detail
-workout.get('/stats/projects/:repoFullName', async (c) => {
+workout.get('/stats/projects/:owner/:repo', async (c) => {
   const userId = c.get('userId');
-  const repoFullName = decodeURIComponent(c.req.param('repoFullName'));
+  const repoOwner = c.req.param('owner');
+  const repoName = c.req.param('repo');
   const period = c.req.query('period') || 'all';
   const periodStart = getPeriodStart(period);
-
-  const [repoOwner, repoName] = repoFullName.split('/');
-  if (!repoOwner || !repoName) {
-    return c.json({ error: 'Invalid repo format' }, 400);
-  }
 
   // Build where clause for sessions
   const sessionWhere: { userId: string; endedAt?: { not: null; gte?: Date } } = {
@@ -1912,15 +1907,15 @@ workout.get('/stats/projects/:repoFullName', async (c) => {
   });
   filesChanged = filesResult;
 
-  // Build chart data
-  const useDailyBuckets = period === '7d' || period === '30d';
-  const bucketMs = useDailyBuckets ? 24 * 60 * 60 * 1000 : 7 * 24 * 60 * 60 * 1000;
+  // Build chart data - always use daily buckets, UI handles display
+  const bucketMs = 24 * 60 * 60 * 1000;
   const buckets: Array<{
     date: string;
     durationSecs: number;
     commits: number;
     linesAdded: number;
     linesRemoved: number;
+    toolCalls: number;
   }> = [];
 
   const chartStart =
@@ -1936,22 +1931,19 @@ workout.get('/stats/projects/:repoFullName', async (c) => {
       commits: 0,
       linesAdded: 0,
       linesRemoved: 0,
+      toolCalls: 0,
     });
     bucketDate = new Date(bucketDate.getTime() + bucketMs);
   }
 
   for (const session of sessions) {
     const sessionDate = session.startedAt.toISOString().split('T')[0];
-    const bucket = buckets.find((b) => {
-      if (useDailyBuckets) return b.date === sessionDate;
-      const bDate = new Date(b.date);
-      const sDate = new Date(sessionDate);
-      return sDate >= bDate && sDate < new Date(bDate.getTime() + bucketMs);
-    });
+    const bucket = buckets.find((b) => b.date === sessionDate);
 
     if (bucket) {
       bucket.durationSecs += session.summary?.durationSecs ?? 0;
       bucket.commits += session.commits.length;
+      bucket.toolCalls += session.toolAttempts.length;
       for (const commit of session.commits) {
         bucket.linesAdded += commit.linesAdded ?? 0;
         bucket.linesRemoved += commit.linesRemoved ?? 0;
@@ -1973,10 +1965,10 @@ workout.get('/stats/projects/:repoFullName', async (c) => {
   }));
 
   return c.json({
-    repoFullName,
+    repoFullName: `${repoOwner}/${repoName}`,
     repoOwner,
     repoName,
-    htmlUrl: `https://github.com/${repoFullName}`,
+    htmlUrl: `https://github.com/${repoOwner}/${repoName}`,
     lastActiveAt: sessions[0]?.startedAt.toISOString() ?? null,
     workout: {
       totalDurationSecs,
@@ -2013,16 +2005,12 @@ workout.get('/stats/projects/:repoFullName', async (c) => {
 });
 
 // Get sessions for a specific project (paginated)
-workout.get('/stats/projects/:repoFullName/sessions', async (c) => {
+workout.get('/stats/projects/:owner/:repo/sessions', async (c) => {
   const userId = c.get('userId');
-  const repoFullName = decodeURIComponent(c.req.param('repoFullName'));
+  const repoOwner = c.req.param('owner');
+  const repoName = c.req.param('repo');
   const limit = parseInt(c.req.query('limit') || '20', 10);
   const cursor = c.req.query('cursor');
-
-  const [repoOwner, repoName] = repoFullName.split('/');
-  if (!repoOwner || !repoName) {
-    return c.json({ error: 'Invalid repo format' }, 400);
-  }
 
   const sessions = await prisma.workoutSession.findMany({
     where: {

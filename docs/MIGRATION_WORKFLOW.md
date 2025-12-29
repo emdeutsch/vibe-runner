@@ -21,7 +21,7 @@ This document explains the workflow for database schema changes using Prisma mig
 ### Start Local Supabase
 
 ```bash
-cd /Users/evandeutsch/vibe-runner && npx supabase start
+npx supabase start
 ```
 
 ### Environment Files

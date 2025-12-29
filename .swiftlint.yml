@@ -1,4 +1,4 @@
-# SwiftLint configuration for vibe-runner
+# SwiftLint configuration for vibeworkout
 
 included:
   - apps

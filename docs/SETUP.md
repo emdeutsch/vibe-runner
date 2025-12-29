@@ -198,7 +198,7 @@ open apps/ios/vibeworkout/vibeworkout.xcodeproj
 1. Select your development team in Signing & Capabilities
 2. Update bundle identifier if needed
 3. Add environment variables or update `Config.swift`:
-   - `VIBERUNNER_API_URL`: Your API URL
+   - `VIBEWORKOUT_API_URL`: Your API URL
    - `SUPABASE_URL`: Your Supabase URL
    - `SUPABASE_ANON_KEY`: Your Supabase anon key
 

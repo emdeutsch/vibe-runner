@@ -7,11 +7,16 @@ struct ContentView: View {
         Group {
             if authService.isAuthenticated {
                 MainTabView()
+                    .transition(.asymmetric(
+                        insertion: .opacity.combined(with: .scale(scale: 0.98)),
+                        removal: .opacity
+                    ))
             } else {
                 LoginView()
+                    .transition(.opacity)
             }
         }
-        .animation(.easeInOut, value: authService.isAuthenticated)
+        .animation(.easeInOut(duration: 0.35), value: authService.isAuthenticated)
     }
 }
 

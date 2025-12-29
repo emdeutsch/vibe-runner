@@ -289,6 +289,31 @@ struct ActivityChartSection: View {
     let chart: ActivityChartData
     @Binding var selectedMetric: ChartMetric
 
+    // Filter to only buckets with data for cleaner display
+    private var activeBuckets: [ActivityBucket] {
+        chart.buckets.filter { valueFor($0) > 0 }
+    }
+
+    // Get first and last dates for axis labels
+    private var axisDateValues: [Date] {
+        let dates = activeBuckets.compactMap { $0.parsedDate }
+        guard let first = dates.first, let last = dates.last, first != last else {
+            return dates.first.map { [$0] } ?? []
+        }
+        return [first, last]
+    }
+
+    // Extend domain so edge labels aren't clipped
+    private var chartXDomain: ClosedRange<Date> {
+        let dates = activeBuckets.compactMap { $0.parsedDate }
+        guard let first = dates.first, let last = dates.last else {
+            return Date()...Date()
+        }
+        // Add 2 days padding on each side for label visibility
+        let padding: TimeInterval = 2 * 24 * 60 * 60
+        return first.addingTimeInterval(-padding)...last.addingTimeInterval(padding)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
             HStack {
@@ -303,25 +328,38 @@ struct ActivityChartSection: View {
                 .pickerStyle(.menu)
             }
 
-            if chart.buckets.isEmpty {
+            if activeBuckets.isEmpty {
                 Text("No activity data")
                     .foregroundStyle(.secondary)
                     .frame(height: 150)
                     .frame(maxWidth: .infinity)
             } else {
                 Chart {
-                    ForEach(chart.buckets) { bucket in
-                        BarMark(
-                            x: .value("Date", bucket.formattedDate),
-                            y: .value("Value", valueFor(bucket))
-                        )
-                        .foregroundStyle(colorForMetric.gradient)
+                    ForEach(activeBuckets) { bucket in
+                        if let date = bucket.parsedDate {
+                            BarMark(
+                                x: .value("Date", date, unit: .day),
+                                y: .value("Value", valueFor(bucket))
+                            )
+                            .foregroundStyle(colorForMetric.gradient)
+                        }
                     }
                 }
                 .frame(height: 150)
-                .chartXAxis {
-                    AxisMarks(values: .automatic(desiredCount: 5)) { _ in
-                        AxisValueLabel()
+                .chartXAxis(.hidden)
+
+                // Manual date labels with proper alignment
+                HStack {
+                    if let first = axisDateValues.first {
+                        Text(first, format: .dateTime.month(.abbreviated).day())
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    if let last = axisDateValues.last, axisDateValues.count > 1 {
+                        Text(last, format: .dateTime.month(.abbreviated).day())
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
@@ -340,7 +378,7 @@ struct ActivityChartSection: View {
         case .lines:
             return bucket.linesAdded + bucket.linesRemoved
         case .tools:
-            return bucket.toolCalls ?? 0
+            return bucket.toolCalls
         }
     }
 

@@ -144,13 +144,36 @@ struct SettingsView: View {
                 }
 
                 // About Section
-                Section("About") {
-                    LabeledContent("Version", value: "1.0.0")
+                Section {
+                    HStack(spacing: Spacing.md) {
+                        Image(.vwLogo)
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 48, height: 28)
+                            .foregroundStyle(Color.brandPrimary)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Vibeworkout")
+                                .font(.headline)
+                            Text("Version \(Bundle.main.appVersion) (\(Bundle.main.buildNumber))")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .padding(.vertical, Spacing.xs)
+
                     Link("Documentation", destination: URL(string: "https://github.com/evandeutsch/vibe-workout")!)
                     Link("Report Issue", destination: URL(string: "https://github.com/evandeutsch/vibe-workout/issues")!)
+                } header: {
+                    Text("About")
                 }
             }
-            .navigationTitle("Settings")
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    BrandedNavigationTitle(title: "Settings")
+                }
+            }
             .task {
                 // Fetch profile and GitHub status
                 if let profile = try? await apiService.fetchProfile() {

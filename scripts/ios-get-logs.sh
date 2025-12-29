@@ -2,9 +2,9 @@
 # Pull app.log from iOS device
 # Requires: brew install libimobiledevice ideviceinstaller
 
-BUNDLE_ID="com.viberunner.app.local"
+BUNDLE_ID="com.vibeworkout.app.local"
 APP_LOG="app.log"
-OUTPUT="/tmp/viberunner-app.log"
+OUTPUT="/tmp/vibeworkout-app.log"
 
 echo "📱 Pulling logs from device..."
 
@@ -28,5 +28,5 @@ else
     echo "❌ Could not pull logs. Try using macOS Console.app instead:"
     echo "   1. Open Console.app"
     echo "   2. Select your iPhone from the sidebar"
-    echo "   3. Filter by 'viberunner'"
+    echo "   3. Filter by 'vibeworkout'"
 fi

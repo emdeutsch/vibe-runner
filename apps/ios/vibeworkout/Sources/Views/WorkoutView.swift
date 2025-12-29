@@ -51,7 +51,11 @@ struct WorkoutView: View {
                     .padding(.vertical, Spacing.md)
                     .background(.ultraThinMaterial)
             }
-            .navigationTitle("Workout")
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    BrandedNavigationTitle(title: "Workout")
+                }
+            }
             .animation(.spring(response: 0.3, dampingFraction: 0.8), value: workoutService.isActive)
             .task {
                 await workoutService.checkActiveSession()

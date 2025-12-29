@@ -11,121 +11,91 @@ struct LoginView: View {
     @State private var isSignUp = false
 
     // Animation states
-    @State private var logoAppeared = false
     @State private var contentAppeared = false
 
     var body: some View {
         GeometryReader { geometry in
-            ZStack {
-                // Subtle gradient background
-                backgroundGradient
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 0) {
+                    // Top spacing - generous whitespace
+                    Spacer()
+                        .frame(height: geometry.size.height * 0.12)
 
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: Spacing.xl) {
-                        Spacer()
-                            .frame(height: geometry.size.height * 0.06)
+                    // Logo section
+                    logoSection
+                        .opacity(contentAppeared ? 1 : 0)
+                        .offset(y: contentAppeared ? 0 : -10)
 
-                        // Logo section with animation
-                        logoSection
-                            .opacity(logoAppeared ? 1 : 0)
-                            .offset(y: logoAppeared ? 0 : -20)
+                    Spacer()
+                        .frame(height: Spacing.xxl)
 
-                        Spacer()
-                            .frame(height: Spacing.xl)
+                    // Auth section
+                    authSection
+                        .opacity(contentAppeared ? 1 : 0)
+                        .offset(y: contentAppeared ? 0 : 10)
 
-                        // Auth section
-                        authSection
-                            .opacity(contentAppeared ? 1 : 0)
-                            .offset(y: contentAppeared ? 0 : 20)
-
-                        // Error message
-                        if let error = authService.error {
-                            errorView(error)
-                                .transition(.opacity.combined(with: .scale(scale: 0.95)))
-                        }
-
-                        Spacer()
-                            .frame(height: Spacing.xxl)
+                    // Error message
+                    if let error = authService.error {
+                        errorView(error)
+                            .padding(.top, Spacing.md)
+                            .transition(.opacity.combined(with: .scale(scale: 0.95)))
                     }
-                    .padding(.horizontal, Spacing.lg)
+
+                    Spacer()
+                        .frame(minHeight: Spacing.xxl)
+
+                    // Footer
+                    footerSection
+                        .opacity(contentAppeared ? 1 : 0)
+                        .padding(.bottom, geometry.safeAreaInsets.bottom + Spacing.md)
                 }
+                .padding(.horizontal, Spacing.lg)
+                .frame(minHeight: geometry.size.height)
             }
+            .background(Color.backgroundPrimary)
         }
-        .ignoresSafeArea(.container, edges: .top)
+        .ignoresSafeArea(.container, edges: .bottom)
         .overlay {
             if authService.isLoading {
                 loadingOverlay
             }
         }
         .onAppear {
-            // Staggered entrance animations
-            withAnimation(.easeOut(duration: 0.6)) {
-                logoAppeared = true
-            }
-            withAnimation(.easeOut(duration: 0.6).delay(0.2)) {
+            withAnimation(.easeOut(duration: 0.5)) {
                 contentAppeared = true
             }
         }
-    }
-
-    // MARK: - Background
-
-    private var backgroundGradient: some View {
-        LinearGradient.subtleBackground
-            .ignoresSafeArea()
     }
 
     // MARK: - Logo Section
 
     private var logoSection: some View {
         VStack(spacing: Spacing.lg) {
-            // App logo - Running figure with heartbeat
-            ZStack {
-                // Glow effect
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [Color.brandPrimary.opacity(0.25), .clear],
-                            center: .center,
-                            startRadius: 30,
-                            endRadius: 80
-                        )
-                    )
-                    .frame(width: 160, height: 160)
+            // Logo - clean, no effects
+            Image(.vwLogo)
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 70, height: 40)
+                .foregroundStyle(Color.textPrimary)
 
-                // Logo container
-                ZStack {
-                    // Running figure
-                    Image(systemName: "figure.run")
-                        .font(.system(size: 56, weight: .medium))
-                        .foregroundStyle(Color.brandPrimary)
+            // App name - bold, centered
+            Text("vibeworkout")
+                .font(.system(size: 36, weight: .bold, design: .rounded))
+                .foregroundStyle(Color.textPrimary)
 
-                    // Small heart badge
-                    Image(systemName: "heart.fill")
-                        .font(.system(size: 18, weight: .bold))
-                        .foregroundStyle(Color.brandAccent)
-                        .offset(x: 28, y: -24)
-                        .symbolEffect(.pulse, options: .repeating.speed(0.8))
-                }
-            }
-
-            VStack(spacing: Spacing.sm) {
-                Text("vibeworkout")
-                    .font(.system(size: 32, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color.primary)
-
-                Text("HR-gated Claude Code tools")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
+            // Tagline - subtle
+            Text("HR-gated Claude Code tools")
+                .font(.subheadline)
+                .foregroundStyle(Color.textSecondary)
         }
     }
 
     // MARK: - Auth Section
 
     private var authSection: some View {
-        VStack(spacing: Spacing.lg) {
-            // GitHub Sign In (primary)
+        VStack(spacing: Spacing.md) {
+            // GitHub Sign In (primary action)
             Button {
                 Task {
                     logger.info("GitHub sign in button tapped")
@@ -137,21 +107,22 @@ struct LoginView: View {
                 }
             } label: {
                 HStack(spacing: Spacing.sm) {
-                    GitHubLogo()
-                        .frame(width: 20, height: 20)
+                    GitHubMark()
+                        .frame(width: 18, height: 18)
                     Text("Continue with GitHub")
-                        .fontWeight(.semibold)
+                        .font(.system(size: 15, weight: .semibold))
                 }
                 .frame(maxWidth: .infinity)
-                .frame(height: 50)
-                .background(Color(uiColor: .label))
-                .foregroundStyle(Color(uiColor: .systemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: Radius.md))
+                .frame(height: 48)
+                .foregroundStyle(.white)
+                .background(Color.textPrimary)
+                .clipShape(RoundedRectangle(cornerRadius: Radius.sm))
             }
             .buttonStyle(.plain)
 
             // Divider
             dividerView
+                .padding(.vertical, Spacing.sm)
 
             // Email/Password form
             emailPasswordForm
@@ -163,15 +134,15 @@ struct LoginView: View {
     private var dividerView: some View {
         HStack(spacing: Spacing.md) {
             Rectangle()
-                .fill(.secondary.opacity(0.2))
+                .fill(Color.borderLight)
                 .frame(height: 1)
 
-            Text("or")
-                .font(.caption)
-                .foregroundStyle(.tertiary)
+            Text("OR")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(Color.textSecondary)
 
             Rectangle()
-                .fill(.secondary.opacity(0.2))
+                .fill(Color.borderLight)
                 .frame(height: 1)
         }
     }
@@ -179,17 +150,17 @@ struct LoginView: View {
     // MARK: - Email/Password Form
 
     private var emailPasswordForm: some View {
-        VStack(spacing: Spacing.md) {
+        VStack(spacing: Spacing.sm) {
             // Email field
             TextField("Email", text: $email)
-                .textFieldStyle(ModernTextFieldStyle())
+                .textFieldStyle(CleanTextFieldStyle())
                 .textContentType(.emailAddress)
                 .autocapitalization(.none)
                 .keyboardType(.emailAddress)
 
             // Password field
             SecureField("Password", text: $password)
-                .textFieldStyle(ModernTextFieldStyle())
+                .textFieldStyle(CleanTextFieldStyle())
                 .textContentType(isSignUp ? .newPassword : .password)
 
             // Submit button
@@ -202,11 +173,31 @@ struct LoginView: View {
                     }
                 }
             } label: {
-                Text(isSignUp ? "Sign Up" : "Sign In")
+                Text(isSignUp ? "Sign Up" : "Log In")
+                    .font(.system(size: 15, weight: .semibold))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 48)
+                    .foregroundStyle(.white)
+                    .background(
+                        (email.isEmpty || password.isEmpty)
+                            ? Color.buttonPrimaryDisabled
+                            : Color.buttonPrimary
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: Radius.sm))
             }
-            .buttonStyle(.primary(color: Color.brandPrimary))
+            .buttonStyle(.plain)
             .disabled(email.isEmpty || password.isEmpty)
-            .opacity(email.isEmpty || password.isEmpty ? 0.6 : 1)
+            .padding(.top, Spacing.xs)
+        }
+    }
+
+    // MARK: - Footer Section
+
+    private var footerSection: some View {
+        VStack(spacing: Spacing.md) {
+            Rectangle()
+                .fill(Color.borderLight)
+                .frame(height: 1)
 
             // Toggle sign up/in
             Button {
@@ -214,9 +205,14 @@ struct LoginView: View {
                     isSignUp.toggle()
                 }
             } label: {
-                Text(isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                HStack(spacing: 4) {
+                    Text(isSignUp ? "Have an account?" : "Don't have an account?")
+                        .foregroundStyle(Color.textSecondary)
+                    Text(isSignUp ? "Log In" : "Sign Up")
+                        .foregroundStyle(Color.buttonPrimary)
+                        .fontWeight(.semibold)
+                }
+                .font(.system(size: 14))
             }
         }
     }
@@ -225,18 +221,22 @@ struct LoginView: View {
 
     private func errorView(_ message: String) -> some View {
         HStack(spacing: Spacing.sm) {
-            Image(systemName: "exclamationmark.triangle.fill")
+            Image(systemName: "exclamationmark.circle.fill")
                 .foregroundStyle(Color.statusError)
 
             Text(message)
-                .font(.caption)
+                .font(.system(size: 13))
                 .foregroundStyle(Color.statusError)
         }
         .padding(Spacing.md)
         .frame(maxWidth: .infinity)
         .background(
-            RoundedRectangle(cornerRadius: Radius.md)
-                .fill(Color.statusError.opacity(0.1))
+            RoundedRectangle(cornerRadius: Radius.sm)
+                .fill(Color.statusError.opacity(0.08))
+                .overlay(
+                    RoundedRectangle(cornerRadius: Radius.sm)
+                        .stroke(Color.statusError.opacity(0.2), lineWidth: 1)
+                )
         )
     }
 
@@ -244,173 +244,136 @@ struct LoginView: View {
 
     private var loadingOverlay: some View {
         ZStack {
-            Color.black.opacity(0.3)
+            Color.backgroundPrimary.opacity(0.9)
                 .ignoresSafeArea()
 
             VStack(spacing: Spacing.md) {
                 ProgressView()
-                    .scaleEffect(1.2)
-                    .tint(.white)
+                    .scaleEffect(1.1)
+                    .tint(Color.textPrimary)
 
                 Text("Signing in...")
-                    .font(.subheadline)
-                    .foregroundStyle(.white)
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color.textSecondary)
             }
-            .padding(Spacing.xl)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: Radius.lg))
         }
         .transition(.opacity)
     }
 }
 
-// MARK: - Modern TextField Style
+// MARK: - Clean TextField Style
 
-struct ModernTextFieldStyle: TextFieldStyle {
+struct CleanTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
-            .padding(Spacing.md)
+            .font(.system(size: 14))
+            .padding(.horizontal, Spacing.md)
+            .padding(.vertical, 14)
             .background(
-                RoundedRectangle(cornerRadius: Radius.md)
-                    .fill(Color(uiColor: .secondarySystemBackground))
+                RoundedRectangle(cornerRadius: Radius.sm)
+                    .fill(Color.backgroundSecondary)
             )
             .overlay(
-                RoundedRectangle(cornerRadius: Radius.md)
-                    .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                RoundedRectangle(cornerRadius: Radius.sm)
+                    .stroke(Color.borderLight, lineWidth: 1)
             )
     }
 }
 
-// MARK: - GitHub Logo
+// MARK: - GitHub Mark (Octocat)
 
-struct GitHubLogo: View {
+struct GitHubMark: View {
     var body: some View {
-        GeometryReader { geometry in
-            let size = min(geometry.size.width, geometry.size.height)
-            Path { path in
-                // GitHub Octocat mark - simplified SVG path
-                let scale = size / 24.0
+        GeometryReader { geo in
+            let s = min(geo.size.width, geo.size.height) / 16
 
-                path.move(to: CGPoint(x: 12 * scale, y: 0))
-                path.addCurve(
-                    to: CGPoint(x: 0, y: 12 * scale),
-                    control1: CGPoint(x: 5.37 * scale, y: 0),
-                    control2: CGPoint(x: 0, y: 5.37 * scale)
+            Path { p in
+                // GitHub Octocat mark - simplified path
+                p.move(to: CGPoint(x: 8 * s, y: 0))
+                p.addCurve(
+                    to: CGPoint(x: 0, y: 8 * s),
+                    control1: CGPoint(x: 3.58 * s, y: 0),
+                    control2: CGPoint(x: 0, y: 3.58 * s)
                 )
-                path.addCurve(
-                    to: CGPoint(x: 9.29 * scale, y: 23.65 * scale),
-                    control1: CGPoint(x: 0, y: 17.31 * scale),
-                    control2: CGPoint(x: 3.87 * scale, y: 21.88 * scale)
+                p.addCurve(
+                    to: CGPoint(x: 5.83 * s, y: 15.54 * s),
+                    control1: CGPoint(x: 0, y: 11.54 * s),
+                    control2: CGPoint(x: 2.43 * s, y: 14.58 * s)
                 )
-                path.addCurve(
-                    to: CGPoint(x: 9.12 * scale, y: 21.35 * scale),
-                    control1: CGPoint(x: 10.19 * scale, y: 23.82 * scale),
-                    control2: CGPoint(x: 9.12 * scale, y: 22.53 * scale)
+                p.addCurve(
+                    to: CGPoint(x: 6.08 * s, y: 14.1 * s),
+                    control1: CGPoint(x: 6.44 * s, y: 15.63 * s),
+                    control2: CGPoint(x: 6.08 * s, y: 14.86 * s)
                 )
-                path.addLine(to: CGPoint(x: 9.12 * scale, y: 19.04 * scale))
-                path.addCurve(
-                    to: CGPoint(x: 4.93 * scale, y: 19.74 * scale),
-                    control1: CGPoint(x: 5.7 * scale, y: 19.97 * scale),
-                    control2: CGPoint(x: 5.17 * scale, y: 19.97 * scale)
+                p.addLine(to: CGPoint(x: 6.08 * s, y: 11.88 * s))
+                p.addCurve(
+                    to: CGPoint(x: 3.6 * s, y: 7.69 * s),
+                    control1: CGPoint(x: 3.75 * s, y: 10.8 * s),
+                    control2: CGPoint(x: 2.17 * s, y: 9.45 * s)
                 )
-                path.addCurve(
-                    to: CGPoint(x: 3.62 * scale, y: 17.13 * scale),
-                    control1: CGPoint(x: 4.25 * scale, y: 19.04 * scale),
-                    control2: CGPoint(x: 3.85 * scale, y: 18.06 * scale)
+                p.addCurve(
+                    to: CGPoint(x: 4.72 * s, y: 4.57 * s),
+                    control1: CGPoint(x: 4.36 * s, y: 6.81 * s),
+                    control2: CGPoint(x: 4.21 * s, y: 5.19 * s)
                 )
-                path.addCurve(
-                    to: CGPoint(x: 1.41 * scale, y: 15.35 * scale),
-                    control1: CGPoint(x: 3.16 * scale, y: 16.2 * scale),
-                    control2: CGPoint(x: 2.33 * scale, y: 15.59 * scale)
+                p.addCurve(
+                    to: CGPoint(x: 4.87 * s, y: 1.61 * s),
+                    control1: CGPoint(x: 4.51 * s, y: 3.54 * s),
+                    control2: CGPoint(x: 4.51 * s, y: 2.39 * s)
                 )
-                path.addCurve(
-                    to: CGPoint(x: 2.1 * scale, y: 14.88 * scale),
-                    control1: CGPoint(x: 0.97 * scale, y: 15.12 * scale),
-                    control2: CGPoint(x: 1.87 * scale, y: 14.88 * scale)
+                p.addCurve(
+                    to: CGPoint(x: 6.89 * s, y: 2.8 * s),
+                    control1: CGPoint(x: 5.79 * s, y: 1.77 * s),
+                    control2: CGPoint(x: 6.74 * s, y: 2.34 * s)
                 )
-                path.addCurve(
-                    to: CGPoint(x: 4.7 * scale, y: 16.9 * scale),
-                    control1: CGPoint(x: 3.5 * scale, y: 14.88 * scale),
-                    control2: CGPoint(x: 4.47 * scale, y: 15.82 * scale)
+                p.addCurve(
+                    to: CGPoint(x: 9.11 * s, y: 2.8 * s),
+                    control1: CGPoint(x: 7.34 * s, y: 2.65 * s),
+                    control2: CGPoint(x: 8.66 * s, y: 2.65 * s)
                 )
-                path.addCurve(
-                    to: CGPoint(x: 8.66 * scale, y: 18.45 * scale),
-                    control1: CGPoint(x: 5.4 * scale, y: 18.52 * scale),
-                    control2: CGPoint(x: 7.48 * scale, y: 18.69 * scale)
+                p.addCurve(
+                    to: CGPoint(x: 11.13 * s, y: 1.61 * s),
+                    control1: CGPoint(x: 9.26 * s, y: 2.34 * s),
+                    control2: CGPoint(x: 10.21 * s, y: 1.77 * s)
                 )
-                path.addCurve(
-                    to: CGPoint(x: 9.12 * scale, y: 16.67 * scale),
-                    control1: CGPoint(x: 8.66 * scale, y: 17.37 * scale),
-                    control2: CGPoint(x: 8.89 * scale, y: 16.9 * scale)
+                p.addCurve(
+                    to: CGPoint(x: 11.28 * s, y: 4.57 * s),
+                    control1: CGPoint(x: 11.49 * s, y: 2.39 * s),
+                    control2: CGPoint(x: 11.49 * s, y: 3.54 * s)
                 )
-                path.addCurve(
-                    to: CGPoint(x: 5.4 * scale, y: 11.53 * scale),
-                    control1: CGPoint(x: 5.63 * scale, y: 16.2 * scale),
-                    control2: CGPoint(x: 3.26 * scale, y: 14.18 * scale)
+                p.addCurve(
+                    to: CGPoint(x: 12.4 * s, y: 7.69 * s),
+                    control1: CGPoint(x: 11.79 * s, y: 5.19 * s),
+                    control2: CGPoint(x: 11.64 * s, y: 6.81 * s)
                 )
-                path.addCurve(
-                    to: CGPoint(x: 7.08 * scale, y: 6.86 * scale),
-                    control1: CGPoint(x: 6.54 * scale, y: 10.22 * scale),
-                    control2: CGPoint(x: 6.31 * scale, y: 7.79 * scale)
+                p.addCurve(
+                    to: CGPoint(x: 9.92 * s, y: 11.11 * s),
+                    control1: CGPoint(x: 13.83 * s, y: 9.45 * s),
+                    control2: CGPoint(x: 12.25 * s, y: 10.8 * s)
                 )
-                path.addCurve(
-                    to: CGPoint(x: 7.31 * scale, y: 2.42 * scale),
-                    control1: CGPoint(x: 6.77 * scale, y: 5.31 * scale),
-                    control2: CGPoint(x: 6.77 * scale, y: 3.58 * scale)
+                p.addCurve(
+                    to: CGPoint(x: 9.92 * s, y: 14.1 * s),
+                    control1: CGPoint(x: 10.08 * s, y: 11.43 * s),
+                    control2: CGPoint(x: 9.92 * s, y: 12.56 * s)
                 )
-                path.addCurve(
-                    to: CGPoint(x: 10.34 * scale, y: 4.2 * scale),
-                    control1: CGPoint(x: 8.68 * scale, y: 2.65 * scale),
-                    control2: CGPoint(x: 10.11 * scale, y: 3.51 * scale)
+                p.addCurve(
+                    to: CGPoint(x: 10.17 * s, y: 15.54 * s),
+                    control1: CGPoint(x: 9.92 * s, y: 14.86 * s),
+                    control2: CGPoint(x: 9.56 * s, y: 15.63 * s)
                 )
-                path.addCurve(
-                    to: CGPoint(x: 13.66 * scale, y: 4.2 * scale),
-                    control1: CGPoint(x: 11.01 * scale, y: 3.97 * scale),
-                    control2: CGPoint(x: 12.99 * scale, y: 3.97 * scale)
+                p.addCurve(
+                    to: CGPoint(x: 16 * s, y: 8 * s),
+                    control1: CGPoint(x: 13.57 * s, y: 14.58 * s),
+                    control2: CGPoint(x: 16 * s, y: 11.54 * s)
                 )
-                path.addCurve(
-                    to: CGPoint(x: 16.69 * scale, y: 2.42 * scale),
-                    control1: CGPoint(x: 13.89 * scale, y: 3.51 * scale),
-                    control2: CGPoint(x: 15.32 * scale, y: 2.65 * scale)
+                p.addCurve(
+                    to: CGPoint(x: 8 * s, y: 0),
+                    control1: CGPoint(x: 16 * s, y: 3.58 * s),
+                    control2: CGPoint(x: 12.42 * s, y: 0)
                 )
-                path.addCurve(
-                    to: CGPoint(x: 16.92 * scale, y: 6.86 * scale),
-                    control1: CGPoint(x: 17.23 * scale, y: 3.58 * scale),
-                    control2: CGPoint(x: 17.23 * scale, y: 5.31 * scale)
-                )
-                path.addCurve(
-                    to: CGPoint(x: 18.6 * scale, y: 11.53 * scale),
-                    control1: CGPoint(x: 17.69 * scale, y: 7.79 * scale),
-                    control2: CGPoint(x: 17.46 * scale, y: 10.22 * scale)
-                )
-                path.addCurve(
-                    to: CGPoint(x: 14.88 * scale, y: 16.67 * scale),
-                    control1: CGPoint(x: 20.74 * scale, y: 14.18 * scale),
-                    control2: CGPoint(x: 18.37 * scale, y: 16.2 * scale)
-                )
-                path.addCurve(
-                    to: CGPoint(x: 14.88 * scale, y: 19.04 * scale),
-                    control1: CGPoint(x: 15.12 * scale, y: 17.14 * scale),
-                    control2: CGPoint(x: 14.88 * scale, y: 17.84 * scale)
-                )
-                path.addLine(to: CGPoint(x: 14.88 * scale, y: 21.35 * scale))
-                path.addCurve(
-                    to: CGPoint(x: 14.71 * scale, y: 23.65 * scale),
-                    control1: CGPoint(x: 14.88 * scale, y: 22.53 * scale),
-                    control2: CGPoint(x: 13.81 * scale, y: 23.82 * scale)
-                )
-                path.addCurve(
-                    to: CGPoint(x: 24 * scale, y: 12 * scale),
-                    control1: CGPoint(x: 20.13 * scale, y: 21.88 * scale),
-                    control2: CGPoint(x: 24 * scale, y: 17.31 * scale)
-                )
-                path.addCurve(
-                    to: CGPoint(x: 12 * scale, y: 0),
-                    control1: CGPoint(x: 24 * scale, y: 5.37 * scale),
-                    control2: CGPoint(x: 18.63 * scale, y: 0)
-                )
-                path.closeSubpath()
+                p.closeSubpath()
             }
-            .fill(Color(uiColor: .systemBackground))
+            .fill(.white)
         }
     }
 }
