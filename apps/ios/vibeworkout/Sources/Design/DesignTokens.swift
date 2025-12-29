@@ -33,10 +33,28 @@ extension Color {
     static let hrBelowThreshold = Color.red
     static let hrNeutral = Color.secondary
 
-    // Brand - Orange/Amber scheme
+    // Brand - Orange/Amber scheme (used in authenticated experience)
     static let brandPrimary = Color(red: 1.0, green: 0.45, blue: 0.0) // Vibrant orange
     static let brandAccent = Color(red: 1.0, green: 0.6, blue: 0.0)   // Amber/gold
     static let brandDark = Color(red: 0.85, green: 0.35, blue: 0.0)   // Darker orange for contrast
+
+    // MARK: - Light Theme (Instagram-style)
+
+    // Backgrounds
+    static let backgroundPrimary = Color.white
+    static let backgroundSecondary = Color(red: 0.98, green: 0.98, blue: 0.98) // #FAFAFA
+
+    // Text
+    static let textPrimary = Color(red: 0.15, green: 0.15, blue: 0.15) // #262626
+    static let textSecondary = Color(red: 0.55, green: 0.55, blue: 0.55) // #8E8E8E
+    static let textTertiary = Color(red: 0.73, green: 0.73, blue: 0.73) // #BABABA
+
+    // Borders & Dividers
+    static let borderLight = Color(red: 0.86, green: 0.86, blue: 0.86) // #DBDBDB
+
+    // Interactive
+    static let buttonPrimary = Color(red: 0.01, green: 0.60, blue: 0.95) // #0095F6 (Instagram blue)
+    static let buttonPrimaryDisabled = Color(red: 0.01, green: 0.60, blue: 0.95).opacity(0.4)
 }
 
 // MARK: - Gradients
@@ -60,4 +78,16 @@ extension LinearGradient {
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
+}
+
+// MARK: - Bundle Extensions
+
+extension Bundle {
+    var appVersion: String {
+        infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+    }
+
+    var buildNumber: String {
+        infoDictionary?["CFBundleVersion"] as? String ?? "1"
+    }
 }

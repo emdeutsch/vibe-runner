@@ -36,7 +36,11 @@ struct ActivityView: View {
                     }
                 }
             }
-            .navigationTitle("Activity")
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    BrandedNavigationTitle(title: "Activity")
+                }
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-// Prisma schema for viberunner - managed against Supabase Postgres
+// Prisma schema for vibeworkout - managed against Supabase Postgres
 // Development: npx prisma migrate dev --name <description>
 // Production:  npx prisma migrate deploy
 
@@ -126,7 +126,7 @@ model GateRepo {
   owner                   String
   name                    String
   userKey                 String   @map("user_key") // Stable identifier for ref path
-  signalRef               String   @map("signal_ref") // Full ref path: refs/viberunner/hr/<user_key>
+  signalRef               String   @map("signal_ref") // Full ref path: refs/vibeworkout/hr/<user_key>
   githubAppInstallationId Int?     @map("github_app_installation_id")
   active                  Boolean  @default(true)
   activeSessionId         String?  @map("active_session_id") // Set when repo is selected for a workout

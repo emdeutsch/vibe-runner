@@ -67,8 +67,10 @@ struct GateReposView: View {
                     .listStyle(.insetGrouped)
                 }
             }
-            .navigationTitle("Gate Repos")
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    BrandedNavigationTitle(title: "Repos")
+                }
                 ToolbarItem(placement: .primaryAction) {
                     Button {
                         showingCreateSheet = true

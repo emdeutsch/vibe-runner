@@ -23,6 +23,7 @@ struct MainTabView: View {
                     Label("Settings", systemImage: "gear")
                 }
         }
+        .tint(Color.brandPrimary)
     }
 }
 

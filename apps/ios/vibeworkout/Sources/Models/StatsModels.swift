@@ -157,9 +157,28 @@ struct ActivityBucket: Codable, Identifiable {
     let commits: Int
     let linesAdded: Int
     let linesRemoved: Int
-    let toolCalls: Int?
+    let toolCalls: Int
 
     var id: String { date }
+
+    enum CodingKeys: String, CodingKey {
+        case date
+        case durationSecs
+        case commits
+        case linesAdded
+        case linesRemoved
+        case toolCalls
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        date = try container.decode(String.self, forKey: .date)
+        durationSecs = try container.decode(Int.self, forKey: .durationSecs)
+        commits = try container.decode(Int.self, forKey: .commits)
+        linesAdded = try container.decode(Int.self, forKey: .linesAdded)
+        linesRemoved = try container.decode(Int.self, forKey: .linesRemoved)
+        toolCalls = try container.decodeIfPresent(Int.self, forKey: .toolCalls) ?? 0
+    }
 
     var parsedDate: Date? {
         let formatter = DateFormatter()

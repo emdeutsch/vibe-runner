@@ -2,7 +2,7 @@
 set -e
 
 echo "==================================="
-echo "  viberunner Development Setup"
+echo "  vibeworkout Development Setup"
 echo "==================================="
 echo ""
 
@@ -113,7 +113,7 @@ echo "  1. Make sure Docker Desktop is running"
 echo "  2. Run: npm run dev"
 echo ""
 echo "For iOS development:"
-echo "  1. Update your IP in apps/ios/viberunner/Config/Local.xcconfig"
-echo "  2. Run: cd apps/ios/viberunner && xcodegen generate"
-echo "  3. Open viberunner.xcodeproj in Xcode"
+echo "  1. Update your IP in apps/ios/vibeworkout/Config/Local.xcconfig"
+echo "  2. Run: cd apps/ios/vibeworkout && xcodegen generate"
+echo "  3. Open vibeworkout.xcodeproj in Xcode"
 echo ""

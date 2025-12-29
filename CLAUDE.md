@@ -27,8 +27,8 @@ npx prisma migrate deploy
 
 **WARNING TO AGENTS:** NEVER look at git history or Info.plist to determine the current build number. Git is often out of sync with TestFlight. You MUST ask the user to check TestFlight directly. Uploading a duplicate or lower build number will fail and waste time.
 
-| File                                     | Key                          | Purpose                                                                         |
-| ---------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------- |
+| File                                      | Key                          | Purpose                                                                         |
+| ----------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------- |
 | `apps/ios/vibeworkout/Sources/Info.plist` | `CFBundleShortVersionString` | Marketing version (e.g., "1.0")                                                 |
 | `apps/ios/vibeworkout/Sources/Info.plist` | `CFBundleVersion`            | Build number - must increment for each TestFlight upload (ask user for current) |
 
@@ -93,7 +93,7 @@ For GitHub OAuth to work locally, the Supabase dashboard must have the app's cal
 Start local Supabase:
 
 ```bash
-cd /Users/evandeutsch/vibe-runner && npx supabase start
+npx supabase start
 ```
 
 The iOS app connects to Supabase at `http://192.168.1.144:54421` (configured in `apps/ios/vibeworkout/Config/Local.xcconfig`).
